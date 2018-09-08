@@ -1,0 +1,33 @@
+{
+  "name": "breakout",
+  "description": "Classic breakout done in Vue + Phaser 3",
+  "keywords": [
+    "vue",
+    "phaser",
+    "breakout",
+    "game"
+  ],
+  "author": "Markus Appel <markospoparkos@gmail.com>",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sun0fABeach/breakout.git"
+  },
+  "scripts": {
+    "dev": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "serve": "serve dist"
+  },
+  "dependencies": {
+    "phaser": "^3.11.0",
+    "vue": "^2.5.17"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.0.1",
+    "@vue/cli-service": "^3.0.1",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^7.0.1",
+    "serve": "^10.0.0",
+    "vue-template-compiler": "^2.5.17"
+  }
+}
