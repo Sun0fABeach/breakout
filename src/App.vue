@@ -1,20 +1,24 @@
 <template>
-  <Game />
+  <Game/>
 </template>
 
 
 <script>
-import Game from '@/components/Game'
+import Game from './components/Game'
+
 export default {
-  name: 'App',
+  name: 'app',
   components: { Game }
 }
 </script>
 
 
 <style lang="scss">
+html, body {
+  height: 100%;
+}
+
 body {
-  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
