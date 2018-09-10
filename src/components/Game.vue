@@ -14,7 +14,6 @@
   </div>
 </template>
 
-
 <script>
 import comms from '@/vuePhaserComms'
 
@@ -23,7 +22,7 @@ export default {
   data () {
     return {
       button_visible: false,
-      paused : false,
+      paused: false,
       game_over: false
     }
   },
@@ -45,7 +44,7 @@ export default {
       this.game_over = false
     }
   },
-  mounted() {
+  mounted () {
     import(/* webpackChunkName: "game" */ '@/game/game').then(game => {
       game.launch()
       this.button_visible = true
@@ -54,7 +53,6 @@ export default {
   }
 }
 </script>
-
 
 <style lang="scss" scoped>
 #game-container {

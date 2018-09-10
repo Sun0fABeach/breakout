@@ -22,7 +22,7 @@ class LifeCounter extends BaseText {
     this.setText()
     super.show()
   }
-  
+
   setText () {
     super.setText(`Lives: ${this._livesCurrent}`)
   }

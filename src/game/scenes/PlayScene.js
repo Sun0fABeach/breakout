@@ -1,11 +1,10 @@
-import { Scene } from 'phaser'
+import Phaser, { Scene } from 'phaser'
 import comms from '@/vuePhaserComms'
 import Ball from '@/game/objects/Ball'
 import Paddle from '@/game/objects/Paddle'
 import GameOver from '@/game/objects/text/GameOver'
 import LifeCounter from '@/game/objects/text/LifeCounter'
 import Audio from '@/game/audio'
-
 
 export default class PlayScene extends Scene {
   constructor () {
@@ -143,8 +142,8 @@ export default class PlayScene extends Scene {
     const worldDimensions = this.physics.world.bounds
     obj.setScale(scale)
     obj.setPosition(
-      worldDimensions.width/2 - obj.displayWidth/2,
-      worldDimensions.height/2 - obj.displayHeight/2
+      worldDimensions.width / 2 - obj.displayWidth / 2,
+      worldDimensions.height / 2 - obj.displayHeight / 2
     )
   }
 

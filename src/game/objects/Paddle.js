@@ -6,7 +6,7 @@ class Paddle extends GameObjects.Container {
     this._img = scene.add.image(0, 0, 'paddle')
     this.add(this._img)
     this.setSize(this._img.displayWidth, this._img.displayHeight)
-    
+
     scene.add.existing(this)
     scene.physics.world.enable(this)
     this.body.setCollideWorldBounds(true)

@@ -8,7 +8,7 @@ class Ball extends Physics.Arcade.Image {
     this._angularVelocity = 200
     this._scene = scene
 
-    /* game object not registered with scene and it's body is not enabled when 
+    /* game object not registered with scene and it's body is not enabled when
        it is *not* constructed via scene factory */
     scene.physics.world.enableBody(this, Physics.Arcade.DYNAMIC_BODY)
     scene.add.existing(this)
@@ -19,11 +19,11 @@ class Ball extends Physics.Arcade.Image {
     this._emitters = this.setupEmitters(scene)
   }
 
-  setupEmitters(scene) {
+  setupEmitters (scene) {
     const emitterConf = {
       active: false,
       blendMode: 'SCREEN',
-      speed: { min: 50, max: 500 }, 
+      speed: { min: 50, max: 500 },
       scale: { start: 1, end: 0 },
       lifespan: 3000,
       gravityY: 300,
@@ -32,13 +32,13 @@ class Ball extends Physics.Arcade.Image {
       bounce: 0.5
     }
 
-    return ['Small', 'Medium', 'Big'].map(type => 
+    return ['Small', 'Medium', 'Big'].map(type =>
       scene.add.particles(`particleStar${type}`).createEmitter(emitterConf)
     )
   }
 
   show () {
-    this.setTexture('ball') 
+    this.setTexture('ball')
     this.enableBody(false, 0, 0, false, true) // just show, don't enable body
   }
 
@@ -63,18 +63,18 @@ class Ball extends Physics.Arcade.Image {
 
   set spin (spinDirection) {
     const sign = spinDirection === 'left' ? -1 : +1
-    this.setAngularVelocity(sign * this._angularVelocity) 
+    this.setAngularVelocity(sign * this._angularVelocity)
   }
 
-  kill (reset_cb=undefined) {
+  kill (resetCb = undefined) {
     this.explode()
     this.disableFull()
-    if(reset_cb) {
-      reset_cb()
+    if (resetCb) {
+      resetCb()
     }
   }
 
-  explode() {
+  explode () {
     Object.values(this._emitters).forEach(emitter => {
       emitter.resume()
       emitter.setAngle(this.explosionAngleRange(this.body.velocity.angle()))
@@ -82,15 +82,15 @@ class Ball extends Physics.Arcade.Image {
     })
   }
 
-  explosionAngleRange(radians) {
+  explosionAngleRange (radians) {
     let deg = Phaser.Math.RadToDeg(radians)
     const shiftFunc = deg > 270 ? Phaser.Math.MinSub : Phaser.Math.MaxAdd
     deg = shiftFunc(deg, 20, 270) // shift range towards center up
 
     const spreadDegRange = 140
-    return { 
-      min: deg - spreadDegRange/2,
-      max: deg + spreadDegRange/2
+    return {
+      min: deg - spreadDegRange / 2,
+      max: deg + spreadDegRange / 2
     }
   }
 

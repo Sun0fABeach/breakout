@@ -12,7 +12,6 @@ import explosionMP3 from '@/game/assets/sounds/explosion.mp3'
 import woodenOGG from '@/game/assets/sounds/wooden.ogg'
 import woodenMP3 from '@/game/assets/sounds/wooden.mp3'
 
-
 export default class BootScene extends Scene {
   constructor () {
     super({ key: 'BootScene' })
