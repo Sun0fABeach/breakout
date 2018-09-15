@@ -1,10 +1,20 @@
 import { Scene } from 'phaser'
+
 import sky from '@/game/assets/sky.png'
+
 import paddle from '@/game/assets/paddleRed.png'
 import ball from '@/game/assets/ballGrey.png'
+
+import blockGreen from '@/game/assets/blockGreen.png'
+import blockGrey from '@/game/assets/blockGrey.png'
+import blockPurple from '@/game/assets/blockPurple.png'
+import blockRed from '@/game/assets/blockRed.png'
+import blockYellow from '@/game/assets/blockYellow.png'
+
 import particleStarSmall from '@/game/assets/particleStarSmall.png'
 import particleStarMedium from '@/game/assets/particleStarMedium.png'
 import particleStarBig from '@/game/assets/particleStarBig.png'
+
 import thudOGG from '@/game/assets/sounds/thud.ogg'
 import thudMP3 from '@/game/assets/sounds/thud.mp3'
 import explosionOGG from '@/game/assets/sounds/explosion.ogg'
@@ -24,6 +34,13 @@ export default class BootScene extends Scene {
     this.load.image('particleStarSmall', particleStarSmall)
     this.load.image('particleStarMedium', particleStarMedium)
     this.load.image('particleStarBig', particleStarBig)
+
+    this.load.image('blockGreen', blockGreen)
+    this.load.image('blockGrey', blockGrey)
+    this.load.image('blockPurple', blockPurple)
+    this.load.image('blockRed', blockRed)
+    this.load.image('blockYellow', blockYellow)
+
     this.load.audio('thud', [thudMP3, thudOGG])
     this.load.audio('explosion', [explosionMP3, explosionOGG])
     this.load.audio('wooden', [woodenMP3, woodenOGG])

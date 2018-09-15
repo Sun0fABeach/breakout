@@ -13,10 +13,15 @@ export default class PlayScene extends Scene {
     this.lifeCounter = null
     this.gameOver = null
 
+    this.blocks = null
     this.paddle = null
     this.ball = null
     this.ballPaddleOffset = { x: 0, y: 0 }
-    this.ballPaddleCollider = null
+
+    this.colliders = {
+      ballPaddle: null,
+      ballBlock: null
+    }
 
     this.audio = null
     this.cursor = null
@@ -27,23 +32,50 @@ export default class PlayScene extends Scene {
 
     this.ball = new Ball(this, 400, 300)
     this.paddle = new Paddle(this, 400, 550)
-    this.ballPaddleCollider = this.physics.add.collider(
+    this.colliders.ballPaddle = this.physics.add.collider(
       this.ball, this.paddle, this.bounceBallOffPaddle, null, this
     )
+    this.blocks = this.initBlocks()
+    this.colliders.ballBlock = this.physics.add.collider(this.ball, this.blocks)
 
-    this.audio = new Audio(this)
-    this.cursor = this.input.keyboard.createCursorKeys()
     this.putBallOnPaddle()
     this.physics.world.on('worldbounds', this.ballHitWorldBounds, this)
 
     this.lifeCounter = new LifeCounter(this)
     this.lifeCounter.show()
-
     this.gameOver = new GameOver(this)
+
+    this.audio = new Audio(this)
+    this.cursor = this.input.keyboard.createCursorKeys()
 
     comms.on('pause', () => this.scene.pause())
     comms.on('resume', () => this.scene.resume())
     comms.on('restart', this.restart.bind(this))
+  }
+
+  initBlocks () {
+    const padX = 100
+    const padY = 50
+    const colGap = 100
+    const rowGap = 50
+    const numCols = 7
+
+    const groupConfigs = [
+      'Green', 'Grey', 'Purple', 'Red', 'Yellow'
+    ].map((color, idx) => {
+      return {
+        key: 'block' + color,
+        repeat: numCols - 1,
+        setXY: {
+          x: padX, y: padY + rowGap * idx, stepX: colGap
+        }
+      }
+    })
+
+    const blocks = this.physics.add.staticGroup()
+    blocks.createMultiple(groupConfigs)
+
+    return blocks
   }
 
   restart () {
@@ -71,7 +103,8 @@ export default class PlayScene extends Scene {
     )
 
     this.bounceBallOffPaddle(this.ball, this.paddle)
-    this.ballPaddleCollider.object1 = this.ball
+    this.colliders.ballPaddle.object1 = this.ball
+    this.colliders.ballBlock.object1 = this.ball
   }
 
   bounceBallOffPaddle (ball, paddle) {
