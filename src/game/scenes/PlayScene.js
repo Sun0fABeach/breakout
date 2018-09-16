@@ -59,6 +59,7 @@ export default class PlayScene extends Scene {
   restart () {
     this.ball.show()
     this.putBallOnPaddle()
+    this.blocks.reset()
     this.gameOver.hide()
     this.lifeCounter.reset()
   }
@@ -118,7 +119,7 @@ export default class PlayScene extends Scene {
   }
 
   blockHit (ball, block) {
-    this.blocks.remove(block, true, true)
+    this.blocks.killBlock(block)
     this.audio.play('ding')
   }
 

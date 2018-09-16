@@ -24,6 +24,19 @@ class Blocks extends Physics.Arcade.StaticGroup {
 
     this.createMultiple(groupConfigs)
   }
+
+  killBlock (block) {
+    this.killAndHide(block)
+    block.body.enable = false
+  }
+
+  reset () {
+    for (let dead = this.getFirstDead(); dead; dead = this.getFirstDead()) {
+      dead.setActive(true)
+      dead.setVisible(true)
+      dead.body.enable = true
+    }
+  }
 }
 
 export default Blocks
