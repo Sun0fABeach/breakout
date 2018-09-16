@@ -2,6 +2,7 @@ import Phaser, { Scene } from 'phaser'
 import comms from '@/vuePhaserComms'
 import Ball from '@/game/objects/Ball'
 import Paddle from '@/game/objects/Paddle'
+import Blocks from '@/game/objects/Blocks'
 import GameOver from '@/game/objects/text/GameOver'
 import LifeCounter from '@/game/objects/text/LifeCounter'
 import Audio from '@/game/audio'
@@ -35,7 +36,7 @@ export default class PlayScene extends Scene {
     this.colliders.ballPaddle = this.physics.add.collider(
       this.ball, this.paddle, this.bounceBallOffPaddle, null, this
     )
-    this.blocks = this.initBlocks()
+    this.blocks = new Blocks(this)
     this.colliders.ballBlock = this.physics.add.collider(this.ball, this.blocks)
 
     this.putBallOnPaddle()
@@ -51,31 +52,6 @@ export default class PlayScene extends Scene {
     comms.on('pause', () => this.scene.pause())
     comms.on('resume', () => this.scene.resume())
     comms.on('restart', this.restart.bind(this))
-  }
-
-  initBlocks () {
-    const padX = 100
-    const padY = 50
-    const colGap = 100
-    const rowGap = 50
-    const numCols = 7
-
-    const groupConfigs = [
-      'Green', 'Grey', 'Purple', 'Red', 'Yellow'
-    ].map((color, idx) => {
-      return {
-        key: 'block' + color,
-        repeat: numCols - 1,
-        setXY: {
-          x: padX, y: padY + rowGap * idx, stepX: colGap
-        }
-      }
-    })
-
-    const blocks = this.physics.add.staticGroup()
-    blocks.createMultiple(groupConfigs)
-
-    return blocks
   }
 
   restart () {
