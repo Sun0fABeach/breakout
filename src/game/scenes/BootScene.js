@@ -21,6 +21,8 @@ import explosionOGG from '@/game/assets/sounds/explosion.ogg'
 import explosionMP3 from '@/game/assets/sounds/explosion.mp3'
 import woodenOGG from '@/game/assets/sounds/wooden.ogg'
 import woodenMP3 from '@/game/assets/sounds/wooden.mp3'
+import dingOGG from '@/game/assets/sounds/ding.ogg'
+import dingMP3 from '@/game/assets/sounds/ding.mp3'
 
 export default class BootScene extends Scene {
   constructor () {
@@ -44,6 +46,7 @@ export default class BootScene extends Scene {
     this.load.audio('thud', [thudMP3, thudOGG])
     this.load.audio('explosion', [explosionMP3, explosionOGG])
     this.load.audio('wooden', [woodenMP3, woodenOGG])
+    this.load.audio('ding', [dingMP3, dingOGG])
   }
 
   create () {

@@ -4,7 +4,8 @@ class Audio {
     this._volumes = {
       thud: 0.4,
       wooden: 0.6,
-      explosion: 0.16
+      explosion: 0.16,
+      ding: 0.5
     }
   }
 

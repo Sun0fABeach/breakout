@@ -37,7 +37,9 @@ export default class PlayScene extends Scene {
       this.ball, this.paddle, this.bounceBallOffPaddle, null, this
     )
     this.blocks = new Blocks(this)
-    this.colliders.ballBlock = this.physics.add.collider(this.ball, this.blocks)
+    this.colliders.ballBlock = this.physics.add.collider(
+      this.ball, this.blocks, this.blockHit, null, this
+    )
 
     this.putBallOnPaddle()
     this.physics.world.on('worldbounds', this.ballHitWorldBounds, this)
@@ -113,6 +115,11 @@ export default class PlayScene extends Scene {
       this.audio.play('thud')
       this.adjustBallSpinAfterWorldBoundsCollision(up, left, right)
     }
+  }
+
+  blockHit (ball, block) {
+    this.blocks.remove(block, true, true)
+    this.audio.play('ding')
   }
 
   loseLife () {
