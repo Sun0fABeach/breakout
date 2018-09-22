@@ -58,6 +58,17 @@ export default {
 
 <style lang="scss" scoped>
 #game-controls {
-  padding: 1rem;
+  display: flex;
+
+  > div:first-of-type {
+    flex-grow: 1;
+    padding: 1rem;
+    background-color: aliceblue;
+    font-family: 'Courier New', Courier, monospace;
+  }
+}
+
+button {
+  margin-top: 1rem;
 }
 </style>
