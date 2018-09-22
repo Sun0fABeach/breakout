@@ -52,7 +52,6 @@ export default {
 
 <style lang="scss" scoped>
 #game-controls {
-  border: 1px solid black;
   padding: 1rem;
 }
 </style>
