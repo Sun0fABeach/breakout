@@ -1,54 +1,30 @@
 <template>
   <div id="game-container">
-    <div id="phaser-game-surface"></div>
-    <button type="button" :style="button_style" @click="restart"
-      v-show="button_visible" v-if="game_over"
-    >
-      Restart
-    </button>
-    <button type="button" :style="button_style" @click="togglePause"
-      v-show="button_visible" v-else
-    >
-      {{ this.paused ? 'Resume' : 'Pause' }}
-    </button>
+
+    <div id="phaser-game-surface" v-if="downloaded" />
+    <div class="placeholder" v-else>
+      Downloading ...
+    </div>
+
+    <GameControls :content_visible="downloaded" />
   </div>
 </template>
 
 <script>
-import comms from '@/vuePhaserComms'
+import GameControls from './GameControls'
 
 export default {
   name: 'game',
+  components: { GameControls },
   data () {
     return {
-      button_visible: false,
-      paused: false,
-      game_over: false
-    }
-  },
-  computed: {
-    button_style () {
-      return {
-        marginTop: '0.25rem',
-        visibility: this.button_visible ? 'visible' : 'hidden'
-      }
-    }
-  },
-  methods: {
-    togglePause () {
-      comms.emit(this.paused ? 'resume' : 'pause')
-      this.paused = !this.paused
-    },
-    restart () {
-      comms.emit('restart')
-      this.game_over = false
+      downloaded: false
     }
   },
   mounted () {
     import(/* webpackChunkName: "game" */ '@/game/game').then(game => {
-      game.launch()
-      this.button_visible = true
-      comms.on('game over', () => { this.game_over = true })
+      this.downloaded = true
+      this.$nextTick(() => game.launch())
     })
   }
 }
@@ -57,7 +33,10 @@ export default {
 <style lang="scss" scoped>
 #game-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+}
+
+.placeholder {
+  font-size: 2rem;
+  font-family: 'Courier New', Courier, monospace;
 }
 </style>
