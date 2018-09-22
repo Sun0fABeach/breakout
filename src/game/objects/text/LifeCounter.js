@@ -1,30 +1,28 @@
-import BaseText from './BaseText'
+import comms from '@/vuePhaserComms'
 
-class LifeCounter extends BaseText {
-  constructor (scene) {
-    super(scene, 10, 10, '', '1.5rem')
-    this._livesTotal = 2
+class LifeCounter {
+  constructor (lives) {
+    this._livesTotal = lives
     this._livesCurrent = this._livesTotal
-    this.setText()
+    this._emit()
   }
 
-  loseLife () {
+  decrement () {
     this._livesCurrent--
-    this.setText()
+    this._emit()
   }
 
   reset () {
     this._livesCurrent = this._livesTotal
-    this.setText()
+    this._emit()
   }
 
-  show () {
-    this.setText()
-    super.show()
+  _emit () {
+    comms.emit('life change', this._livesCurrent)
   }
 
-  setText () {
-    super.setText(`Lives: ${this._livesCurrent}`)
+  get number () {
+    return this._livesCurrent
   }
 
   get atZero () {

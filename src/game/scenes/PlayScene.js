@@ -44,8 +44,7 @@ export default class PlayScene extends Scene {
     this.putBallOnPaddle()
     this.physics.world.on('worldbounds', this.ballHitWorldBounds, this)
 
-    this.lifeCounter = new LifeCounter(this)
-    this.lifeCounter.show()
+    this.lifeCounter = new LifeCounter(3)
     this.gameOver = new GameOver(this)
 
     this.audio = new Audio(this)
@@ -125,7 +124,7 @@ export default class PlayScene extends Scene {
 
   loseLife () {
     this.audio.play('explosion')
-    this.lifeCounter.loseLife()
+    this.lifeCounter.decrement()
     if (this.lifeCounter.atZero) {
       this.ball.kill()
       this.gameOver.show(() => comms.emit('game over'))

@@ -2,6 +2,10 @@
   <div id="game-controls">
     <div :style="content_style">
 
+      <div>
+        Lives: {{ num_lives }}
+      </div>
+
       <button type="button" @click="game_over ? restart() : togglePause()">
         {{ this.game_over ? 'Restart' : this.paused ? 'Resume' : 'Pause' }}
       </button>
@@ -23,6 +27,7 @@ export default {
   },
   data () {
     return {
+      num_lives: 0,
       paused: false,
       game_over: false
     }
@@ -45,6 +50,7 @@ export default {
     }
   },
   created () {
+    comms.on('life change', newAmount => { this.num_lives = newAmount })
     comms.on('game over', () => { this.game_over = true })
   }
 }
