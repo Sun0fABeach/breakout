@@ -1,11 +1,12 @@
 <template>
   <div id="game-container">
 
-    <div id="phaser-game-surface" :style="dimensionsStyle">
-      {{ downloaded ? '' : 'Downloading ...' }}
-    </div>
+    <div id="phaser-game-surface" :style="dimensionsStyle" />
+    <GameControls />
 
-    <GameControls :content_visible="downloaded" />
+    <div id="download-overlay" v-if="!downloaded">
+      Downloading ...
+    </div>
   </div>
 </template>
 
@@ -40,15 +41,22 @@ export default {
 
 <style lang="scss" scoped>
 #game-container {
+  position: relative;
   display: flex;
   box-shadow: 0px 0px 8px 2px lightgrey;
 }
 
-#phaser-game-surface {
+#download-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 2rem;
   font-family: 'Courier New', Courier, monospace;
+  background-color: white;
 }
 </style>

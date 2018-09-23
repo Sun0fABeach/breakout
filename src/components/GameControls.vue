@@ -1,16 +1,14 @@
 <template>
   <div id="game-controls">
-    <div :style="content_style">
 
-      <div>
-        Lives: {{ num_lives }}
-      </div>
-
-      <button type="button" @click="game_over ? restart() : togglePause()">
-        {{ this.game_over ? 'Restart' : this.paused ? 'Resume' : 'Pause' }}
-      </button>
-
+    <div>
+      Lives: {{ num_lives }}
     </div>
+
+    <button type="button" @click="game_over ? restart() : togglePause()">
+      {{ this.game_over ? 'Restart' : this.paused ? 'Resume' : 'Pause' }}
+    </button>
+
   </div>
 </template>
 
@@ -19,24 +17,11 @@ import comms from '@/vuePhaserComms'
 
 export default {
   name: 'gameControls',
-  props: {
-    content_visible: {
-      type: Boolean,
-      default: true
-    }
-  },
   data () {
     return {
       num_lives: 0,
       paused: false,
       game_over: false
-    }
-  },
-  computed: {
-    content_style () {
-      return {
-        visibility: this.content_visible ? 'visible' : 'hidden'
-      }
     }
   },
   methods: {
@@ -59,13 +44,10 @@ export default {
 <style lang="scss" scoped>
 #game-controls {
   display: flex;
-
-  > div:first-of-type {
-    flex-grow: 1;
-    padding: 1rem;
-    background-color: aliceblue;
-    font-family: 'Courier New', Courier, monospace;
-  }
+  flex-direction: column;
+  padding: 1rem;
+  background-color: aliceblue;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 button {
