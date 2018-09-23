@@ -5,6 +5,10 @@
       Lives: {{ num_lives }}
     </div>
 
+    <div>
+      Score: {{ score }}
+    </div>
+
     <button type="button" @click="game_over ? restart() : togglePause()">
       {{ this.game_over ? 'Restart' : this.paused ? 'Resume' : 'Pause' }}
     </button>
@@ -20,6 +24,7 @@ export default {
   data () {
     return {
       num_lives: 0,
+      score: 0,
       paused: false,
       game_over: false
     }
@@ -36,6 +41,7 @@ export default {
   },
   created () {
     comms.on('life change', newAmount => { this.num_lives = newAmount })
+    comms.on('score change', newScore => { this.score = newScore })
     comms.on('game over', () => { this.game_over = true })
   }
 }
@@ -48,6 +54,10 @@ export default {
   padding: 1rem;
   background-color: aliceblue;
   font-family: 'Courier New', Courier, monospace;
+
+  > div:not(:first-child) {
+    margin-top: 1rem;
+  }
 }
 
 button {

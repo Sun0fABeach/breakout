@@ -5,6 +5,7 @@ import Paddle from '@/game/objects/Paddle'
 import Blocks from '@/game/objects/Blocks'
 import GameOver from '@/game/objects/text/GameOver'
 import LifeCounter from '@/game/objects/LifeCounter'
+import Score from '@/game/objects/Score'
 import Audio from '@/game/audio'
 
 export default class PlayScene extends Scene {
@@ -26,6 +27,8 @@ export default class PlayScene extends Scene {
 
     this.audio = null
     this.cursor = null
+
+    this.score = new Score(0)
   }
 
   create () {
@@ -56,6 +59,7 @@ export default class PlayScene extends Scene {
   }
 
   restart () {
+    this.score.reset()
     this.ball.show()
     this.putBallOnPaddle()
     this.blocks.reset()
@@ -120,6 +124,7 @@ export default class PlayScene extends Scene {
   blockHit (ball, block) {
     this.blocks.killBlock(block)
     this.audio.play('ding')
+    this.score.increment(100)
   }
 
   loseLife () {
