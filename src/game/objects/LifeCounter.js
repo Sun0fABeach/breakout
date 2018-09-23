@@ -1,7 +1,7 @@
 import comms from '@/vuePhaserComms'
 
 class LifeCounter {
-  constructor (lives) {
+  constructor (lives = 3) {
     this._livesTotal = lives
     this._livesCurrent = this._livesTotal
     this._emit()
@@ -23,10 +23,6 @@ class LifeCounter {
 
   get number () {
     return this._livesCurrent
-  }
-
-  get atZero () {
-    return this._livesCurrent === 0
   }
 }
 
