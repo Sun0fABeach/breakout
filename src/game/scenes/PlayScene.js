@@ -4,8 +4,8 @@ import Ball from '@/game/objects/Ball'
 import Paddle from '@/game/objects/Paddle'
 import Blocks from '@/game/objects/Blocks'
 import GameOver from '@/game/objects/text/GameOver'
-import LifeCounter from '@/game/objects/LifeCounter'
-import Score from '@/game/objects/Score'
+import LifeCounter from '@/game/objects/counter/LifeCounter'
+import Score from '@/game/objects/counter/Score'
 import Audio from '@/game/audio'
 
 export default class PlayScene extends Scene {
