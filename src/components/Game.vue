@@ -46,6 +46,10 @@ export default {
   box-shadow: 0px 0px 8px 2px lightgrey;
 }
 
+#phaser-game-surface {
+  flex-shrink: 0;
+}
+
 #download-overlay {
   position: absolute;
   top: 0;

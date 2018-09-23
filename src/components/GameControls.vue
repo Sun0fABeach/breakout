@@ -51,6 +51,7 @@ export default {
 #game-controls {
   display: flex;
   flex-direction: column;
+  min-width: 150px;
   padding: 1rem;
   background-color: aliceblue;
   font-family: 'Courier New', Courier, monospace;
