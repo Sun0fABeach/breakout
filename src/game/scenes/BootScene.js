@@ -11,9 +11,9 @@ import blockPurple from '@/game/assets/blockPurple.png'
 import blockRed from '@/game/assets/blockRed.png'
 import blockYellow from '@/game/assets/blockYellow.png'
 
-import particleStarSmall from '@/game/assets/particleStarSmall.png'
-import particleStarMedium from '@/game/assets/particleStarMedium.png'
-import particleStarBig from '@/game/assets/particleStarBig.png'
+import particleStarSmall from '@/game/assets/particles/starSmall.png'
+import particleStarMedium from '@/game/assets/particles/starMedium.png'
+import particleStarBig from '@/game/assets/particles/starBig.png'
 
 import thudOGG from '@/game/assets/sounds/thud.ogg'
 import thudMP3 from '@/game/assets/sounds/thud.mp3'
