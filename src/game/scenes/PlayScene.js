@@ -117,6 +117,7 @@ export default class PlayScene extends Scene {
     } else {
       // call like this to enable multiple layered thuds:
       this.audio.play('thud')
+      this.ball.puff(up, false, left, right)
       this.adjustBallSpinAfterWorldBoundsCollision(up, left, right)
     }
   }

@@ -14,6 +14,7 @@ import blockYellow from '@/game/assets/blockYellow.png'
 import particleStarSmall from '@/game/assets/particles/starSmall.png'
 import particleStarMedium from '@/game/assets/particles/starMedium.png'
 import particleStarBig from '@/game/assets/particles/starBig.png'
+import puff from '@/game/assets/particles/whitePuff.png'
 
 import thudOGG from '@/game/assets/sounds/thud.ogg'
 import thudMP3 from '@/game/assets/sounds/thud.mp3'
@@ -36,6 +37,7 @@ export default class BootScene extends Scene {
     this.load.image('particleStarSmall', particleStarSmall)
     this.load.image('particleStarMedium', particleStarMedium)
     this.load.image('particleStarBig', particleStarBig)
+    this.load.image('puff', puff)
 
     this.load.image('blockGreen', blockGreen)
     this.load.image('blockGrey', blockGrey)

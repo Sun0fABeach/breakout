@@ -7,10 +7,11 @@ class Ball extends Physics.Arcade.Image {
     this._velocityFactor = 400
     this._angularVelocity = 200
     this._scene = scene
+    this._world = scene.physics.world
 
     /* game object not registered with scene and it's body is not enabled when
        it is *not* constructed via scene factory */
-    scene.physics.world.enableBody(this, Physics.Arcade.DYNAMIC_BODY)
+    this._world.enableBody(this, Physics.Arcade.DYNAMIC_BODY)
     scene.add.existing(this)
     this.setCollideWorldBounds(true)
     this.body.onWorldBounds = true // enable worldbounds event
@@ -20,21 +21,33 @@ class Ball extends Physics.Arcade.Image {
   }
 
   setupEmitters (scene) {
-    const emitterConf = {
-      active: false,
-      blendMode: 'SCREEN',
-      speed: { min: 50, max: 500 },
-      scale: { start: 1, end: 0 },
-      lifespan: 3000,
-      gravityY: 300,
-      bounds: scene.physics.world.bounds,
-      collideTop: false,
-      bounce: 0.5
-    }
+    const emitters = {}
 
-    return ['Small', 'Medium', 'Big'].map(type =>
-      scene.add.particles(`particleStar${type}`).createEmitter(emitterConf)
+    emitters.explosion = ['Small', 'Medium', 'Big'].map(type =>
+      scene.add.particles(`particleStar${type}`).createEmitter({
+        active: false,
+        blendMode: 'SCREEN',
+        speed: { min: 50, max: 500 },
+        scale: { start: 1, end: 0 },
+        lifespan: 3000,
+        gravityY: 300,
+        bounds: this._world.bounds,
+        collideTop: false,
+        bounce: 0.5
+      })
     )
+    emitters.puff = [
+      scene.add.particles('puff').createEmitter({
+        active: false,
+        blendMode: 'SCREEN',
+        speed: 15,
+        scale: { start: 0.05, end: 0.07 },
+        lifespan: 600,
+        alpha: 0.15
+      })
+    ]
+
+    return emitters
   }
 
   show () {
@@ -75,7 +88,7 @@ class Ball extends Physics.Arcade.Image {
   }
 
   explode () {
-    Object.values(this._emitters).forEach(emitter => {
+    Object.values(this._emitters.explosion).forEach(emitter => {
       emitter.resume()
       emitter.setAngle(this.explosionAngleRange(this.body.velocity.angle()))
       emitter.explode(60, this.x, this.y)
@@ -86,11 +99,39 @@ class Ball extends Physics.Arcade.Image {
     let deg = Phaser.Math.RadToDeg(radians)
     const shiftFunc = deg > 270 ? Phaser.Math.MinSub : Phaser.Math.MaxAdd
     deg = shiftFunc(deg, 20, 270) // shift range towards center up
+    return this.particleAngleRange(deg, 140)
+  }
 
-    const spreadDegRange = 140
+  puff (up, down, left, right) {
+    let directionDeg, coords
+    const worldWidth = this._world.bounds.width
+    const worldheight = this._world.bounds.height
+
+    if (down) {
+      directionDeg = 270
+      coords = [ this.x, worldheight - 1 ]
+    } else if (left) {
+      directionDeg = 360
+      coords = [ 1, this.y ]
+    } else if (up) {
+      directionDeg = 90
+      coords = [ this.x, 1 ]
+    } else if (right) {
+      directionDeg = 180
+      coords = [ worldWidth - 1, this.y ]
+    }
+
+    Object.values(this._emitters.puff).forEach(emitter => {
+      emitter.resume()
+      emitter.setAngle(this.particleAngleRange(directionDeg, 180))
+      emitter.explode(2, ...coords)
+    })
+  }
+
+  particleAngleRange (deg, spreadRange) {
     return {
-      min: deg - spreadDegRange / 2,
-      max: deg + spreadDegRange / 2
+      min: deg - spreadRange / 2,
+      max: deg + spreadRange / 2
     }
   }
 
