@@ -72,7 +72,7 @@ export default class PlayScene extends Scene {
   }
 
   launchBallFromPaddle () {
-    this.paddle.removeBall(this.ball)
+    this.paddle.removeBall(this.ball, true) // destroys ball object
     this.ball = new Ball(this,
       this.paddle.x + this.ballPaddleOffset.x,
       this.paddle.y + this.ballPaddleOffset.y

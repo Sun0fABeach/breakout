@@ -32,8 +32,8 @@ class Paddle extends GameObjects.Container {
     this.add(ball)
   }
 
-  removeBall () {
-    this.remove(this._mountedBall, true) // calls destroy on ball object
+  removeBall (destroyBall = false) {
+    this.remove(this._mountedBall, destroyBall)
     this._mountedBall = null
   }
 
