@@ -22,7 +22,7 @@ export default class PlayScene extends Scene {
 
     this.colliders = {
       ballPaddle: null,
-      ballBlock: null
+      ballBlockGroup: []
     }
 
     this.audio = null
@@ -40,9 +40,17 @@ export default class PlayScene extends Scene {
       this.ball, this.paddle, this.bounceBallOffPaddle, null, this
     )
     this.blocks = new Blocks(this)
-    this.colliders.ballBlock = this.physics.add.collider(
-      this.ball, this.blocks, this.blockHit, null, this
-    )
+    this.blocks.groups.forEach(group => {
+      this.colliders.ballBlockGroup.push(
+        this.physics.add.collider(
+          this.ball,
+          group,
+          (ball, block) => this.blockHit(ball, block, group.points),
+          null,
+          this
+        )
+      )
+    })
 
     this.putBallOnPaddle()
     this.physics.world.on('worldbounds', this.ballHitWorldBounds, this)
@@ -86,7 +94,9 @@ export default class PlayScene extends Scene {
 
     this.bounceBallOffPaddle(this.ball, this.paddle)
     this.colliders.ballPaddle.object1 = this.ball
-    this.colliders.ballBlock.object1 = this.ball
+    this.colliders.ballBlockGroup.forEach(collider => {
+      collider.object1 = this.ball
+    })
   }
 
   bounceBallOffPaddle (ball, paddle) {
@@ -122,10 +132,10 @@ export default class PlayScene extends Scene {
     }
   }
 
-  blockHit (ball, block) {
+  blockHit (ball, block, points) {
     this.blocks.killBlock(block)
     this.audio.play('ding')
-    this.score.increment(100)
+    this.score.increment(points)
   }
 
   loseLife () {
