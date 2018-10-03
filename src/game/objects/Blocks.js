@@ -34,8 +34,12 @@ class Blocks {
     this._blockGroups.forEach(group => group.reset())
   }
 
-  get groups () {
-    return this._blockGroups
+  setupBallCollider (ball, callback) {
+    this._blockGroups.forEach(group => group.setupBallCollider(ball, callback))
+  }
+
+  setBallForCollider (ball) {
+    this._blockGroups.forEach(group => group.setBallForCollider(ball))
   }
 }
 
@@ -43,7 +47,10 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
   constructor (scene, config, scoreVal) {
     super(scene.physics.world, scene)
     this.createFromConfig(config)
-    this.scoreVal = scoreVal
+
+    this._scene = scene
+    this._scoreVal = scoreVal
+    this._ballCollider = null
   }
 
   killBlock (block) {
@@ -59,8 +66,18 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
     }
   }
 
-  get points () {
-    return this.scoreVal
+  setupBallCollider (ball, callback) {
+    this._ballCollider = this._scene.physics.add.collider(
+      ball,
+      this,
+      (ball, block) => callback(ball, block, this._scoreVal),
+      null,
+      this._scene
+    )
+  }
+
+  setBallForCollider (ball) {
+    this._ballCollider.object1 = ball
   }
 }
 

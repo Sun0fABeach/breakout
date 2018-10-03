@@ -12,21 +12,33 @@ class Paddle extends GameObjects.Container {
     this.body.setCollideWorldBounds(true)
     this.body.immovable = true
 
-    this._ball = null
+    this._scene = scene
+    this._mountedBall = null
+    this._ballCollider = null
+  }
+
+  setupBallCollider (ball, callback) {
+    this._ballCollider = this._scene.physics.add.collider(
+      ball, this, callback, null, this._scene
+    )
+  }
+
+  setBallForCollider (ball) {
+    this._ballCollider.object1 = ball
   }
 
   mountBall (ball) {
-    this._ball = ball
+    this._mountedBall = ball
     this.add(ball)
   }
 
   removeBall () {
-    this.remove(this._ball, true) // calls destroy on ball object
-    this._ball = null
+    this.remove(this._mountedBall, true) // calls destroy on ball object
+    this._mountedBall = null
   }
 
   get ballMounted () {
-    return this._ball !== null
+    return this._mountedBall !== null
   }
 
   get halfHeight () {

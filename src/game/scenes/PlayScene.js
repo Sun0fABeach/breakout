@@ -20,11 +20,6 @@ export default class PlayScene extends Scene {
     this.ball = null
     this.ballPaddleOffset = { x: 0, y: 0 }
 
-    this.colliders = {
-      ballPaddle: null,
-      ballBlockGroup: []
-    }
-
     this.audio = null
     this.cursor = null
 
@@ -35,22 +30,13 @@ export default class PlayScene extends Scene {
     this.add.image(400, 300, 'sky')
 
     this.ball = new Ball(this, 400, 300)
+
     this.paddle = new Paddle(this, 400, 550)
-    this.colliders.ballPaddle = this.physics.add.collider(
-      this.ball, this.paddle, this.bounceBallOffPaddle, null, this
+    this.paddle.setupBallCollider(
+      this.ball, this.bounceBallOffPaddle.bind(this)
     )
     this.blocks = new Blocks(this)
-    this.blocks.groups.forEach(group => {
-      this.colliders.ballBlockGroup.push(
-        this.physics.add.collider(
-          this.ball,
-          group,
-          (ball, block) => this.blockHit(ball, block, group.points),
-          null,
-          this
-        )
-      )
-    })
+    this.blocks.setupBallCollider(this.ball, this.blockHit.bind(this))
 
     this.putBallOnPaddle()
     this.physics.world.on('worldbounds', this.ballHitWorldBounds, this)
@@ -93,10 +79,8 @@ export default class PlayScene extends Scene {
     )
 
     this.bounceBallOffPaddle(this.ball, this.paddle)
-    this.colliders.ballPaddle.object1 = this.ball
-    this.colliders.ballBlockGroup.forEach(collider => {
-      collider.object1 = this.ball
-    })
+    this.paddle.setBallForCollider(this.ball)
+    this.blocks.setBallForCollider(this.ball)
   }
 
   bounceBallOffPaddle (ball, paddle) {
