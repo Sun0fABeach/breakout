@@ -24,10 +24,28 @@ class Blocks {
       }
       return new BlockGroup(scene, config, blockDef.value)
     })
+
+    this._emitters = ['Small', 'Medium'].map(type =>
+      scene.add.particles(`particleStar${type}`).createEmitter({
+        active: false,
+        blendMode: 'SCREEN',
+        scale: { start: 0.8, end: 0 },
+        speed: { min: -100, max: 100 },
+        quantity: 20
+      })
+    )
   }
 
   killBlock (block) {
     this._blockGroups.find(group => group.contains(block)).killBlock(block)
+    this._emitters.forEach(emitter => {
+      emitter.setEmitZone({
+        type: 'edge',
+        source: block.getBounds(),
+        quantity: 20
+      })
+      emitter.resume().explode()
+    })
   }
 
   reset () {
