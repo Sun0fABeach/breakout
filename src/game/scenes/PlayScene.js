@@ -7,6 +7,7 @@ import GameOver from '@/game/objects/text/GameOver'
 import LifeCounter from '@/game/objects/counter/LifeCounter'
 import Score from '@/game/objects/counter/Score'
 import Audio from '@/game/audio'
+import { init as particlesInit } from '@/game/particleManagers'
 
 export default class PlayScene extends Scene {
   constructor () {
@@ -28,6 +29,12 @@ export default class PlayScene extends Scene {
 
   create () {
     this.add.image(400, 300, 'sky')
+
+    /**
+     * weird: this call has to happen right before ball init. if I put
+     * this.add.image() in between, the particles will be invisible! -.-
+     */
+    particlesInit(this)
 
     this.ball = new Ball(this, 400, 300)
 

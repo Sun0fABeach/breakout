@@ -1,4 +1,5 @@
 import Phaser, { Physics } from 'phaser'
+import { managers as particleManagers } from '@/game/particleManagers'
 
 class Ball extends Physics.Arcade.Image {
   constructor (scene, x, y) {
@@ -23,8 +24,8 @@ class Ball extends Physics.Arcade.Image {
   setupEmitters (scene) {
     const emitters = {}
 
-    emitters.explosion = ['Small', 'Medium', 'Big'].map(type =>
-      scene.add.particles(`particleStar${type}`).createEmitter({
+    emitters.explosion = ['small', 'medium', 'big'].map(type =>
+      particleManagers.stars[type].createEmitter({
         active: false,
         blendMode: 'SCREEN',
         speed: { min: 50, max: 500 },
@@ -37,7 +38,7 @@ class Ball extends Physics.Arcade.Image {
       })
     )
     emitters.puff = [
-      scene.add.particles('puff').createEmitter({
+      particleManagers.puff.createEmitter({
         active: false,
         blendMode: 'SCREEN',
         speed: 15,

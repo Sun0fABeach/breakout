@@ -1,4 +1,5 @@
 import { Physics } from 'phaser'
+import { managers as particleManagers } from '@/game/particleManagers'
 
 class Blocks {
   constructor (scene) {
@@ -25,8 +26,8 @@ class Blocks {
       return new BlockGroup(scene, config, blockDef.value)
     })
 
-    this._emitters = ['Small', 'Medium'].map(type =>
-      scene.add.particles(`particleStar${type}`).createEmitter({
+    this._emitters = ['small', 'medium'].map(type =>
+      particleManagers.stars[type].createEmitter({
         active: false,
         blendMode: 'SCREEN',
         scale: { start: 0.8, end: 0 },
