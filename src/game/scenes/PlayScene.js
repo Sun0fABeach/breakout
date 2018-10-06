@@ -161,15 +161,6 @@ export default class PlayScene extends Scene {
     this.ball.spin = spinDirection
   }
 
-  centerScale (obj, scale) {
-    const worldDimensions = this.physics.world.bounds
-    obj.setScale(scale)
-    obj.setPosition(
-      worldDimensions.width / 2 - obj.displayWidth / 2,
-      worldDimensions.height / 2 - obj.displayHeight / 2
-    )
-  }
-
   update () {
     if (this.gameOver.visible) {
       return
