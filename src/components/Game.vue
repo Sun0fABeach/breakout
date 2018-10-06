@@ -30,10 +30,8 @@ export default {
   },
   mounted () {
     import(/* webpackChunkName: "game" */ '@/game/game').then(game => {
-      setTimeout(() => {
-        this.downloaded = true
-        this.$nextTick(() => game.launch(width, height))
-      }, 2000)
+      this.downloaded = true
+      this.$nextTick(() => game.launch(width, height))
     })
   }
 }
