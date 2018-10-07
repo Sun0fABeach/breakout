@@ -28,7 +28,7 @@ class Blocks {
       { type: 'Red', value: 100 },
       { type: 'Yellow', value: 50 }
     ].map((blockDef, idx) => {
-      const config = {
+      const config : GroupCreateConfig = {
         key: 'block' + blockDef.type,
         repeat: numCols - 1,
         setXY: {
@@ -50,7 +50,7 @@ class Blocks {
   }
 
   killBlock (toKill : Block) {
-    const containerGroup = this._blockGroups.find(
+    const containerGroup : BlockGroup | undefined = this._blockGroups.find(
       group => group.contains(toKill)
     )
     if (!containerGroup) {
@@ -104,7 +104,9 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
   }
 
   reset () {
-    for (let dead = this.getFirstDead(); dead; dead = this.getFirstDead()) {
+    for (
+      let dead : Block = this.getFirstDead(); dead; dead = this.getFirstDead()
+    ) {
       dead.setActive(true)
       dead.setVisible(true)
       dead.body.enable = true

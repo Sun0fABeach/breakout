@@ -1,4 +1,4 @@
-import Phaser, { Physics } from 'phaser'
+import Phaser, { Physics, Math as PhaserMath } from 'phaser'
 import { managers as particleManagers } from '@/game/particleManagers'
 
 type Emitter = Phaser.GameObjects.Particles.ParticleEmitter
@@ -107,8 +107,11 @@ class Ball extends Physics.Arcade.Image {
   }
 
   explosionAngleRange (radians : number) {
-    let deg = Phaser.Math.RadToDeg(radians)
-    const shiftFunc = deg > 270 ? Phaser.Math.MinSub : Phaser.Math.MaxAdd
+    type ShiftFunc = (base : number, amount : number, limit : number) => number
+
+    let deg : number = PhaserMath.RadToDeg(radians)
+    const shiftFunc : ShiftFunc =
+      deg > 270 ? PhaserMath.MinSub : PhaserMath.MaxAdd
     deg = shiftFunc(deg, 20, 270) // shift range towards center up
     return this.particleAngleRange(deg, 140)
   }
@@ -116,8 +119,8 @@ class Ball extends Physics.Arcade.Image {
   puff (up : boolean, down : boolean, left : boolean, right : boolean) {
     let directionDeg : number
     let coords : [number, number]
-    const worldWidth = this._world.bounds.width
-    const worldheight = this._world.bounds.height
+    const worldWidth : number = this._world.bounds.width
+    const worldheight : number = this._world.bounds.height
 
     if (down) {
       directionDeg = 270

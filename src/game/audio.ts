@@ -13,7 +13,7 @@ class Audio {
   }
 
   play (name : string, vol? : number) {
-    const volume = vol === undefined ? this._volumes[name] : vol
+    const volume : number = vol === undefined ? this._volumes[name] : vol
     this._scene.sound.play(name, { volume })
   }
 }

@@ -5,7 +5,8 @@ class GameOver extends BaseText {
 
   constructor (scene : Phaser.Scene) {
     super(scene, 0, 0, 'Game Over', '4rem')
-    const worldDimensions = scene.physics.world.bounds
+    const worldDimensions : { width : number, height : number } =
+      scene.physics.world.bounds
     this._worldCenter = {
       x: worldDimensions.width / 2,
       y: worldDimensions.height / 2

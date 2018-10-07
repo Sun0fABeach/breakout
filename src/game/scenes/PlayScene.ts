@@ -48,7 +48,8 @@ export default class PlayScene extends Scene {
     this.physics.world.on('worldbounds', this.ballHitWorldBounds, this)
 
     const gameOver = new GameOver(this)
-    const cursor = this.input.keyboard.createCursorKeys()
+    const cursor : Phaser.Input.Keyboard.CursorKeys =
+      this.input.keyboard.createCursorKeys()
 
     comms.on('pause', () => this.scene.pause())
     comms.on('resume', () => this.scene.resume())
