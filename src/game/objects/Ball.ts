@@ -2,17 +2,17 @@ import Phaser, { Physics, Math as PhaserMath } from 'phaser'
 import { managers as particleManagers } from '@/game/particleManagers'
 
 type Emitter = Phaser.GameObjects.Particles.ParticleEmitter
-type EmitterDict = { [index : string] : Emitter[] }
+type EmitterDict = { [index: string]: Emitter[] }
 
 class Ball extends Physics.Arcade.Image {
-  _startingAngle : number
-  _velocityFactor : number
-  _angularVelocity : number
-  _scene : Phaser.Scene
-  _world : Phaser.Physics.Arcade.World
-  _emitters : EmitterDict
+  _startingAngle: number
+  _velocityFactor: number
+  _angularVelocity: number
+  _scene: Phaser.Scene
+  _world: Phaser.Physics.Arcade.World
+  _emitters: EmitterDict
 
-  constructor (scene : Phaser.Scene, x : number, y : number) {
+  constructor (scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, 'ball')
     this._startingAngle = 315
     this._velocityFactor = 400
@@ -31,8 +31,8 @@ class Ball extends Physics.Arcade.Image {
     this._emitters = this.setupEmitters(scene)
   }
 
-  setupEmitters (scene : Phaser.Scene) {
-    const emitters : EmitterDict = {}
+  setupEmitters (scene: Phaser.Scene) {
+    const emitters: EmitterDict = {}
 
     emitters.explosion = ['small', 'medium', 'big'].map(type =>
       particleManagers.stars[type].createEmitter({
@@ -74,7 +74,7 @@ class Ball extends Physics.Arcade.Image {
     this.disableBody(true, true) // disable & hide
   }
 
-  setVelocityFromAngle (angleRad : number) {
+  setVelocityFromAngle (angleRad: number) {
     super.setVelocity(
       Math.cos(angleRad) * this._velocityFactor,
       Math.sin(angleRad) * this._velocityFactor
@@ -85,12 +85,12 @@ class Ball extends Physics.Arcade.Image {
     this.setVelocity(0)
   }
 
-  set spin (spinDirection : string) {
+  set spin (spinDirection: string) {
     const sign = spinDirection === 'left' ? -1 : +1
     this.setAngularVelocity(sign * this._angularVelocity)
   }
 
-  kill (callback ?: () => any) {
+  kill (callback?: () => any) {
     this.explode()
     this.disableFull()
     if (callback) {
@@ -106,21 +106,21 @@ class Ball extends Physics.Arcade.Image {
     })
   }
 
-  explosionAngleRange (radians : number) {
-    type ShiftFunc = (base : number, amount : number, limit : number) => number
+  explosionAngleRange (radians: number) {
+    type ShiftFunc = (base: number, amount: number, limit: number) => number
 
-    let deg : number = PhaserMath.RadToDeg(radians)
-    const shiftFunc : ShiftFunc =
+    let deg: number = PhaserMath.RadToDeg(radians)
+    const shiftFunc: ShiftFunc =
       deg > 270 ? PhaserMath.MinSub : PhaserMath.MaxAdd
     deg = shiftFunc(deg, 20, 270) // shift range towards center up
     return this.particleAngleRange(deg, 140)
   }
 
-  puff (up : boolean, down : boolean, left : boolean, right : boolean) {
-    let directionDeg : number
-    let coords : [number, number]
-    const worldWidth : number = this._world.bounds.width
-    const worldheight : number = this._world.bounds.height
+  puff (up: boolean, down: boolean, left: boolean, right: boolean) {
+    let directionDeg: number
+    let coords: [number, number]
+    const worldWidth: number = this._world.bounds.width
+    const worldheight: number = this._world.bounds.height
 
     if (down) {
       directionDeg = 270
@@ -143,7 +143,7 @@ class Ball extends Physics.Arcade.Image {
     })
   }
 
-  particleAngleRange (deg : number, spreadRange : number) {
+  particleAngleRange (deg: number, spreadRange: number) {
     return {
       min: deg - spreadRange / 2,
       max: deg + spreadRange / 2

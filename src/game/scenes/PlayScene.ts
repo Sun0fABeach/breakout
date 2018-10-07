@@ -10,11 +10,11 @@ import Audio from '@/game/audio'
 import { init as particlesInit } from '@/game/particleManagers'
 
 export default class PlayScene extends Scene {
-  prefabs : { [index : string] : any }
-  ballPaddleOffset : { x : number, y : number }
-  lifeCounter : LifeCounter
-  score : Score
-  audio : Audio
+  prefabs: { [index: string]: any }
+  ballPaddleOffset: { x: number, y: number }
+  lifeCounter: LifeCounter
+  score: Score
+  audio: Audio
 
   constructor () {
     super({ key: 'PlayScene' })
@@ -48,7 +48,7 @@ export default class PlayScene extends Scene {
     this.physics.world.on('worldbounds', this.ballHitWorldBounds, this)
 
     const gameOver = new GameOver(this)
-    const cursor : Phaser.Input.Keyboard.CursorKeys =
+    const cursor: Phaser.Input.Keyboard.CursorKeys =
       this.input.keyboard.createCursorKeys()
 
     comms.on('pause', () => this.scene.pause())
@@ -95,7 +95,7 @@ export default class PlayScene extends Scene {
     blocks.setBallForCollider(ball)
   }
 
-  bounceBallOffPaddle (ball : Ball, paddle : Paddle) {
+  bounceBallOffPaddle (ball: Ball, paddle: Paddle) {
     this.audio.play('wooden')
     this.setBallVelocity(
       Phaser.Math.Angle.Between(paddle.x, paddle.y, ball.x, ball.y)
@@ -103,12 +103,12 @@ export default class PlayScene extends Scene {
     ball.spin = ball.x < paddle.x ? 'left' : 'right'
   }
 
-  setBallVelocity (angleRad : number) {
+  setBallVelocity (angleRad: number) {
     /* if the angle is too horizontal, adjust it a
        little to make the ball go slightly upwards */
-    const flatRight : number = 0
-    const flatLeft : number = 3.141593
-    const tolerance : number = 0.008726 // 0.5 degrees
+    const flatRight: number = 0
+    const flatLeft: number = 3.141593
+    const tolerance: number = 0.008726 // 0.5 degrees
     if (Phaser.Math.Within(angleRad, flatRight, tolerance)) {
       angleRad = -tolerance
     } else if (Phaser.Math.Within(Math.abs(angleRad), flatLeft, tolerance)) {
@@ -118,8 +118,8 @@ export default class PlayScene extends Scene {
   }
 
   ballHitWorldBounds (
-    ballBody : Phaser.Physics.Arcade.Body,
-    up : boolean, down : boolean, left : boolean, right : boolean
+    ballBody: Phaser.Physics.Arcade.Body,
+    up: boolean, down: boolean, left: boolean, right: boolean
   ) {
     if (down) {
       this.loseLife()
@@ -132,7 +132,7 @@ export default class PlayScene extends Scene {
   }
 
   blockHit (
-    ball : Ball, block : Phaser.Physics.Arcade.Sprite, points : number
+    ball: Ball, block: Phaser.Physics.Arcade.Sprite, points: number
   ) {
     this.prefabs.blocks.killBlock(block)
     this.audio.play('ding')
@@ -156,10 +156,10 @@ export default class PlayScene extends Scene {
   }
 
   adjustBallSpinAfterWorldBoundsCollision (
-    upperWall : boolean, leftWall : boolean, rightWall : boolean
+    upperWall: boolean, leftWall: boolean, rightWall: boolean
   ) {
     const ball = this.prefabs.ball
-    let spinDirection : string
+    let spinDirection: string
 
     if (upperWall) {
       // goes left -> spin right
@@ -188,7 +188,7 @@ export default class PlayScene extends Scene {
       this.launchBallFromPaddle()
     }
 
-    const pixelChange : number = 5
+    const pixelChange: number = 5
 
     if (cursor.left.isDown) {
       paddle.x -= pixelChange

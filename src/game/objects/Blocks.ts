@@ -11,10 +11,10 @@ type CollisionCb = (
 ) => any
 
 class Blocks {
-  _blockGroups : BlockGroup[]
-  _emitters : Emitter[]
+  _blockGroups: BlockGroup[]
+  _emitters: Emitter[]
 
-  constructor (scene : Phaser.Scene) {
+  constructor (scene: Phaser.Scene) {
     const padX = 100
     const padY = 50
     const colGap = 100
@@ -28,7 +28,7 @@ class Blocks {
       { type: 'Red', value: 100 },
       { type: 'Yellow', value: 50 }
     ].map((blockDef, idx) => {
-      const config : GroupCreateConfig = {
+      const config: GroupCreateConfig = {
         key: 'block' + blockDef.type,
         repeat: numCols - 1,
         setXY: {
@@ -49,8 +49,8 @@ class Blocks {
     )
   }
 
-  killBlock (toKill : Block) {
-    const containerGroup : BlockGroup | undefined = this._blockGroups.find(
+  killBlock (toKill: Block) {
+    const containerGroup: BlockGroup | undefined = this._blockGroups.find(
       group => group.contains(toKill)
     )
     if (!containerGroup) {
@@ -73,22 +73,22 @@ class Blocks {
     this._blockGroups.forEach(group => group.reset())
   }
 
-  setupBallCollider (ball : Ball, callback : CollisionCb) {
+  setupBallCollider (ball: Ball, callback: CollisionCb) {
     this._blockGroups.forEach(group => group.setupBallCollider(ball, callback))
   }
 
-  setBallForCollider (ball : Ball) {
+  setBallForCollider (ball: Ball) {
     this._blockGroups.forEach(group => group.setBallForCollider(ball))
   }
 }
 
 class BlockGroup extends Physics.Arcade.StaticGroup {
-  _scene : Phaser.Scene
-  _scoreVal : number
-  _ballCollider : Phaser.Physics.Arcade.Collider | null
+  _scene: Phaser.Scene
+  _scoreVal: number
+  _ballCollider: Phaser.Physics.Arcade.Collider | null
 
   constructor (
-    scene : Phaser.Scene, config : GroupCreateConfig, scoreVal : number
+    scene: Phaser.Scene, config: GroupCreateConfig, scoreVal: number
   ) {
     super(scene.physics.world, scene)
     this.createFromConfig(config)
@@ -98,14 +98,14 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
     this._ballCollider = null
   }
 
-  killBlock (block : Block) {
+  killBlock (block: Block) {
     this.killAndHide(block)
     block.body.enable = false
   }
 
   reset () {
     for (
-      let dead : Block = this.getFirstDead(); dead; dead = this.getFirstDead()
+      let dead: Block = this.getFirstDead(); dead; dead = this.getFirstDead()
     ) {
       dead.setActive(true)
       dead.setVisible(true)
@@ -113,7 +113,7 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
     }
   }
 
-  setupBallCollider (ball : Ball, callback : CollisionCb) {
+  setupBallCollider (ball: Ball, callback: CollisionCb) {
     this._ballCollider = this._scene.physics.add.collider(
       ball,
       this,
@@ -123,7 +123,7 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
     )
   }
 
-  setBallForCollider (ball : Ball) {
+  setBallForCollider (ball: Ball) {
     // @ts-ignore
     this._ballCollider.object1 = ball
   }

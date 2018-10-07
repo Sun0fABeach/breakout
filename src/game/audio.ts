@@ -1,8 +1,8 @@
 class Audio {
-  _scene : Phaser.Scene
-  _volumes : { [index: string] : number }
+  _scene: Phaser.Scene
+  _volumes: { [index: string]: number }
 
-  constructor (scene : Phaser.Scene) {
+  constructor (scene: Phaser.Scene) {
     this._scene = scene
     this._volumes = {
       thud: 0.4,
@@ -12,8 +12,8 @@ class Audio {
     }
   }
 
-  play (name : string, vol? : number) {
-    const volume : number = vol === undefined ? this._volumes[name] : vol
+  play (name: string, vol?: number) {
+    const volume: number = vol === undefined ? this._volumes[name] : vol
     this._scene.sound.play(name, { volume })
   }
 }
