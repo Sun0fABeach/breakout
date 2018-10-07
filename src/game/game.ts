@@ -1,8 +1,8 @@
 import Phaser from 'phaser'
-import BootScene from './scenes/BootScene'
-import PlayScene from './scenes/PlayScene'
+import BootScene from '@/game/scenes/BootScene'
+import PlayScene from '@/game/scenes/PlayScene'
 
-function launch (width, height) {
+function launch (width : number, height : number) {
   // eslint-disable-next-line
   new Phaser.Game({
     type: Phaser.AUTO,

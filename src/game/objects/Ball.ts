@@ -1,8 +1,18 @@
 import Phaser, { Physics } from 'phaser'
 import { managers as particleManagers } from '@/game/particleManagers'
 
+type Emitter = Phaser.GameObjects.Particles.ParticleEmitter
+type EmitterDict = { [index : string] : Emitter[] }
+
 class Ball extends Physics.Arcade.Image {
-  constructor (scene, x, y) {
+  _startingAngle : number
+  _velocityFactor : number
+  _angularVelocity : number
+  _scene : Phaser.Scene
+  _world : Phaser.Physics.Arcade.World
+  _emitters : EmitterDict
+
+  constructor (scene : Phaser.Scene, x : number, y : number) {
     super(scene, x, y, 'ball')
     this._startingAngle = 315
     this._velocityFactor = 400
@@ -21,13 +31,13 @@ class Ball extends Physics.Arcade.Image {
     this._emitters = this.setupEmitters(scene)
   }
 
-  setupEmitters (scene) {
-    const emitters = {}
+  setupEmitters (scene : Phaser.Scene) {
+    const emitters : EmitterDict = {}
 
     emitters.explosion = ['small', 'medium', 'big'].map(type =>
       particleManagers.stars[type].createEmitter({
         active: false,
-        blendMode: 'SCREEN',
+        blendMode: Phaser.BlendModes.SCREEN,
         speed: { min: 50, max: 500 },
         scale: { start: 1, end: 0 },
         lifespan: 3000,
@@ -40,7 +50,7 @@ class Ball extends Physics.Arcade.Image {
     emitters.puff = [
       particleManagers.puff.createEmitter({
         active: false,
-        blendMode: 'SCREEN',
+        blendMode: Phaser.BlendModes.SCREEN,
         speed: 15,
         scale: { start: 0.05, end: 0.07 },
         lifespan: 600,
@@ -64,7 +74,7 @@ class Ball extends Physics.Arcade.Image {
     this.disableBody(true, true) // disable & hide
   }
 
-  setVelocityFromAngle (angleRad) {
+  setVelocityFromAngle (angleRad : number) {
     super.setVelocity(
       Math.cos(angleRad) * this._velocityFactor,
       Math.sin(angleRad) * this._velocityFactor
@@ -75,16 +85,16 @@ class Ball extends Physics.Arcade.Image {
     this.setVelocity(0)
   }
 
-  set spin (spinDirection) {
+  set spin (spinDirection : string) {
     const sign = spinDirection === 'left' ? -1 : +1
     this.setAngularVelocity(sign * this._angularVelocity)
   }
 
-  kill (resetCb = undefined) {
+  kill (callback ?: () => any) {
     this.explode()
     this.disableFull()
-    if (resetCb) {
-      resetCb()
+    if (callback) {
+      callback()
     }
   }
 
@@ -96,15 +106,16 @@ class Ball extends Physics.Arcade.Image {
     })
   }
 
-  explosionAngleRange (radians) {
+  explosionAngleRange (radians : number) {
     let deg = Phaser.Math.RadToDeg(radians)
     const shiftFunc = deg > 270 ? Phaser.Math.MinSub : Phaser.Math.MaxAdd
     deg = shiftFunc(deg, 20, 270) // shift range towards center up
     return this.particleAngleRange(deg, 140)
   }
 
-  puff (up, down, left, right) {
-    let directionDeg, coords
+  puff (up : boolean, down : boolean, left : boolean, right : boolean) {
+    let directionDeg : number
+    let coords : [number, number]
     const worldWidth = this._world.bounds.width
     const worldheight = this._world.bounds.height
 
@@ -129,7 +140,7 @@ class Ball extends Physics.Arcade.Image {
     })
   }
 
-  particleAngleRange (deg, spreadRange) {
+  particleAngleRange (deg : number, spreadRange : number) {
     return {
       min: deg - spreadRange / 2,
       max: deg + spreadRange / 2

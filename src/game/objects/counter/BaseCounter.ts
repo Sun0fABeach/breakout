@@ -1,18 +1,21 @@
 import comms from '@/vuePhaserComms'
 
 class BaseCounter {
-  constructor (total) {
+  _countTotal : number
+  _countCurrent : number
+
+  constructor (total : number) {
     this._countTotal = total
     this._countCurrent = this._countTotal
     this._emit()
   }
 
-  increment (val = 1) {
+  increment (val : number = 1) {
     this._countCurrent += val
     this._emit()
   }
 
-  decrement (val = 1) {
+  decrement (val : number = 1) {
     this._countCurrent -= val
     this._emit()
   }
@@ -22,7 +25,7 @@ class BaseCounter {
     this._emit()
   }
 
-  _emit (eventName = 'count change') {
+  _emit (eventName : string = 'count change') {
     comms.emit(eventName, this._countCurrent)
   }
 

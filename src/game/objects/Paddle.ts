@@ -1,7 +1,15 @@
 import { GameObjects } from 'phaser'
+import Ball from '@/game/objects/Ball'
+
+type PhysicsBody = Phaser.Physics.Arcade.Body
 
 class Paddle extends GameObjects.Container {
-  constructor (scene, x, y) {
+  _img : Phaser.GameObjects.Image
+  _scene : Phaser.Scene
+  _mountedBall : Ball | null
+  _ballCollider : Phaser.Physics.Arcade.Collider | null
+
+  constructor (scene : Phaser.Scene, x : number, y : number) {
     super(scene, x, y)
     this._img = scene.add.image(0, 0, 'paddle')
     this.add(this._img)
@@ -9,31 +17,33 @@ class Paddle extends GameObjects.Container {
 
     scene.add.existing(this)
     scene.physics.world.enable(this)
-    this.body.setCollideWorldBounds(true)
-    this.body.immovable = true
+    const body : PhysicsBody = this.body as PhysicsBody
+    body.setCollideWorldBounds(true)
+    body.immovable = true
 
     this._scene = scene
     this._mountedBall = null
     this._ballCollider = null
   }
 
-  setupBallCollider (ball, callback) {
+  setupBallCollider (ball : Ball, callback : ArcadePhysicsCallback) {
     this._ballCollider = this._scene.physics.add.collider(
-      ball, this, callback, null, this._scene
+      ball, this, callback, undefined, this._scene
     )
   }
 
-  setBallForCollider (ball) {
+  setBallForCollider (ball : Ball) {
+    // @ts-ignore
     this._ballCollider.object1 = ball
   }
 
-  mountBall (ball) {
+  mountBall (ball : Ball) {
     this._mountedBall = ball
     this.add(ball)
   }
 
-  removeBall (destroyBall = false) {
-    this.remove(this._mountedBall, destroyBall)
+  removeBall (destroyBall : boolean = false) {
+    this.remove(this._mountedBall as Ball, destroyBall)
     this._mountedBall = null
   }
 

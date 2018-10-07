@@ -1,7 +1,9 @@
 import BaseText from './BaseText'
 
 class GameOver extends BaseText {
-  constructor (scene) {
+  _worldCenter : { x : number, y : number }
+
+  constructor (scene : Phaser.Scene) {
     super(scene, 0, 0, 'Game Over', '4rem')
     const worldDimensions = scene.physics.world.bounds
     this._worldCenter = {
@@ -12,7 +14,7 @@ class GameOver extends BaseText {
     this.setOrigin(0.5)
   }
 
-  show (finishCb) {
+  show (finishCb ?: () => any) {
     this.setScale(0)
 
     this._scene.tweens.add({
