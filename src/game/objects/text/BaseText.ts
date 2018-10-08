@@ -1,6 +1,6 @@
 import { GameObjects } from 'phaser'
 
-class BaseText extends GameObjects.Text {
+abstract class BaseText extends GameObjects.Text {
   _scene: Phaser.Scene
 
   constructor (

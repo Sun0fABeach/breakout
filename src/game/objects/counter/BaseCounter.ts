@@ -1,6 +1,6 @@
 import comms from '@/vuePhaserComms'
 
-class BaseCounter {
+abstract class BaseCounter {
   _countTotal: number
   _countCurrent: number
 
