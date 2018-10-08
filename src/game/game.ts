@@ -2,7 +2,7 @@ import Phaser from 'phaser'
 import BootScene from '@/game/scenes/BootScene'
 import PlayScene from '@/game/scenes/PlayScene'
 
-function launch (width: number, height: number) {
+function launch (width: number, height: number): void {
   // eslint-disable-next-line
   new Phaser.Game({
     type: Phaser.AUTO,

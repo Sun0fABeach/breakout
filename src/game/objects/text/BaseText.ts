@@ -14,11 +14,11 @@ abstract class BaseText extends GameObjects.Text {
     this._scene = scene
   }
 
-  hide () {
+  hide (): void {
     this.setVisible(false)
   }
 
-  show () {
+  show (): void {
     this.setVisible(true)
   }
 }

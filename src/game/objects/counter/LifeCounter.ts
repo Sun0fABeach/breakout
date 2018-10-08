@@ -5,7 +5,7 @@ class LifeCounter extends BaseCounter {
     super(lives)
   }
 
-  _emit () {
+  _emit (): void {
     super._emit('life change')
   }
 }

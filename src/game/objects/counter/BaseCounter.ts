@@ -10,26 +10,26 @@ abstract class BaseCounter {
     this._emit()
   }
 
-  increment (val: number = 1) {
+  increment (val: number = 1): void {
     this._countCurrent += val
     this._emit()
   }
 
-  decrement (val: number = 1) {
+  decrement (val: number = 1): void {
     this._countCurrent -= val
     this._emit()
   }
 
-  reset () {
+  reset (): void {
     this._countCurrent = this._countTotal
     this._emit()
   }
 
-  _emit (eventName: string = 'count change') {
+  _emit (eventName: string = 'count change'): void {
     comms.emit(eventName, this._countCurrent)
   }
 
-  get number () {
+  get number (): number {
     return this._countCurrent
   }
 }

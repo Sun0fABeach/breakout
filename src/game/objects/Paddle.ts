@@ -26,36 +26,36 @@ class Paddle extends GameObjects.Container {
     this._ballCollider = null
   }
 
-  setupBallCollider (ball: Ball, callback: ArcadePhysicsCallback) {
+  setupBallCollider (ball: Ball, callback: ArcadePhysicsCallback): void {
     this._ballCollider = this._scene.physics.add.collider(
       ball, this, callback, undefined, this._scene
     )
   }
 
-  setBallForCollider (ball: Ball) {
+  setBallForCollider (ball: Ball): void {
     // @ts-ignore
     this._ballCollider.object1 = ball
   }
 
-  mountBall (ball: Ball) {
+  mountBall (ball: Ball): void {
     this._mountedBall = ball
     this.add(ball)
   }
 
-  removeBall (destroyBall: boolean = false) {
+  removeBall (destroyBall: boolean = false): void {
     this.remove(this._mountedBall as Ball, destroyBall)
     this._mountedBall = null
   }
 
-  get ballMounted () {
+  get ballMounted (): boolean {
     return this._mountedBall !== null
   }
 
-  get halfHeight () {
+  get halfHeight (): number {
     return this._img.displayHeight / 2
   }
 
-  get halfWidth () {
+  get halfWidth (): number {
     return this._img.displayWidth / 2
   }
 }

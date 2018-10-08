@@ -27,7 +27,7 @@ export default class PlayScene extends Scene {
     this.prefabs = {} // filled in create()
   }
 
-  create () {
+  create (): void {
     this.add.image(400, 300, 'sky')
 
     /**
@@ -59,7 +59,7 @@ export default class PlayScene extends Scene {
     this.putBallOnPaddle()
   }
 
-  restart () {
+  restart (): void {
     this.score.reset()
     this.prefabs.ball.show()
     this.putBallOnPaddle()
@@ -68,7 +68,7 @@ export default class PlayScene extends Scene {
     this.lifeCounter.reset()
   }
 
-  putBallOnPaddle () {
+  putBallOnPaddle (): void {
     const { ball, paddle } = this.prefabs
 
     ball.disablePhysics()
@@ -80,7 +80,7 @@ export default class PlayScene extends Scene {
     ball.setPosition(this.ballPaddleOffset.x, this.ballPaddleOffset.y)
   }
 
-  launchBallFromPaddle () {
+  launchBallFromPaddle (): void {
     const { paddle, blocks } = this.prefabs
 
     paddle.removeBall(true) // destroys ball object
@@ -95,7 +95,7 @@ export default class PlayScene extends Scene {
     blocks.setBallForCollider(ball)
   }
 
-  bounceBallOffPaddle (ball: Ball, paddle: Paddle) {
+  bounceBallOffPaddle (ball: Ball, paddle: Paddle): void {
     this.audio.play('wooden')
     this.setBallVelocity(
       Phaser.Math.Angle.Between(paddle.x, paddle.y, ball.x, ball.y)
@@ -103,7 +103,7 @@ export default class PlayScene extends Scene {
     ball.spin = ball.x < paddle.x ? 'left' : 'right'
   }
 
-  setBallVelocity (angleRad: number) {
+  setBallVelocity (angleRad: number): void {
     /* if the angle is too horizontal, adjust it a
        little to make the ball go slightly upwards */
     const flatRight: number = 0
@@ -120,7 +120,7 @@ export default class PlayScene extends Scene {
   ballHitWorldBounds (
     ballBody: Phaser.Physics.Arcade.Body,
     up: boolean, down: boolean, left: boolean, right: boolean
-  ) {
+  ): void {
     if (down) {
       this.loseLife()
     } else {
@@ -133,13 +133,13 @@ export default class PlayScene extends Scene {
 
   blockHit (
     ball: Ball, block: Phaser.Physics.Arcade.Sprite, points: number
-  ) {
+  ): void {
     this.prefabs.blocks.killBlock(block)
     this.audio.play('ding')
     this.score.increment(points)
   }
 
-  loseLife () {
+  loseLife (): void {
     const { ball, gameOver } = this.prefabs
 
     this.audio.play('explosion')
@@ -157,7 +157,7 @@ export default class PlayScene extends Scene {
 
   adjustBallSpinAfterWorldBoundsCollision (
     upperWall: boolean, leftWall: boolean, rightWall: boolean
-  ) {
+  ): void {
     const ball = this.prefabs.ball
     let spinDirection: string
 
@@ -177,7 +177,7 @@ export default class PlayScene extends Scene {
     ball.spin = spinDirection
   }
 
-  update () {
+  update (): void {
     const { paddle, gameOver, cursor } = this.prefabs
 
     if (gameOver.visible) {

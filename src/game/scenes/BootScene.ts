@@ -32,7 +32,7 @@ export default class BootScene extends Scene {
     super({ key: 'BootScene' })
   }
 
-  preload () {
+  preload (): void {
     this.load.image('sky', sky)
     this.load.image('paddle', paddle)
     this.load.image('ball', ball)
@@ -53,7 +53,7 @@ export default class BootScene extends Scene {
     this.load.audio('ding', [dingMP3, dingOGG])
   }
 
-  create () {
+  create (): void {
     this.scene.start('PlayScene')
   }
 }

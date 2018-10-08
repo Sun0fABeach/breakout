@@ -31,7 +31,7 @@ class Ball extends Physics.Arcade.Image {
     this._emitters = this.setupEmitters(scene)
   }
 
-  setupEmitters (scene: Phaser.Scene) {
+  setupEmitters (scene: Phaser.Scene): EmitterDict {
     const emitters: EmitterDict = {}
 
     emitters.explosion = ['small', 'medium', 'big'].map(type =>
@@ -61,27 +61,27 @@ class Ball extends Physics.Arcade.Image {
     return emitters
   }
 
-  show () {
+  show (): void {
     this.setTexture('ball')
     this.enableBody(false, 0, 0, false, true) // just show, don't enable body
   }
 
-  disablePhysics () {
+  disablePhysics (): void {
     this.disableBody(true) // object still visible
   }
 
-  disableFull () {
+  disableFull (): void {
     this.disableBody(true, true) // disable & hide
   }
 
-  setVelocityFromAngle (angleRad: number) {
+  setVelocityFromAngle (angleRad: number): void {
     super.setVelocity(
       Math.cos(angleRad) * this._velocityFactor,
       Math.sin(angleRad) * this._velocityFactor
     )
   }
 
-  stop () {
+  stop (): void {
     this.setVelocity(0)
   }
 
@@ -90,7 +90,7 @@ class Ball extends Physics.Arcade.Image {
     this.setAngularVelocity(sign * this._angularVelocity)
   }
 
-  kill (callback?: () => any) {
+  kill (callback?: () => any): void {
     this.explode()
     this.disableFull()
     if (callback) {
@@ -98,7 +98,7 @@ class Ball extends Physics.Arcade.Image {
     }
   }
 
-  explode () {
+  explode (): void {
     Object.values(this._emitters.explosion).forEach(emitter => {
       emitter.resume()
       emitter.setAngle(this.explosionAngleRange(this.body.velocity.angle()))
@@ -106,7 +106,7 @@ class Ball extends Physics.Arcade.Image {
     })
   }
 
-  explosionAngleRange (radians: number) {
+  explosionAngleRange (radians: number): { min: number, max: number } {
     type ShiftFunc = (base: number, amount: number, limit: number) => number
 
     let deg: number = PhaserMath.RadToDeg(radians)
@@ -116,7 +116,7 @@ class Ball extends Physics.Arcade.Image {
     return this.particleAngleRange(deg, 140)
   }
 
-  puff (up: boolean, down: boolean, left: boolean, right: boolean) {
+  puff (up: boolean, down: boolean, left: boolean, right: boolean): void {
     let directionDeg: number
     let coords: [number, number]
     const worldWidth: number = this._world.bounds.width
@@ -143,26 +143,27 @@ class Ball extends Physics.Arcade.Image {
     })
   }
 
-  particleAngleRange (deg: number, spreadRange: number) {
+  particleAngleRange (deg: number, spreadRange: number):
+    { min: number, max: number } {
     return {
       min: deg - spreadRange / 2,
       max: deg + spreadRange / 2
     }
   }
 
-  get velocityX () {
+  get velocityX (): number {
     return this.body.velocity.x
   }
 
-  get velocityY () {
+  get velocityY (): number {
     return this.body.velocity.y
   }
 
-  get halfHeight () {
+  get halfHeight (): number {
     return this.displayHeight / 2
   }
 
-  get halfWidth () {
+  get halfWidth (): number {
     return this.displayWidth / 2
   }
 }

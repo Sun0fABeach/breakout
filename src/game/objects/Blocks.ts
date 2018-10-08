@@ -98,12 +98,12 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
     this._ballCollider = null
   }
 
-  killBlock (block: Block) {
+  killBlock (block: Block): void {
     this.killAndHide(block)
     block.body.enable = false
   }
 
-  reset () {
+  reset (): void {
     for (
       let dead: Block = this.getFirstDead(); dead; dead = this.getFirstDead()
     ) {
@@ -113,7 +113,7 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
     }
   }
 
-  setupBallCollider (ball: Ball, callback: CollisionCb) {
+  setupBallCollider (ball: Ball, callback: CollisionCb): void {
     this._ballCollider = this._scene.physics.add.collider(
       ball,
       this,
@@ -123,7 +123,7 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
     )
   }
 
-  setBallForCollider (ball: Ball) {
+  setBallForCollider (ball: Ball): void {
     // @ts-ignore
     this._ballCollider.object1 = ball
   }

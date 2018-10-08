@@ -15,7 +15,7 @@ class GameOver extends BaseText {
     this.setOrigin(0.5)
   }
 
-  show (finishCb?: () => any) {
+  show (finishCb?: () => any): void {
     this.setScale(0)
 
     this._scene.tweens.add({

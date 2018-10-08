@@ -9,7 +9,7 @@ interface Managers {
 
 let managers: Managers
 
-function init (scene: Phaser.Scene) {
+function init (scene: Phaser.Scene): void {
   const stars: ManagerDict = ['Small', 'Medium', 'Big'].reduce(
     (res: ManagerDict, type: string) => {
       res[type.toLowerCase()] = scene.add.particles(`particleStar${type}`)
