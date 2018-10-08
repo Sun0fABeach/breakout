@@ -2,6 +2,7 @@ import { GameObjects } from 'phaser'
 import Ball from '@/game/objects/Ball'
 
 type PhysicsBody = Phaser.Physics.Arcade.Body
+type CollisionCb = (this: Phaser.Scene, ball: Ball, paddle: Paddle) => any
 
 class Paddle extends GameObjects.Container {
   _img: Phaser.GameObjects.Image
@@ -26,9 +27,9 @@ class Paddle extends GameObjects.Container {
     this._ballCollider = null
   }
 
-  setupBallCollider (ball: Ball, callback: ArcadePhysicsCallback): void {
+  setupBallCollider (ball: Ball, callback: CollisionCb): void {
     this._ballCollider = this._scene.physics.add.collider(
-      ball, this, callback, undefined, this._scene
+      ball, this, callback as ArcadePhysicsCallback, undefined, this._scene
     )
   }
 

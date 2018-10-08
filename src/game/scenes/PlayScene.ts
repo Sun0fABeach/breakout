@@ -39,9 +39,7 @@ export default class PlayScene extends Scene {
     const ball = new Ball(this, 400, 300)
 
     const paddle = new Paddle(this, 400, 550)
-    paddle.setupBallCollider(
-      ball, this.bounceBallOffPaddle.bind(this)
-    )
+    paddle.setupBallCollider(ball, this.bounceBallOffPaddle)
     const blocks = new Blocks(this)
     blocks.setupBallCollider(ball, this.blockHit.bind(this))
 

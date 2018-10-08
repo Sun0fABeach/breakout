@@ -2,11 +2,13 @@ import { Physics } from 'phaser'
 import { managers as particleManagers } from '@/game/particleManagers'
 import Ball from '@/game/objects/Ball'
 
+import ArcadePhysics = Phaser.Physics.Arcade
 type Emitter = Phaser.GameObjects.Particles.ParticleEmitter
-type Block = Phaser.Physics.Arcade.Sprite
+type Block = ArcadePhysics.Sprite
+type GameObj = Phaser.GameObjects.GameObject
 type CollisionCb = (
-  ball: Phaser.GameObjects.GameObject,
-  block: Phaser.GameObjects.GameObject,
+  ball: Ball,
+  block: ArcadePhysics.Sprite,
   points: number
 ) => any
 
@@ -85,7 +87,7 @@ class Blocks {
 class BlockGroup extends Physics.Arcade.StaticGroup {
   _scene: Phaser.Scene
   _scoreVal: number
-  _ballCollider: Phaser.Physics.Arcade.Collider | null
+  _ballCollider: ArcadePhysics.Collider | null
 
   constructor (
     scene: Phaser.Scene, config: GroupCreateConfig, scoreVal: number
@@ -114,10 +116,14 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
   }
 
   setupBallCollider (ball: Ball, callback: CollisionCb): void {
+    const scoreVal = this._scoreVal
     this._ballCollider = this._scene.physics.add.collider(
       ball,
       this,
-      (ball, block) => callback(ball, block, this._scoreVal),
+      function (this: Phaser.Scene, ball: GameObj, block: GameObj) {
+        // eslint-disable-next-line standard/no-callback-literal
+        callback(ball as Ball, block as ArcadePhysics.Sprite, scoreVal)
+      },
       undefined,
       this._scene
     )
