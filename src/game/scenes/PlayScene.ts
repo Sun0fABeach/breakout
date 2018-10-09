@@ -10,11 +10,11 @@ import Audio from '@/game/audio'
 import { init as particlesInit } from '@/game/particleManagers'
 
 export default class PlayScene extends Scene {
-  prefabs: { [index: string]: any }
-  ballPaddleOffset: { x: number, y: number }
-  lifeCounter: LifeCounter
-  score: Score
-  audio: Audio
+  private prefabs: { [index: string]: any }
+  private readonly ballPaddleOffset: { x: number, y: number }
+  private readonly lifeCounter: LifeCounter
+  private readonly score: Score
+  private readonly audio: Audio
 
   constructor () {
     super({ key: 'PlayScene' })

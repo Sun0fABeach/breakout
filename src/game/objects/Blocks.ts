@@ -13,8 +13,8 @@ type CollisionCb = (
 ) => any
 
 class Blocks {
-  _blockGroups: BlockGroup[]
-  _emitters: Emitter[]
+  private readonly blockGroups: BlockGroup[]
+  private readonly emitters: Emitter[]
 
   constructor (scene: Phaser.Scene) {
     const padX = 100
@@ -23,7 +23,7 @@ class Blocks {
     const rowGap = 50
     const numCols = 7
 
-    this._blockGroups = [
+    this.blockGroups = [
       { type: 'Green', value: 250 },
       { type: 'Grey', value: 200 },
       { type: 'Purple', value: 150 },
@@ -40,7 +40,7 @@ class Blocks {
       return new BlockGroup(scene, config, blockDef.value)
     })
 
-    this._emitters = ['small', 'medium'].map(type =>
+    this.emitters = ['small', 'medium'].map(type =>
       particleManagers.stars[type].createEmitter({
         active: false,
         blendMode: Phaser.BlendModes.SCREEN,
@@ -52,14 +52,14 @@ class Blocks {
   }
 
   killBlock (toKill: Block) {
-    const containerGroup: BlockGroup | undefined = this._blockGroups.find(
+    const containerGroup: BlockGroup | undefined = this.blockGroups.find(
       group => group.contains(toKill)
     )
     if (!containerGroup) {
       return
     }
     containerGroup.killBlock(toKill)
-    this._emitters.forEach(emitter => {
+    this.emitters.forEach(emitter => {
       emitter.setEmitZone({
         type: 'edge',
         source: toKill.getBounds(),
@@ -72,22 +72,21 @@ class Blocks {
   }
 
   reset () {
-    this._blockGroups.forEach(group => group.reset())
+    this.blockGroups.forEach(group => group.reset())
   }
 
   setupBallCollider (ball: Ball, callback: CollisionCb) {
-    this._blockGroups.forEach(group => group.setupBallCollider(ball, callback))
+    this.blockGroups.forEach(group => group.setupBallCollider(ball, callback))
   }
 
   setBallForCollider (ball: Ball) {
-    this._blockGroups.forEach(group => group.setBallForCollider(ball))
+    this.blockGroups.forEach(group => group.setBallForCollider(ball))
   }
 }
 
 class BlockGroup extends Physics.Arcade.StaticGroup {
-  _scene: Phaser.Scene
-  _scoreVal: number
-  _ballCollider: ArcadePhysics.Collider | null
+  private readonly scoreVal: number
+  private ballCollider: ArcadePhysics.Collider | null
 
   constructor (
     scene: Phaser.Scene, config: GroupCreateConfig, scoreVal: number
@@ -95,9 +94,8 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
     super(scene.physics.world, scene)
     this.createFromConfig(config)
 
-    this._scene = scene
-    this._scoreVal = scoreVal
-    this._ballCollider = null
+    this.scoreVal = scoreVal
+    this.ballCollider = null
   }
 
   killBlock (block: Block): void {
@@ -116,8 +114,8 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
   }
 
   setupBallCollider (ball: Ball, callback: CollisionCb): void {
-    const scoreVal = this._scoreVal
-    this._ballCollider = this._scene.physics.add.collider(
+    const scoreVal = this.scoreVal
+    this.ballCollider = this.scene.physics.add.collider(
       ball,
       this,
       function (this: Phaser.Scene, ball: GameObj, block: GameObj) {
@@ -125,13 +123,13 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
         callback(ball as Ball, block as ArcadePhysics.Sprite, scoreVal)
       },
       undefined,
-      this._scene
+      this.scene
     )
   }
 
   setBallForCollider (ball: Ball): void {
     // @ts-ignore
-    this._ballCollider.object1 = ball
+    this.ballCollider.object1 = ball
   }
 }
 

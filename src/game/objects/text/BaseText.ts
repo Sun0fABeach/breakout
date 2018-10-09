@@ -1,8 +1,6 @@
 import { GameObjects } from 'phaser'
 
 abstract class BaseText extends GameObjects.Text {
-  _scene: Phaser.Scene
-
   constructor (
     scene: Phaser.Scene, x: number, y: number,
     text: string, fontSize: string
@@ -11,7 +9,6 @@ abstract class BaseText extends GameObjects.Text {
 
     this.hide()
     scene.add.existing(this)
-    this._scene = scene
   }
 
   hide (): void {

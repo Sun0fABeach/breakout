@@ -5,30 +5,26 @@ type Emitter = Phaser.GameObjects.Particles.ParticleEmitter
 type EmitterDict = { [index: string]: Emitter[] }
 
 class Ball extends Physics.Arcade.Image {
-  _startingAngle: number
-  _velocityFactor: number
-  _angularVelocity: number
-  _scene: Phaser.Scene
-  _world: Phaser.Physics.Arcade.World
-  _emitters: EmitterDict
+  private readonly velocityFactor: number
+  private readonly angularVelocity: number
+  private readonly world: Phaser.Physics.Arcade.World
+  private readonly emitters: EmitterDict
 
   constructor (scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, 'ball')
-    this._startingAngle = 315
-    this._velocityFactor = 400
-    this._angularVelocity = 200
-    this._scene = scene
-    this._world = scene.physics.world
+    this.velocityFactor = 400
+    this.angularVelocity = 200
+    this.world = scene.physics.world
 
     /* game object not registered with scene and it's body is not enabled when
        it is *not* constructed via scene factory */
-    this._world.enableBody(this, Physics.Arcade.DYNAMIC_BODY)
+    this.world.enableBody(this, Physics.Arcade.DYNAMIC_BODY)
     scene.add.existing(this)
     this.setCollideWorldBounds(true)
     this.body.onWorldBounds = true // enable worldbounds event
     this.setBounce(1)
 
-    this._emitters = this.setupEmitters(scene)
+    this.emitters = this.setupEmitters(scene)
   }
 
   setupEmitters (scene: Phaser.Scene): EmitterDict {
@@ -42,7 +38,7 @@ class Ball extends Physics.Arcade.Image {
         scale: { start: 1, end: 0 },
         lifespan: 3000,
         gravityY: 300,
-        bounds: this._world.bounds,
+        bounds: this.world.bounds,
         collideTop: false,
         bounce: 0.5
       })
@@ -76,8 +72,8 @@ class Ball extends Physics.Arcade.Image {
 
   setVelocityFromAngle (angleRad: number): void {
     super.setVelocity(
-      Math.cos(angleRad) * this._velocityFactor,
-      Math.sin(angleRad) * this._velocityFactor
+      Math.cos(angleRad) * this.velocityFactor,
+      Math.sin(angleRad) * this.velocityFactor
     )
   }
 
@@ -87,7 +83,7 @@ class Ball extends Physics.Arcade.Image {
 
   set spin (spinDirection: string) {
     const sign = spinDirection === 'left' ? -1 : +1
-    this.setAngularVelocity(sign * this._angularVelocity)
+    this.setAngularVelocity(sign * this.angularVelocity)
   }
 
   kill (callback?: () => any): void {
@@ -99,7 +95,7 @@ class Ball extends Physics.Arcade.Image {
   }
 
   explode (): void {
-    Object.values(this._emitters.explosion).forEach(emitter => {
+    Object.values(this.emitters.explosion).forEach(emitter => {
       emitter.resume()
       emitter.setAngle(this.explosionAngleRange(this.body.velocity.angle()))
       emitter.explode(60, this.x, this.y)
@@ -119,8 +115,8 @@ class Ball extends Physics.Arcade.Image {
   puff (up: boolean, down: boolean, left: boolean, right: boolean): void {
     let directionDeg: number
     let coords: [number, number]
-    const worldWidth: number = this._world.bounds.width
-    const worldheight: number = this._world.bounds.height
+    const worldWidth: number = this.world.bounds.width
+    const worldheight: number = this.world.bounds.height
 
     if (down) {
       directionDeg = 270
@@ -136,7 +132,7 @@ class Ball extends Physics.Arcade.Image {
       coords = [ worldWidth - 1, this.y ]
     }
 
-    Object.values(this._emitters.puff).forEach(emitter => {
+    Object.values(this.emitters.puff).forEach(emitter => {
       emitter.resume()
       emitter.setAngle(this.particleAngleRange(directionDeg, 180))
       emitter.explode(2, ...coords)
