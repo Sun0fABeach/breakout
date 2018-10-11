@@ -1,15 +1,14 @@
 import { GameObjects } from 'phaser'
 import Ball from '@/game/objects/Ball'
 
-type PhysicsBody = Phaser.Physics.Arcade.Body
-type CollisionCb = (this: Phaser.Scene, ball: Ball, paddle: Paddle) => any
+type CollisionCb = (this: Scene, ball: Ball, paddle: Paddle) => any
 
 class Paddle extends GameObjects.Container {
-  private readonly img: Phaser.GameObjects.Image
+  private readonly img: GameObjects.Image
   private mountedBall: Ball | null
-  private ballCollider: Phaser.Physics.Arcade.Collider | null
+  private ballCollider: Collider | null
 
-  constructor (scene: Phaser.Scene, x: number, y: number) {
+  constructor (scene: Scene, x: number, y: number) {
     super(scene, x, y)
     this.img = scene.add.image(0, 0, 'paddle')
     this.add(this.img)

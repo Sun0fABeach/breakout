@@ -2,7 +2,7 @@ import { GameObjects } from 'phaser'
 
 abstract class BaseText extends GameObjects.Text {
   constructor (
-    scene: Phaser.Scene, x: number, y: number,
+    scene: Scene, x: number, y: number,
     text: string, fontSize: string
   ) {
     super(scene, x, y, text, { fontSize, fontFamily: 'Courier New' })

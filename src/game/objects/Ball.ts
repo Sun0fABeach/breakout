@@ -1,8 +1,7 @@
 import Phaser, { Physics, Math as PhaserMath } from 'phaser'
 import { managers as particleManagers } from '@/game/particleManagers'
 
-type Emitter = Phaser.GameObjects.Particles.ParticleEmitter
-type EmitterDict = { [index: string]: Emitter[] }
+type EmitterDict = { [index: string]: ParticleEmitter[] }
 
 class Ball extends Physics.Arcade.Image {
   private readonly velocityFactor: number
@@ -10,7 +9,7 @@ class Ball extends Physics.Arcade.Image {
   private readonly world: Phaser.Physics.Arcade.World
   private readonly emitters: EmitterDict
 
-  constructor (scene: Phaser.Scene, x: number, y: number) {
+  constructor (scene: Scene, x: number, y: number) {
     super(scene, x, y, 'ball')
     this.velocityFactor = 400
     this.angularVelocity = 200
@@ -27,7 +26,7 @@ class Ball extends Physics.Arcade.Image {
     this.emitters = this.setupEmitters(scene)
   }
 
-  setupEmitters (scene: Phaser.Scene): EmitterDict {
+  setupEmitters (scene: Scene): EmitterDict {
     const emitters: EmitterDict = {}
 
     emitters.explosion = ['small', 'medium', 'big'].map(type =>

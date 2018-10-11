@@ -116,7 +116,7 @@ export default class PlayScene extends Scene {
   }
 
   ballHitWorldBounds (
-    ballBody: Phaser.Physics.Arcade.Body,
+    ballBody: PhysicsBody,
     up: boolean, down: boolean, left: boolean, right: boolean
   ): void {
     if (down) {
@@ -129,9 +129,7 @@ export default class PlayScene extends Scene {
     }
   }
 
-  blockHit (
-    ball: Ball, block: Phaser.Physics.Arcade.Sprite, points: number
-  ): void {
+  blockHit (ball: Ball, block: PhysicsSprite, points: number): void {
     this.prefabs.blocks.killBlock(block)
     this.audio.play('ding')
     this.score.increment(points)

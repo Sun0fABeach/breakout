@@ -3,7 +3,7 @@ import BaseText from './BaseText'
 class GameOver extends BaseText {
   private readonly worldCenter: { x: number, y: number }
 
-  constructor (scene: Phaser.Scene) {
+  constructor (scene: Scene) {
     super(scene, 0, 0, 'Game Over', '4rem')
     const worldDimensions: { width: number, height: number } =
       scene.physics.world.bounds
