@@ -1,9 +1,7 @@
 class Audio {
-  private readonly scene: Phaser.Scene
   private readonly volumes: { [index: string]: number }
 
-  constructor (scene: Phaser.Scene) {
-    this.scene = scene
+  constructor (private readonly scene: Phaser.Scene) {
     this.volumes = {
       thud: 0.4,
       wooden: 0.6,

@@ -1,12 +1,10 @@
 import comms from '@/vuePhaserComms'
 
 abstract class BaseCounter {
-  private readonly countTotal: number
   private countCurrent: number
 
-  constructor (total: number) {
-    this.countTotal = total
-    this.countCurrent = this.countTotal
+  constructor (private readonly countTotal: number) {
+    this.countCurrent = countTotal
     this._emit()
   }
 
