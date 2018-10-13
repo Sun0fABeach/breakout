@@ -7,7 +7,7 @@ type EmitterDict = { [index: string]: ParticleEmitter[] }
 class Ball extends Physics.Arcade.Image {
   private readonly velocityFactor: number
   private readonly angularVelocity: number
-  private readonly world: Phaser.Physics.Arcade.World
+  private readonly world: ArcadePhysics.World
   private readonly emitters: EmitterDict
 
   constructor (scene: Scene, x: number, y: number) {
@@ -98,7 +98,7 @@ class Ball extends Physics.Arcade.Image {
     Object.values(this.emitters.explosion).forEach(emitter => {
       emitter.resume()
       emitter.setAngle(this.explosionAngleRange(this.body.velocity.angle()))
-      emitter.explode(60, this.x, this.y)
+      emitter.explode(60, this.x, this.world.bounds.height - 4)
     })
   }
 
