@@ -1,5 +1,6 @@
 import Phaser, { Physics, Math as PhaserMath } from 'phaser'
 import { managers as particleManagers } from '@/game/particleManagers'
+import { Direction } from '@/game/globals'
 
 type EmitterDict = { [index: string]: ParticleEmitter[] }
 
@@ -80,8 +81,8 @@ class Ball extends Physics.Arcade.Image {
     this.setVelocity(0)
   }
 
-  set spin (spinDirection: string) {
-    const sign = spinDirection === 'left' ? -1 : +1
+  set spin (spinDirection: Direction) {
+    const sign = spinDirection === Direction.Left ? -1 : +1
     this.setAngularVelocity(sign * this.angularVelocity)
   }
 

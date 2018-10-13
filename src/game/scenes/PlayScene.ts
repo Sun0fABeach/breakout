@@ -8,6 +8,7 @@ import LifeCounter from '@/game/objects/counter/LifeCounter'
 import Score from '@/game/objects/counter/Score'
 import Audio from '@/game/audio'
 import { init as particlesInit } from '@/game/particleManagers'
+import { Direction } from '@/game/globals'
 
 export default class PlayScene extends Scene {
   private prefabs: { [index: string]: any }
@@ -98,7 +99,7 @@ export default class PlayScene extends Scene {
     this.setBallVelocity(
       Phaser.Math.Angle.Between(paddle.x, paddle.y, ball.x, ball.y)
     )
-    ball.spin = ball.x < paddle.x ? 'left' : 'right'
+    ball.spin = Direction[ball.x < paddle.x ? 'Left' : 'Right']
   }
 
   setBallVelocity (angleRad: number): void {
@@ -155,22 +156,20 @@ export default class PlayScene extends Scene {
     upperWall: boolean, leftWall: boolean, rightWall: boolean
   ): void {
     const ball = this.prefabs.ball
-    let spinDirection: string
 
     if (upperWall) {
       // goes left -> spin right
       // goes right -> spin left
-      spinDirection = ball.velocityX < 0 ? 'right' : 'left'
+      ball.spin = Direction[ball.velocityX < 0 ? 'Right' : 'Left']
     } else if (leftWall) {
       // goes up -> spin left
       // goes down -> spin right
-      spinDirection = ball.velocityY < 0 ? 'left' : 'right'
+      ball.spin = Direction[ball.velocityY < 0 ? 'Left' : 'Right']
     } else { // right wall
       // goes up -> spin right
       // goes down -> spin left
-      spinDirection = ball.velocityY < 0 ? 'right' : 'left'
+      ball.spin = Direction[ball.velocityY < 0 ? 'Right' : 'Left']
     }
-    ball.spin = spinDirection
   }
 
   update (): void {
