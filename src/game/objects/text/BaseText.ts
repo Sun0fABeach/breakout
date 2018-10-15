@@ -3,9 +3,9 @@ import { GameObjects } from 'phaser'
 abstract class BaseText extends GameObjects.Text {
   constructor (
     scene: Scene, x: number, y: number,
-    text: string, fontSize: string
+    text: string, config: Object
   ) {
-    super(scene, x, y, text, { fontSize, fontFamily: 'Courier New' })
+    super(scene, x, y, text, config)
 
     this.hide()
     scene.add.existing(this)

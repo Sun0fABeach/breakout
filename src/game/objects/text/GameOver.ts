@@ -4,7 +4,11 @@ class GameOver extends BaseText {
   private readonly worldCenter: { x: number, y: number }
 
   constructor (scene: Scene) {
-    super(scene, 0, 0, 'Game Over', '4rem')
+    super(scene, 0, 0, 'Game Over', {
+      fontSize: '4rem',
+      fontFamily: 'Courier New'
+    })
+
     const worldDimensions: { width: number, height: number } =
       scene.physics.world.bounds
     this.worldCenter = {
