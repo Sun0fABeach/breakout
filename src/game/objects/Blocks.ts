@@ -82,14 +82,13 @@ class Blocks {
 }
 
 class BlockGroup extends Physics.Arcade.StaticGroup {
-  private readonly scoreVal: number
   private ballCollider: Collider | null
 
-  constructor (scene: Scene, config: GroupCreateConfig, scoreVal: number) {
+  constructor (
+    scene: Scene, config: GroupCreateConfig, private readonly scoreVal: number
+  ) {
     super(scene.physics.world, scene)
     this.createFromConfig(config)
-
-    this.scoreVal = scoreVal
     this.ballCollider = null
   }
 
