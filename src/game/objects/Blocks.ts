@@ -1,6 +1,7 @@
-import { Physics } from 'phaser'
+import { Physics, GameObjects } from 'phaser'
 import { managers as particleManagers } from '@/game/particleManagers'
 import Ball from '@/game/objects/Ball'
+import PointsText from '@/game/objects/text/PointsText'
 
 type Block = PhysicsSprite
 type CollisionCb = (
@@ -11,6 +12,7 @@ type CollisionCb = (
 
 class Blocks {
   private readonly blockGroups: BlockGroup[]
+  private readonly pointsTextGroup: GameObjects.Group
   private readonly emitters: ParticleEmitter[]
 
   constructor (scene: Scene) {
@@ -37,6 +39,10 @@ class Blocks {
       return new BlockGroup(scene, config, blockDef.value)
     })
 
+    this.pointsTextGroup = new GameObjects.Group(scene, {
+      classType: PointsText
+    })
+
     this.emitters = ['small', 'medium'].map(type =>
       particleManagers.stars[type].createEmitter({
         active: false,
@@ -48,18 +54,23 @@ class Blocks {
     )
   }
 
-  killBlock (toKill: Block) {
+  killBlock (toKill: Block): void {
     const containerGroup: BlockGroup | undefined = this.blockGroups.find(
       group => group.contains(toKill)
     )
     if (!containerGroup) {
       return
     }
+    this.emitHitParticles(toKill)
+    this.showPoints(toKill, containerGroup.points)
     containerGroup.killBlock(toKill)
+  }
+
+  emitHitParticles (block: Block): void {
     this.emitters.forEach(emitter => {
       emitter.setEmitZone({
         type: 'edge',
-        source: toKill.getBounds(),
+        source: block.getBounds(),
         quantity: 20
       })
       emitter.resume()
@@ -68,15 +79,26 @@ class Blocks {
     })
   }
 
-  reset () {
+  showPoints (block: Block, points: number) {
+    const pointsText: PointsText = this.pointsTextGroup.getFirstDead(true)
+    // for some reason, pointsText not created active == true by group
+    pointsText.setActive(true)
+    const blockCenter: Phaser.Math.Vector2 = block.body.center
+    pointsText.setDisplay(blockCenter.x, blockCenter.y, points)
+    pointsText.show(() => setTimeout(() =>
+      this.pointsTextGroup.killAndHide(pointsText), 1000)
+    )
+  }
+
+  reset (): void {
     this.blockGroups.forEach(group => group.reset())
   }
 
-  setupBallCollider (ball: Ball, callback: CollisionCb) {
+  setupBallCollider (ball: Ball, callback: CollisionCb): void {
     this.blockGroups.forEach(group => group.setupBallCollider(ball, callback))
   }
 
-  setBallForCollider (ball: Ball) {
+  setBallForCollider (ball: Ball): void {
     this.blockGroups.forEach(group => group.setBallForCollider(ball))
   }
 }
@@ -124,6 +146,10 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
   setBallForCollider (ball: Ball): void {
     // @ts-ignore
     this.ballCollider.object1 = ball
+  }
+
+  get points (): number {
+    return this.scoreVal
   }
 }
 
