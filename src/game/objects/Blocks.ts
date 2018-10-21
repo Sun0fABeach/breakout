@@ -85,9 +85,7 @@ class Blocks {
     pointsText.setActive(true)
     const blockCenter: Phaser.Math.Vector2 = block.body.center
     pointsText.setDisplay(blockCenter.x, blockCenter.y, points)
-    pointsText.show(() => setTimeout(() =>
-      this.pointsTextGroup.killAndHide(pointsText), 1000)
-    )
+    pointsText.show(() => this.pointsTextGroup.killAndHide(pointsText))
   }
 
   reset (): void {

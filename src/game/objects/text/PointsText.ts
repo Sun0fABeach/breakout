@@ -1,4 +1,5 @@
 import BaseText from './BaseText'
+import Phaser from 'phaser'
 
 class PointsText extends BaseText {
   constructor (scene: Scene) {
@@ -15,11 +16,25 @@ class PointsText extends BaseText {
     this.setPosition(x, y)
   }
 
-  show (callback?: () => any): void {
+  show (finishCb?: () => any): void {
+    this.setAlpha(1)
     super.show()
-    if (callback) {
-      callback()
-    }
+
+    this.scene.tweens.add({
+      targets: this,
+      y: this.y - 10,
+      ease: Phaser.Math.Easing.Linear,
+      duration: 800,
+      onComplete: () => {
+        this.scene.tweens.add({
+          targets: this,
+          alpha: 0,
+          duration: 300,
+          ease: Phaser.Math.Easing.Linear,
+          onComplete: finishCb
+        })
+      }
+    })
   }
 }
 
