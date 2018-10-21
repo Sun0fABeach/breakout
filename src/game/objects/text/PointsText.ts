@@ -5,8 +5,9 @@ class PointsText extends BaseText {
   constructor (scene: Scene) {
     super(scene, 0, 0, '', {
       fontSize: '1.25rem',
-      fontFamily: 'monospace',
-      color: '#fff'
+      fontFamily: 'Arial',
+      color: '#fff',
+      strokeThickness: 0.5
     })
     this.setOrigin(0.5)
   }
