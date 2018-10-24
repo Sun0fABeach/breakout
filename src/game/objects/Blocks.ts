@@ -54,7 +54,7 @@ class Blocks {
     )
   }
 
-  killBlock (toKill: Block): void {
+  killBlock (toKill: Block, points: number): void {
     const containerGroup: BlockGroup | undefined = this.blockGroups.find(
       group => group.contains(toKill)
     )
@@ -62,7 +62,7 @@ class Blocks {
       return
     }
     this.emitHitParticles(toKill)
-    this.showPoints(toKill, containerGroup.points)
+    this.showPoints(toKill, points)
     containerGroup.killBlock(toKill)
   }
 
