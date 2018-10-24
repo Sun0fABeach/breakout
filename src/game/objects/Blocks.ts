@@ -134,7 +134,11 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
       this,
       function (this: Scene, ball: GameObject, block: GameObject) {
         // eslint-disable-next-line standard/no-callback-literal
-        callback(ball as Ball, block as PhysicsSprite, scoreVal)
+        callback(
+          ball as Ball,
+          block as PhysicsSprite,
+          scoreVal
+        )
       },
       undefined,
       this.scene
