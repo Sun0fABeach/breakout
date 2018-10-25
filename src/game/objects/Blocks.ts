@@ -14,6 +14,7 @@ class Blocks {
   private readonly blockGroups: BlockGroup[]
   private readonly pointsTextGroup: GameObjects.Group
   private readonly emitters: ParticleEmitter[]
+  private scoreMult : number
 
   constructor (scene: Scene) {
     const padX = 100
@@ -21,6 +22,8 @@ class Blocks {
     const colGap = 100
     const rowGap = 50
     const numCols = 7
+
+    this.scoreMult = 1
 
     this.blockGroups = [
       { type: 'Green', value: 250 },
@@ -36,7 +39,7 @@ class Blocks {
           x: padX, y: padY + rowGap * idx, stepX: colGap
         }
       }
-      return new BlockGroup(scene, config, blockDef.value)
+      return new BlockGroup(this, scene, config, blockDef.value)
     })
 
     this.pointsTextGroup = new GameObjects.Group(scene, {
@@ -54,7 +57,7 @@ class Blocks {
     )
   }
 
-  killBlock (toKill: Block, points: number): void {
+  killBlock (toKill: Block): void {
     const containerGroup: BlockGroup | undefined = this.blockGroups.find(
       group => group.contains(toKill)
     )
@@ -62,7 +65,7 @@ class Blocks {
       return
     }
     this.emitHitParticles(toKill)
-    this.showPoints(toKill, points)
+    this.showPoints(toKill, containerGroup.points * this.scoreMultiplier)
     containerGroup.killBlock(toKill)
   }
 
@@ -99,13 +102,28 @@ class Blocks {
   setBallForCollider (ball: Ball): void {
     this.blockGroups.forEach(group => group.setBallForCollider(ball))
   }
+
+  bumpScoreMultiplier (): void {
+    this.scoreMult += 0.5
+  }
+
+  resetScoreMultiplier (): void {
+    this.scoreMult = 1
+  }
+
+  get scoreMultiplier (): number {
+    return this.scoreMult
+  }
 }
 
 class BlockGroup extends Physics.Arcade.StaticGroup {
   private ballCollider: Collider | null
 
   constructor (
-    scene: Scene, config: GroupCreateConfig, private readonly scoreVal: number
+    private readonly master: Blocks,
+    scene: Scene,
+    config: GroupCreateConfig,
+    private readonly scoreVal: number
   ) {
     super(scene.physics.world, scene)
     this.createFromConfig(config)
@@ -128,7 +146,7 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
   }
 
   setupBallCollider (ball: Ball, callback: CollisionCb): void {
-    const scoreVal = this.scoreVal
+    const self: BlockGroup = this
     this.ballCollider = this.scene.physics.add.collider(
       ball,
       this,
@@ -137,7 +155,7 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
         callback(
           ball as Ball,
           block as PhysicsSprite,
-          scoreVal
+          self.scoreVal * self.master.scoreMultiplier
         )
       },
       undefined,

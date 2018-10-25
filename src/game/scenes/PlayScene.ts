@@ -16,7 +16,6 @@ export default class PlayScene extends Scene {
   private readonly lifeCounter: LifeCounter
   private readonly score: Score
   private readonly audio: Audio
-  private scoreMultiplier: number
 
   constructor () {
     super({ key: 'PlayScene' })
@@ -27,7 +26,6 @@ export default class PlayScene extends Scene {
     this.lifeCounter = new LifeCounter(3)
     this.audio = new Audio(this)
     this.prefabs = {} // filled in create()
-    this.scoreMultiplier = 1
   }
 
   create (): void {
@@ -102,7 +100,7 @@ export default class PlayScene extends Scene {
       Phaser.Math.Angle.Between(paddle.x, paddle.y, ball.x, ball.y)
     )
     ball.spin = Direction[ball.x < paddle.x ? 'Left' : 'Right']
-    this.scoreMultiplier = 1
+    this.prefabs.blocks.resetScoreMultiplier()
   }
 
   setBallVelocity (angleRad: number): void {
@@ -134,11 +132,10 @@ export default class PlayScene extends Scene {
   }
 
   blockHit (ball: Ball, block: PhysicsSprite, points: number): void {
-    this.scoreMultiplier++
-    points *= this.scoreMultiplier / 2
-    this.prefabs.blocks.killBlock(block, points)
+    this.prefabs.blocks.killBlock(block)
     this.audio.play('ding')
     this.score.increment(points)
+    this.prefabs.blocks.bumpScoreMultiplier()
   }
 
   loseLife (): void {
