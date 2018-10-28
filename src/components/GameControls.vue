@@ -3,6 +3,7 @@
 
     <Counter label="Lives" :num="num_lives" />
     <Counter label="Score" :num="score" />
+    <Counter label="Multiplier" :num="scoreMultiplier" />
 
     <button type="button" @click="game_over ? restart() : togglePause()">
       {{ this.game_over ? 'Restart' : this.paused ? 'Resume' : 'Pause' }}
@@ -22,6 +23,7 @@ export default {
     return {
       num_lives: 0,
       score: 0,
+      scoreMultiplier: 0,
       paused: false,
       game_over: false
     }
@@ -39,6 +41,7 @@ export default {
   created () {
     comms.on('life change', newAmount => { this.num_lives = newAmount })
     comms.on('score change', newScore => { this.score = newScore })
+    comms.on('multiplier change', newMult => { this.scoreMultiplier = newMult })
     comms.on('game over', () => { this.game_over = true })
   }
 }
@@ -48,7 +51,7 @@ export default {
 #game-controls {
   display: flex;
   flex-direction: column;
-  min-width: 9rem;
+  min-width: 10rem;
   padding: 1rem;
   background-color: aliceblue;
   font-family: 'Courier New', Courier, monospace;

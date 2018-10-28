@@ -1,5 +1,6 @@
 import { Physics, GameObjects } from 'phaser'
 import { managers as particleManagers } from '@/game/particleManagers'
+import comms from '@/vuePhaserComms'
 import Ball from '@/game/objects/Ball'
 import PointsText from '@/game/objects/text/PointsText'
 
@@ -93,6 +94,7 @@ class Blocks {
 
   reset (): void {
     this.blockGroups.forEach(group => group.reset())
+    this.resetScoreMultiplier()
   }
 
   setupBallCollider (ball: Ball, callback: CollisionCb): void {
@@ -105,10 +107,16 @@ class Blocks {
 
   bumpScoreMultiplier (): void {
     this.scoreMult += 0.5
+    this.emitScoreMultiplier()
   }
 
   resetScoreMultiplier (): void {
     this.scoreMult = 1
+    this.emitScoreMultiplier()
+  }
+
+  emitScoreMultiplier (): void {
+    comms.emit('multiplier change', this.scoreMult)
   }
 
   get scoreMultiplier (): number {

@@ -60,11 +60,11 @@ export default class PlayScene extends Scene {
 
   restart (): void {
     this.score.reset()
+    this.lifeCounter.reset()
+    this.prefabs.blocks.reset()
     this.prefabs.ball.show()
     this.putBallOnPaddle()
-    this.prefabs.blocks.reset()
     this.prefabs.gameOver.hide()
-    this.lifeCounter.reset()
   }
 
   putBallOnPaddle (): void {
@@ -142,6 +142,7 @@ export default class PlayScene extends Scene {
     const { ball, gameOver } = this.prefabs
 
     this.audio.play('explosion')
+    this.prefabs.blocks.resetScoreMultiplier()
     this.lifeCounter.decrement()
     if (this.lifeCounter.number === 0) {
       ball.kill()
