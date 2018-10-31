@@ -127,7 +127,7 @@ export default class PlayScene extends Scene {
       // call like this to enable multiple layered thuds:
       this.audio.play('thud')
       this.prefabs.ball.puff(up, false, left, right)
-      this.adjustBallSpinAfterWorldBoundsCollision(up, left, right)
+      this.spinBallOnWorldBoundsCollision(up, left, right)
     }
   }
 
@@ -136,6 +136,7 @@ export default class PlayScene extends Scene {
     this.audio.play('ding')
     this.score.increment(points)
     this.prefabs.blocks.bumpScoreMultiplier()
+    this.spinBallOnBlockCollision(ball.body.touching)
   }
 
   loseLife (): void {
@@ -155,7 +156,29 @@ export default class PlayScene extends Scene {
     }
   }
 
-  adjustBallSpinAfterWorldBoundsCollision (
+  spinBallOnBlockCollision (collision: ArcadeBodyCollision): void {
+    const ball = this.prefabs.ball
+
+    if (collision.up) {
+      // goes left -> spin right
+      // goes right -> spin left
+      ball.spin = Direction[ball.velocityX < 0 ? 'Right' : 'Left']
+    } else if (collision.right) {
+      // goes up -> spin right
+      // goes down -> spin left
+      ball.spin = Direction[ball.velocityY < 0 ? 'Right' : 'Left']
+    } else if (collision.down) {
+      // goes left -> spin left
+      // goes right -> spin right
+      ball.spin = Direction[ball.velocityX < 0 ? 'Left' : 'Right']
+    } else { // left
+      // goes up -> spin left
+      // goes down -> spin right
+      ball.spin = Direction[ball.velocityY < 0 ? 'Left' : 'Right']
+    }
+  }
+
+  spinBallOnWorldBoundsCollision (
     upperWall: boolean, leftWall: boolean, rightWall: boolean
   ): void {
     const ball = this.prefabs.ball
