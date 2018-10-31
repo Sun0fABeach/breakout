@@ -6,7 +6,9 @@
     <Counter label="Multiplier" :num="scoreMultiplier" />
 
     <button type="button" @click="game_over ? restart() : togglePause()">
-      {{ this.game_over ? 'Restart' : this.paused ? 'Resume' : 'Pause' }}
+      <span>
+        {{ this.game_over ? 'Restart' : this.paused ? 'Resume' : 'Pause' }}
+      </span>
     </button>
 
   </div>
@@ -58,6 +60,28 @@ export default {
 
   > :not(:first-child) {
     margin-top: 1rem;
+  }
+
+  > button {
+    border: 1px solid darkgrey;
+    border-radius: 0.25rem;
+    background-color: white;
+    padding: 0.375rem;
+    cursor: pointer;
+    transition: box-shadow 0.15s;
+
+    > span {
+      display: inline-block;
+      transition: transform 0.15s;
+    }
+
+    &:hover, &:active {
+      box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
+
+      > span {
+        transform: scale(1.15);
+      }
+    }
   }
 }
 </style>
