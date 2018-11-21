@@ -8,7 +8,7 @@ import LifeCounter from '@/game/objects/counter/LifeCounter'
 import Score from '@/game/objects/counter/Score'
 import Audio from '@/game/audio'
 import { init as particlesInit } from '@/game/particleManagers'
-import { Direction } from '@/game/globals'
+import { Direction, keys } from '@/game/globals'
 
 export default class PlayScene extends Scene {
   private prefabs: { [index: string]: any }
@@ -50,12 +50,27 @@ export default class PlayScene extends Scene {
     const cursor: Phaser.Input.Keyboard.CursorKeys =
       this.input.keyboard.createCursorKeys()
 
-    comms.on('pause', () => this.scene.pause())
-    comms.on('resume', () => this.scene.resume())
+    this.initPauseHandling()
     comms.on('restart', this.restart.bind(this))
 
     this.prefabs = { ball, paddle, blocks, gameOver, cursor }
     this.putBallOnPaddle()
+  }
+
+  initPauseHandling () {
+    this.scene.launch('PauseScene').pause('PauseScene')
+
+    this.input.keyboard.on(keys.pause, () => {
+      this.pause()
+      comms.emit('pauseKey') // emitted for control panel to adjust
+    })
+
+    comms.on('pause', () => this.pause())
+  }
+
+  pause (): void {
+    this.scene.pause()
+    this.scene.resume('PauseScene')
   }
 
   restart (): void {

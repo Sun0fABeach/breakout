@@ -5,7 +5,7 @@
     <Counter label="Score" :num="score" />
     <Counter label="Multiplier" :num="scoreMultiplier" />
 
-    <button type="button" @click="game_over ? restart() : togglePause()">
+    <button type="button" @click="game_over ? restart() : pauseInput()">
       <span>
         {{ this.game_over ? 'Restart' : this.paused ? 'Resume' : 'Pause' }}
       </span>
@@ -31,8 +31,11 @@ export default {
     }
   },
   methods: {
-    togglePause () {
+    pauseInput () {
       comms.emit(this.paused ? 'resume' : 'pause')
+      this.togglePause()
+    },
+    togglePause () {
       this.paused = !this.paused
     },
     restart () {
@@ -45,6 +48,7 @@ export default {
     comms.on('score change', newScore => { this.score = newScore })
     comms.on('multiplier change', newMult => { this.scoreMultiplier = newMult })
     comms.on('game over', () => { this.game_over = true })
+    comms.on('pauseKey', this.togglePause.bind(this))
   }
 }
 </script>
