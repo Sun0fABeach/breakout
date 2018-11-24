@@ -40,7 +40,6 @@ export default {
     },
     restart () {
       comms.emit('restart')
-      this.game_over = false
     }
   },
   created () {
@@ -49,6 +48,7 @@ export default {
     comms.on('multiplier change', newMult => { this.scoreMultiplier = newMult })
     comms.on('game over', () => { this.game_over = true })
     comms.on('pauseKey', this.togglePause.bind(this))
+    comms.on('restart', () => { this.game_over = false })
   }
 }
 </script>

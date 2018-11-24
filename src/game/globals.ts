@@ -1,6 +1,7 @@
 enum Direction { Up, Down, Left, Right }
 const keys: { readonly [index: string]: string } = {
-  pause: 'keydown_P'
+  pause: 'keydown_P',
+  restart: 'keydown_R'
 }
 
 export {

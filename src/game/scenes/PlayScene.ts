@@ -51,7 +51,6 @@ export default class PlayScene extends Scene {
       this.input.keyboard.createCursorKeys()
 
     this.initPauseHandling()
-    comms.on('restart', this.restart.bind(this))
 
     this.prefabs = { ball, paddle, blocks, gameOver, cursor }
     this.putBallOnPaddle()
@@ -155,20 +154,32 @@ export default class PlayScene extends Scene {
   }
 
   loseLife (): void {
-    const { ball, gameOver } = this.prefabs
+    const { ball } = this.prefabs
 
     this.audio.play('explosion')
     this.prefabs.blocks.resetScoreMultiplier()
     this.lifeCounter.decrement()
     if (this.lifeCounter.number === 0) {
       ball.kill()
-      gameOver.show(() => comms.emit('game over'))
+      this.gameOver()
     } else {
       ball.kill(() => {
         ball.show()
         this.putBallOnPaddle()
       })
     }
+  }
+
+  gameOver () {
+    this.prefabs.gameOver.show(() => {
+      comms.emit('game over')
+      comms.once('restart', () => {
+        // @ts-ignore method 'off' doesn't need 4 arguments
+        this.input.keyboard.off(keys.restart)
+        this.restart()
+      })
+      this.input.keyboard.once(keys.restart, () => comms.emit('restart'))
+    })
   }
 
   spinBallOnCollision ({ up, right, down, left }: ArcadeBodyCollision): void {
