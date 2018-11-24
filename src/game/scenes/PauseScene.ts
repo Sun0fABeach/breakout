@@ -8,11 +8,8 @@ export default class PauseScene extends Scene {
   }
 
   create (): void {
-    this.input.keyboard.on(keys.pause, () => {
-      this.resume()
-      comms.emit('pauseKey') // emitted for control panel to adjust
-    })
-    comms.on('resume', () => this.resume())
+    this.input.keyboard.on(keys.pause, () => comms.emit('resume'))
+    comms.on('resume', this.resume.bind(this))
   }
 
   resume (): void {

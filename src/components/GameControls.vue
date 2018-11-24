@@ -33,10 +33,6 @@ export default {
   methods: {
     pauseInput () {
       comms.emit(this.paused ? 'resume' : 'pause')
-      this.togglePause()
-    },
-    togglePause () {
-      this.paused = !this.paused
     },
     restart () {
       comms.emit('restart')
@@ -46,8 +42,9 @@ export default {
     comms.on('life change', newAmount => { this.num_lives = newAmount })
     comms.on('score change', newScore => { this.score = newScore })
     comms.on('multiplier change', newMult => { this.scoreMultiplier = newMult })
+    comms.on('pause', () => { this.paused = true })
+    comms.on('resume', () => { this.paused = false })
     comms.on('game over', () => { this.game_over = true })
-    comms.on('pauseKey', this.togglePause.bind(this))
     comms.on('restart', () => { this.game_over = false })
   }
 }

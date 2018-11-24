@@ -51,6 +51,7 @@ export default class PlayScene extends Scene {
       this.input.keyboard.createCursorKeys()
 
     this.initPauseHandling()
+    this.input.keyboard.on(keys.restart, () => comms.emit('restart'))
 
     this.prefabs = { ball, paddle, blocks, gameOver, cursor }
     this.putBallOnPaddle()
@@ -58,13 +59,8 @@ export default class PlayScene extends Scene {
 
   initPauseHandling () {
     this.scene.launch('PauseScene').pause('PauseScene')
-
-    this.input.keyboard.on(keys.pause, () => {
-      this.pause()
-      comms.emit('pauseKey') // emitted for control panel to adjust
-    })
-
-    comms.on('pause', () => this.pause())
+    this.input.keyboard.on(keys.pause, () => comms.emit('pause'))
+    comms.on('pause', this.pause.bind(this))
   }
 
   pause (): void {
@@ -173,12 +169,7 @@ export default class PlayScene extends Scene {
   gameOver () {
     this.prefabs.gameOver.show(() => {
       comms.emit('game over')
-      comms.once('restart', () => {
-        // @ts-ignore method 'off' doesn't need 4 arguments
-        this.input.keyboard.off(keys.restart)
-        this.restart()
-      })
-      this.input.keyboard.once(keys.restart, () => comms.emit('restart'))
+      comms.once('restart', this.restart.bind(this))
     })
   }
 
