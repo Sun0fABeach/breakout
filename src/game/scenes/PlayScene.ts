@@ -57,7 +57,7 @@ export default class PlayScene extends Scene {
     this.putBallOnPaddle()
   }
 
-  initPauseHandling () {
+  initPauseHandling (): void {
     this.scene.launch('PauseScene').pause('PauseScene')
     this.input.keyboard.on(keys.pause, () => comms.emit('pause'))
     comms.on('pause', this.pause.bind(this))
@@ -159,15 +159,14 @@ export default class PlayScene extends Scene {
       ball.kill()
       this.gameOver()
     } else {
-      ball.kill(() => {
-        ball.show()
-        this.putBallOnPaddle()
-      })
+      ball.kill()
+      ball.show()
+      this.putBallOnPaddle()
     }
   }
 
-  gameOver () {
-    this.prefabs.gameOver.show(() => {
+  gameOver (): void {
+    this.prefabs.gameOver.show().then(() => {
       comms.emit('game over')
       comms.once('restart', this.restart.bind(this))
     })

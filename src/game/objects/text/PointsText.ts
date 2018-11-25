@@ -17,24 +17,26 @@ class PointsText extends BaseText {
     this.setPosition(x, y)
   }
 
-  show (finishCb?: () => any): void {
-    this.setAlpha(1)
-    super.show()
+  show (): Promise<undefined> {
+    return new Promise(resolve => {
+      this.setAlpha(1)
+      super.show()
 
-    this.scene.tweens.add({
-      targets: this,
-      y: this.y - 10,
-      ease: Phaser.Math.Easing.Linear,
-      duration: 800,
-      onComplete: () => {
-        this.scene.tweens.add({
-          targets: this,
-          alpha: 0,
-          duration: 300,
-          ease: Phaser.Math.Easing.Linear,
-          onComplete: finishCb
-        })
-      }
+      this.scene.tweens.add({
+        targets: this,
+        y: this.y - 10,
+        ease: Phaser.Math.Easing.Linear,
+        duration: 800,
+        onComplete: () => {
+          this.scene.tweens.add({
+            targets: this,
+            alpha: 0,
+            duration: 300,
+            ease: Phaser.Math.Easing.Linear,
+            onComplete: resolve
+          })
+        }
+      })
     })
   }
 }

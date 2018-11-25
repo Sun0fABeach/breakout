@@ -86,12 +86,9 @@ class Ball extends Physics.Arcade.Image {
     this.setAngularVelocity(sign * this.angularVelocity)
   }
 
-  kill (callback?: () => any): void {
+  kill (): void {
     this.explode()
     this.disableFull()
-    if (callback) {
-      callback()
-    }
   }
 
   explode (): void {
