@@ -36,11 +36,6 @@ div {
     padding: 0 0.125rem;
     background-color: aliceblue;
     color: dimgrey;
-    z-index: 0;
-  }
-  > :last-child {
-    position: relative;
-    z-index: 1;
   }
 }
 </style>
