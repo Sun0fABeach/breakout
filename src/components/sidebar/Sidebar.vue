@@ -9,6 +9,7 @@
       {{ this.gameOver ? 'Restart' : this.paused ? 'Resume' : 'Pause' }}
     </SidebarButton>
 
+    <SidebarKeys />
   </div>
 </template>
 
@@ -16,10 +17,11 @@
 import comms from '@/vuePhaserComms'
 import SidebarField from './Field'
 import SidebarButton from './Button'
+import SidebarKeys from './Keys'
 
 export default {
   name: 'sidebar',
-  components: { SidebarField, SidebarButton },
+  components: { SidebarField, SidebarButton, SidebarKeys },
   data () {
     return {
       numLives: 0,
@@ -60,6 +62,10 @@ export default {
 
   > :not(:first-child) {
     margin-top: 1rem;
+  }
+
+  > :last-child {
+    margin-top: auto;
   }
 }
 </style>
