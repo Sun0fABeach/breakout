@@ -1,5 +1,6 @@
 <template>
   <div id="game-controls">
+    <h1>Breakout!</h1>
 
     <SidebarField label="Lives">{{ numLives }}</SidebarField>
     <SidebarField label="Score">{{ score }}</SidebarField>
@@ -67,5 +68,12 @@ export default {
   > :last-child {
     margin-top: auto;
   }
+}
+
+h1 {
+  margin: 0 0 0.5rem;
+  font-size: 1.75rem;
+  text-align: center;
+  color: cadetblue;
 }
 </style>
