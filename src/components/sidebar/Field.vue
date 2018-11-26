@@ -1,20 +1,16 @@
 <template>
   <div>
     <span>{{ label }}</span>
-    <span>{{ num }}</span>
+    <slot />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'sidebarCounter',
+  name: 'sidebarField',
   props: {
     label: {
       type: String,
-      required: true
-    },
-    num: {
-      type: Number,
       required: true
     }
   }
