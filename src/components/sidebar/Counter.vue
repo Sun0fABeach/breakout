@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: 'counter',
+  name: 'sidebarCounter',
   props: {
     label: {
       type: String,

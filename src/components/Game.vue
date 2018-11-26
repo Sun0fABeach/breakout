@@ -2,7 +2,7 @@
   <div id="game-container">
 
     <div id="phaser-game-surface" :style="dimensionsStyle" />
-    <GameControls />
+    <Sidebar />
 
     <div id="download-overlay" v-if="!downloaded">
       Downloading ...
@@ -11,14 +11,14 @@
 </template>
 
 <script>
-import GameControls from './GameControls'
+import Sidebar from './sidebar/Sidebar'
 
 const width = 800
 const height = 600
 
 export default {
   name: 'game',
-  components: { GameControls },
+  components: { Sidebar },
   data () {
     return {
       downloaded: false,

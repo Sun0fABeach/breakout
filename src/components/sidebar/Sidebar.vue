@@ -1,9 +1,9 @@
 <template>
   <div id="game-controls">
 
-    <Counter label="Lives" :num="numLives" />
-    <Counter label="Score" :num="score" />
-    <Counter label="Multiplier" :num="scoreMultiplier" />
+    <SidebarCounter label="Lives" :num="numLives" />
+    <SidebarCounter label="Score" :num="score" />
+    <SidebarCounter label="Multiplier" :num="scoreMultiplier" />
 
     <SidebarButton @click="gameOver ? restart() : pauseInput()">
       {{ this.gameOver ? 'Restart' : this.paused ? 'Resume' : 'Pause' }}
@@ -14,12 +14,12 @@
 
 <script>
 import comms from '@/vuePhaserComms'
-import Counter from './Counter'
-import SidebarButton from './SidebarButton'
+import SidebarCounter from './Counter'
+import SidebarButton from './Button'
 
 export default {
-  name: 'gameControls',
-  components: { Counter, SidebarButton },
+  name: 'sidebar',
+  components: { SidebarCounter, SidebarButton },
   data () {
     return {
       numLives: 0,
