@@ -65,8 +65,12 @@ export default {
     margin-top: 1rem;
   }
 
-  > :last-child {
+  > :nth-last-child(2) {
     margin-top: auto;
+  }
+
+  > :last-child {
+    margin-top: 1.5rem;
   }
 }
 
