@@ -17,7 +17,7 @@ class Blocks {
   private readonly emitters: ParticleEmitter[]
   private scoreMult : number
 
-  constructor (scene: Scene) {
+  constructor (private readonly scene: Scene) {
     const padX = 100
     const padY = 50
     const colGap = 100
@@ -65,9 +65,22 @@ class Blocks {
     if (!containerGroup) {
       return
     }
+    toKill.body.enable = false
     this.emitHitParticles(toKill)
     this.showPoints(toKill, containerGroup.points * this.scoreMultiplier)
-    containerGroup.killBlock(toKill)
+    this.fadeOut(toKill).then(() => containerGroup.killBlock(toKill))
+  }
+
+  fadeOut (block: Block): Promise<undefined> {
+    return new Promise(resolve => {
+      this.scene.tweens.add({
+        targets: block,
+        alpha: 0,
+        ease: 'Expo.easeOut',
+        duration: 300,
+        onComplete: resolve
+      })
+    })
   }
 
   emitHitParticles (block: Block): void {
