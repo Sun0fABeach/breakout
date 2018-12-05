@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import BootScene from '@/game/scenes/BootScene'
+import StartScene from '@/game/scenes/StartScene'
 import PlayScene from '@/game/scenes/PlayScene'
 import PauseScene from '@/game/scenes/PauseScene'
 
@@ -16,7 +17,7 @@ function launch (width: number, height: number): void {
         debug: false
       }
     },
-    scene: [BootScene, PlayScene, PauseScene]
+    scene: [BootScene, StartScene, PlayScene, PauseScene]
   })
 }
 
