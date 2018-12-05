@@ -58,14 +58,13 @@ export default class PlayScene extends Scene {
   }
 
   initPauseHandling (): void {
-    this.scene.launch('PauseScene').pause('PauseScene')
     this.input.keyboard.on(keys.pause, () => comms.emit('pause'))
     comms.on('pause', this.pause.bind(this))
   }
 
   pause (): void {
     this.scene.pause()
-    this.scene.resume('PauseScene')
+    this.scene.run('PauseScene')
   }
 
   restart (): void {
