@@ -161,6 +161,7 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
       let dead: Block = this.getFirstDead(); dead; dead = this.getFirstDead()
     ) {
       dead.setActive(true)
+      dead.setAlpha(1) // got set to 0 by fade out
       dead.setVisible(true)
       dead.body.enable = true
     }
