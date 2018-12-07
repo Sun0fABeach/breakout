@@ -1,7 +1,11 @@
 <template>
   <div id="game-container">
 
-    <div id="phaser-game-surface" :style="dimensionsStyle" />
+    <div id="game-surface">
+      <div id="phaser-game" :style="dimensionsStyle" />
+      <StartButton />
+    </div>
+
     <Sidebar />
 
     <div id="download-overlay" v-if="!downloaded">
@@ -12,13 +16,14 @@
 
 <script>
 import Sidebar from './sidebar/Sidebar'
+import StartButton from './StartButton'
 
 const width = 800
 const height = 600
 
 export default {
   name: 'game',
-  components: { Sidebar },
+  components: { Sidebar, StartButton },
   data () {
     return {
       downloaded: false,
@@ -44,8 +49,8 @@ export default {
   box-shadow: 0px 0px 8px 2px lightgrey;
 }
 
-#phaser-game-surface {
-  flex-shrink: 0;
+#game-surface {
+  position: relative;
 }
 
 #download-overlay {

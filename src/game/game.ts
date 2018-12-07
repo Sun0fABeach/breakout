@@ -10,7 +10,7 @@ function launch (width: number, height: number): void {
     type: Phaser.AUTO,
     width,
     height,
-    parent: 'phaser-game-surface',
+    parent: 'phaser-game',
     physics: {
       default: 'arcade',
       arcade: {
