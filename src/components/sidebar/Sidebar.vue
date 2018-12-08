@@ -60,6 +60,7 @@ export default {
   padding: 1rem;
   background-color: aliceblue;
   font-family: 'Courier New', Courier, monospace;
+  z-index: 1; // above game surface
 
   > :not(:first-child) {
     margin-top: 1rem;

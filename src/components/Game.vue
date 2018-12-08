@@ -51,6 +51,9 @@ export default {
 
 #game-surface {
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #download-overlay {
@@ -59,6 +62,7 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
+  z-index: 2;
   display: flex;
   justify-content: center;
   align-items: center;
