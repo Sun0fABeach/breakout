@@ -135,6 +135,13 @@ class Blocks {
   get scoreMultiplier (): number {
     return this.scoreMult
   }
+
+  get all (): PhysicsSprite[] {
+    return this.blockGroups.reduce(
+      (acc: PhysicsSprite[], group: BlockGroup) => {
+        return acc.concat(group.getChildren() as PhysicsSprite[])
+      }, [])
+  }
 }
 
 class BlockGroup extends Physics.Arcade.StaticGroup {

@@ -55,6 +55,8 @@ export default class PlayScene extends Scene {
 
     this.prefabs = { ball, paddle, blocks, gameOver, cursor }
     this.putBallOnPaddle()
+
+    this.setupInitialFadeIn(ball, paddle, ...blocks.all)
   }
 
   initPauseHandling (): void {
@@ -74,6 +76,18 @@ export default class PlayScene extends Scene {
     this.prefabs.ball.show()
     this.putBallOnPaddle()
     this.prefabs.gameOver.hide()
+  }
+
+  setupInitialFadeIn (...objects: { alpha: number }[]): void {
+    objects.forEach(obj => {
+      obj.alpha = 0
+      this.tweens.add({
+        targets: obj,
+        alpha: 1,
+        ease: 'Expo.easeInOut',
+        duration: 1250
+      })
+    })
   }
 
   putBallOnPaddle (): void {
