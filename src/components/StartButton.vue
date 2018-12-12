@@ -1,9 +1,13 @@
 <template>
-  <transition
-    enter-active-class="animated bounceInRight fast"
-    leave-active-class="animated bounceOut faster"
-  >
-    <button v-if="visible" @click="start">Start</button>
+  <transition>
+    <button
+      v-if="visible"
+      @click="start"
+      @animationend.once="pulse"
+      :class="animClasses"
+    >
+      Start
+    </button>
   </transition>
 </template>
 
@@ -14,12 +18,21 @@ export default {
   name: 'startButton',
   data () {
     return {
-      visible: false
+      visible: false,
+      animClasses: 'animated bounceInRight fast'
     }
   },
   methods: {
+    pulse () {
+      this.animClasses = 'animated pulse'
+    },
     start () {
-      comms.emit('play scene')
+      this.animClasses = 'animated bounceOut faster'
+      /**
+       * emit on next render. otherwise, animClasses will not be set due to
+       * vue's internal animation class management.
+       */
+      this.$nextTick(() => { comms.emit('play scene') })
     }
   },
   created () {
@@ -91,5 +104,25 @@ button {
 .bounceOut {
   animation-duration: 0.75s;
   animation-name: bounceOut;
+}
+
+@keyframes pulse {
+  from {
+    transform: scale3d(1, 1, 1);
+  }
+
+  50% {
+    transform: scale3d(1.05, 1.05, 1.05);
+  }
+
+  to {
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+.pulse {
+  animation-name: pulse;
+  animation-duration: 1.75s;
+  animation-iteration-count: infinite;
 }
 </style>
