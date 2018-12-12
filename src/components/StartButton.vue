@@ -32,12 +32,12 @@ export default {
 <style lang="scss" scoped>
 button {
   position: absolute;
-  padding: 0.5rem 1.5rem;
-  font-size: 2rem;
-  color: black;
-  background-color: white;
-  border: 2px solid black;
-  border-radius: 0.375rem;
+  padding: 0.5rem;
+  font-size: 4.5rem;
+  color: white;
+  text-shadow: 0.125rem 0.125rem 0.125rem grey;
+  background-color: transparent;
+  border: none;
   cursor: pointer;
 }
 
