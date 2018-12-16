@@ -29,31 +29,41 @@ export default class PlayScene extends Scene {
 
   create (): void {
     this.add.image(400, 300, 'sky')
+    this.prefabs.paddle = new Paddle(this, 400, 550)
+    this.prefabs.cursor = this.input.keyboard.createCursorKeys()
 
-    /**
-     * weird: this call has to happen right before ball init. if I put
-     * this.add.image() in between, the particles will be invisible! -.-
-     */
+    comms.emit('pre play')
+    comms.once('start play', this.setupPlay.bind(this))
+  }
+
+  setupPlay (): void {
     particlesInit(this)
 
     const ball = new Ball(this, 400, 300)
 
-    const paddle = new Paddle(this, 400, 550)
-    paddle.setupBallCollider(ball, this.bounceBallOffPaddle)
+    this.prefabs.paddle.setupBallCollider(ball, this.bounceBallOffPaddle)
     const blocks = new Blocks(this)
     blocks.setupBallCollider(ball, this.blockHit.bind(this))
 
+    this.prefabs = { ball, blocks, ...this.prefabs }
+
+    this.putBallOnPaddle()
     this.physics.world.on('worldbounds', this.ballHitWorldBounds, this)
 
-    const cursor: Phaser.Input.Keyboard.CursorKeys =
-      this.input.keyboard.createCursorKeys()
-
     this.initPauseHandling()
+    this.setupInitialFadeIn(ball, ...blocks.all)
+  }
 
-    this.prefabs = { ball, paddle, blocks, cursor }
-    this.putBallOnPaddle()
-
-    this.setupInitialFadeIn(ball, paddle, ...blocks.all)
+  setupInitialFadeIn (...objects: { alpha: number }[]): void {
+    objects.forEach(obj => {
+      obj.alpha = 0
+      this.tweens.add({
+        targets: obj,
+        alpha: 1,
+        ease: 'Expo.easeInOut',
+        duration: 1250
+      })
+    })
   }
 
   initPauseHandling (): void {
@@ -72,18 +82,6 @@ export default class PlayScene extends Scene {
     this.prefabs.blocks.reset()
     this.prefabs.ball.show()
     this.putBallOnPaddle()
-  }
-
-  setupInitialFadeIn (...objects: { alpha: number }[]): void {
-    objects.forEach(obj => {
-      obj.alpha = 0
-      this.tweens.add({
-        targets: obj,
-        alpha: 1,
-        ease: 'Expo.easeInOut',
-        duration: 1250
-      })
-    })
   }
 
   putBallOnPaddle (): void {

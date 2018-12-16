@@ -27,12 +27,12 @@ export default {
   },
   methods: {
     buttonClick () {
-      comms.emit('play scene')
+      comms.emit('start play')
     }
   },
   created () {
-    comms.once('start scene', () => { this.startButton.visible = true })
-    comms.once('play scene', () => { this.startButton.visible = false })
+    comms.once('pre play', () => { this.startButton.visible = true })
+    comms.once('start play', () => { this.startButton.visible = false })
     comms.on('game over', () => { this.animText.visible = true })
     comms.on('restart', () => { this.animText.visible = false })
   }

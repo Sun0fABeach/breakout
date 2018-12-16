@@ -54,6 +54,6 @@ export default class BootScene extends Scene {
   }
 
   create (): void {
-    this.scene.start('StartScene')
+    this.scene.start('PlayScene')
   }
 }
