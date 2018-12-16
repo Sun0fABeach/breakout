@@ -49,7 +49,6 @@ export default class PlayScene extends Scene {
       this.input.keyboard.createCursorKeys()
 
     this.initPauseHandling()
-    this.input.keyboard.on(keys.restart, () => comms.emit('restart'))
 
     this.prefabs = { ball, paddle, blocks, cursor }
     this.putBallOnPaddle()

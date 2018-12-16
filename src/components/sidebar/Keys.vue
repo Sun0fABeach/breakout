@@ -13,9 +13,6 @@
       <tr>
         <th>Pause</th><td>P</td>
       </tr>
-      <tr>
-        <th>Restart</th><td>R</td>
-      </tr>
     </table>
   </SidebarField>
 </template>
