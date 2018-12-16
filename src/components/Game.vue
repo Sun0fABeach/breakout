@@ -3,7 +3,7 @@
 
     <div id="game-surface">
       <div id="phaser-game" :style="dimensionsStyle" />
-      <StartButton />
+      <OverlayUI />
     </div>
 
     <Sidebar />
@@ -16,14 +16,14 @@
 
 <script>
 import Sidebar from './sidebar/Sidebar'
-import StartButton from './StartButton'
+import OverlayUI from './overlayUI/OverlayUI'
 
 const width = 800
 const height = 600
 
 export default {
   name: 'game',
-  components: { Sidebar, StartButton },
+  components: { Sidebar, OverlayUI },
   data () {
     return {
       downloaded: false,
@@ -51,9 +51,6 @@ export default {
 
 #game-surface {
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 #download-overlay {

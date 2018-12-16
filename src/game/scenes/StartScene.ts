@@ -9,7 +9,7 @@ export default class PlayScene extends Scene {
   create (): void {
     this.add.image(400, 300, 'sky')
 
-    comms.emit('start scene', true)
+    comms.emit('start scene')
     comms.once('play scene', () => this.scene.start('PlayScene'))
   }
 }

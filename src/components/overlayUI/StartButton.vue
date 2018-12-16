@@ -12,13 +12,16 @@
 </template>
 
 <script>
-import comms from '@/vuePhaserComms'
-
 export default {
   name: 'startButton',
+  props: {
+    visible: {
+      type: Boolean,
+      default: false
+    }
+  },
   data () {
     return {
-      visible: false,
       animClasses: 'animated bounceInRight fast'
     }
   },
@@ -32,12 +35,8 @@ export default {
        * emit on next render. otherwise, animClasses will not be set due to
        * vue's internal animation class management.
        */
-      this.$nextTick(() => { comms.emit('play scene') })
+      this.$nextTick(() => this.$emit('click'))
     }
-  },
-  created () {
-    comms.once('start scene', () => { this.visible = true })
-    comms.once('play scene', () => { this.visible = false })
   }
 }
 </script>

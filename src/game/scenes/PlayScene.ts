@@ -3,7 +3,6 @@ import comms from '@/vuePhaserComms'
 import Ball from '@/game/objects/Ball'
 import Paddle from '@/game/objects/Paddle'
 import Blocks from '@/game/objects/Blocks'
-import GameOver from '@/game/objects/text/GameOver'
 import LifeCounter from '@/game/objects/counter/LifeCounter'
 import Score from '@/game/objects/counter/Score'
 import Audio from '@/game/audio'
@@ -46,14 +45,13 @@ export default class PlayScene extends Scene {
 
     this.physics.world.on('worldbounds', this.ballHitWorldBounds, this)
 
-    const gameOver = new GameOver(this)
     const cursor: Phaser.Input.Keyboard.CursorKeys =
       this.input.keyboard.createCursorKeys()
 
     this.initPauseHandling()
     this.input.keyboard.on(keys.restart, () => comms.emit('restart'))
 
-    this.prefabs = { ball, paddle, blocks, gameOver, cursor }
+    this.prefabs = { ball, paddle, blocks, cursor }
     this.putBallOnPaddle()
 
     this.setupInitialFadeIn(ball, paddle, ...blocks.all)
@@ -75,7 +73,6 @@ export default class PlayScene extends Scene {
     this.prefabs.blocks.reset()
     this.prefabs.ball.show()
     this.putBallOnPaddle()
-    this.prefabs.gameOver.hide()
   }
 
   setupInitialFadeIn (...objects: { alpha: number }[]): void {
@@ -179,10 +176,8 @@ export default class PlayScene extends Scene {
   }
 
   gameOver (): void {
-    this.prefabs.gameOver.show().then(() => {
-      comms.emit('game over')
-      comms.once('restart', this.restart.bind(this))
-    })
+    comms.emit('game over')
+    comms.once('restart', this.restart.bind(this))
   }
 
   spinBallOnCollision ({ up, right, down, left }: ArcadeBodyCollision): void {
@@ -208,11 +203,7 @@ export default class PlayScene extends Scene {
   }
 
   update (): void {
-    const { paddle, gameOver, cursor } = this.prefabs
-
-    if (gameOver.visible) {
-      return
-    }
+    const { paddle, cursor } = this.prefabs
 
     if (paddle.ballMounted && cursor.space.isDown) {
       this.launchBallFromPaddle()
