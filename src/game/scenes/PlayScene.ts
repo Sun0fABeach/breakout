@@ -67,8 +67,12 @@ export default class PlayScene extends Scene {
   }
 
   initPauseHandling (): void {
-    this.input.keyboard.on(keys.pause, () => comms.emit('pause'))
+    this.activatePauseButton()
     comms.on('pause', this.pause.bind(this))
+  }
+
+  activatePauseButton (): void {
+    this.input.keyboard.on(keys.pause, () => comms.emit('pause'))
   }
 
   pause (): void {
@@ -82,6 +86,7 @@ export default class PlayScene extends Scene {
     this.prefabs.blocks.reset()
     this.prefabs.ball.show()
     this.putBallOnPaddle()
+    this.activatePauseButton()
   }
 
   putBallOnPaddle (): void {
@@ -173,6 +178,8 @@ export default class PlayScene extends Scene {
   }
 
   gameOver (): void {
+    // @ts-ignore - no need to pass fn argument here
+    this.input.keyboard.removeListener(keys.pause)
     comms.emit('game over')
     comms.once('start play', this.restart.bind(this))
   }
