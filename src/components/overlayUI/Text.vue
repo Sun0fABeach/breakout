@@ -1,5 +1,8 @@
 <template>
-  <transition :enter-active-class="animation">
+  <transition
+    enter-active-class="spin"
+    leave-active-class="bounceOut"
+  >
     <span v-if="visible">
       {{ text }}
     </span>
@@ -8,16 +11,8 @@
 
 <script>
 export default {
-  name: 'animText',
+  name: 'overlayUIText',
   props: {
-    animation: {
-      type: String,
-      default: null,
-      validator: given => {
-        const animTypes = ['spin']
-        return !given || animTypes.indexOf(given) !== -1
-      }
-    },
     text: {
       type: String,
       required: true
@@ -32,13 +27,17 @@ export default {
 
 <style lang="scss" scoped>
 span {
-  font-size: 4rem;
+  font-size: 6rem;
   font-family: 'Courier New', Courier, monospace;
   color: white;
-  text-shadow: 0 0 6px lightGrey;
+  text-shadow: 0.125rem 0.125rem 0.125rem grey;
 }
 .spin {
   animation-name: spinIn;
   animation-duration: 650ms;
+}
+.bounceOut {
+  animation-duration: 0.75s;
+  animation-name: bounceOut;
 }
 </style>

@@ -174,7 +174,7 @@ export default class PlayScene extends Scene {
 
   gameOver (): void {
     comms.emit('game over')
-    comms.once('restart', this.restart.bind(this))
+    comms.once('start play', this.restart.bind(this))
   }
 
   spinBallOnCollision ({ up, right, down, left }: ArcadeBodyCollision): void {

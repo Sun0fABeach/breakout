@@ -1,27 +1,27 @@
 <template>
   <div>
-    <AnimText v-bind="animText" />
-    <StartButton :visible="startButton.visible" @click="buttonClick"/>
+    <OverlayUIText v-bind="text" />
+    <OverlayUIButton v-bind="button" @click="buttonClick" />
   </div>
 </template>
 
 <script>
 import comms from '@/vuePhaserComms'
-import AnimText from './AnimText'
-import StartButton from './StartButton'
+import OverlayUIText from './Text'
+import OverlayUIButton from './Button'
 
 export default {
   name: 'game',
-  components: { AnimText, StartButton },
+  components: { OverlayUIText, OverlayUIButton },
   data () {
     return {
-      animText: {
+      text: {
         visible: false,
-        text: 'Game Over',
-        animation: 'spin'
+        text: ''
       },
-      startButton: {
-        visible: false
+      button: {
+        visible: false,
+        text: ''
       }
     }
   },
@@ -31,10 +31,30 @@ export default {
     }
   },
   created () {
-    comms.once('pre play', () => { this.startButton.visible = true })
-    comms.once('start play', () => { this.startButton.visible = false })
-    comms.on('game over', () => { this.animText.visible = true })
-    comms.on('restart', () => { this.animText.visible = false })
+    comms.once('pre play', () => {
+      this.button = {
+        visible: true,
+        text: 'Start'
+      }
+    })
+    comms.on('start play', () => {
+      this.text.visible = false
+      this.button.visible = false
+    })
+    comms.on('game over', () => {
+      this.text = {
+        visible: true,
+        text: 'Game Over'
+      }
+      this.button = {
+        visible: true,
+        text: 'Restart'
+      }
+    })
+    comms.on('restart', () => {
+      this.text.visible = false
+      this.button.visible = false
+    })
   }
 }
 </script>

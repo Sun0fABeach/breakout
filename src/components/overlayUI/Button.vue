@@ -1,41 +1,29 @@
 <template>
-  <transition>
+  <transition
+    enter-active-class="animated bounceInRight fast"
+    leave-active-class="animated bounceOut faster"
+  >
     <button
       v-if="visible"
-      @click="start"
-      @animationend.once="pulse"
-      :class="animClasses"
+      v-on="$listeners"
+      class="animated pulse"
     >
-      Start
+      {{ text }}
     </button>
   </transition>
 </template>
 
 <script>
 export default {
-  name: 'startButton',
+  name: 'overlayUIButton',
   props: {
     visible: {
       type: Boolean,
       default: false
-    }
-  },
-  data () {
-    return {
-      animClasses: 'animated bounceInRight fast'
-    }
-  },
-  methods: {
-    pulse () {
-      this.animClasses = 'animated pulse'
     },
-    start () {
-      this.animClasses = 'animated bounceOut faster'
-      /**
-       * emit on next render. otherwise, animClasses will not be set due to
-       * vue's internal animation class management.
-       */
-      this.$nextTick(() => this.$emit('click'))
+    text: {
+      type: String,
+      required: true
     }
   }
 }
@@ -43,7 +31,6 @@ export default {
 
 <style lang="scss" scoped>
 button {
-  position: absolute;
   padding: 0.5rem;
   font-size: 4.5rem;
   color: white;
@@ -63,7 +50,7 @@ button {
   animation-name: bounceOut;
 }
 
-.pulse {
+.pulse:not(.bounceInRight):not(.bounceOut) {
   animation-name: pulse;
   animation-duration: 1.75s;
   animation-iteration-count: infinite;
