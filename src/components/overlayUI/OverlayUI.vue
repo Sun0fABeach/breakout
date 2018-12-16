@@ -51,10 +51,6 @@ export default {
         text: 'Restart'
       }
     })
-    comms.on('restart', () => {
-      this.text.visible = false
-      this.button.visible = false
-    })
   }
 }
 </script>

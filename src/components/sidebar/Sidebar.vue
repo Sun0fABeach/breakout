@@ -6,8 +6,8 @@
     <SidebarField label="Score">{{ score }}</SidebarField>
     <SidebarField label="Multiplier">{{ scoreMultiplier }}</SidebarField>
 
-    <SidebarButton @click="gameOver ? restart() : pauseInput()">
-      {{ this.gameOver ? 'Restart' : this.paused ? 'Resume' : 'Pause' }}
+    <SidebarButton @click="pauseInput()">
+      {{ this.paused ? 'Resume' : 'Pause' }}
     </SidebarButton>
 
     <SidebarKeys />
@@ -34,10 +34,9 @@ export default {
   },
   methods: {
     pauseInput () {
-      comms.emit(this.paused ? 'resume' : 'pause')
-    },
-    restart () {
-      comms.emit('restart')
+      if (!this.gameOver) {
+        comms.emit(this.paused ? 'resume' : 'pause')
+      }
     }
   },
   created () {
@@ -47,7 +46,7 @@ export default {
     comms.on('pause', () => { this.paused = true })
     comms.on('resume', () => { this.paused = false })
     comms.on('game over', () => { this.gameOver = true })
-    comms.on('restart', () => { this.gameOver = false })
+    comms.on('start play', () => { this.gameOver = false })
   }
 }
 </script>
