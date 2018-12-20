@@ -154,11 +154,17 @@ export default class PlayScene extends Scene {
   }
 
   blockHit (ball: Ball, block: PhysicsSprite, points: number): void {
-    this.prefabs.blocks.killBlock(block)
+    const { blocks } = this.prefabs
+
     this.audio.play('ding')
     this.score.increment(points)
-    this.prefabs.blocks.bumpScoreMultiplier()
     this.spinBallOnCollision(ball.body.touching)
+    blocks.bumpScoreMultiplier()
+    blocks.killBlock(block).then(() => {
+      if (blocks.allDead) {
+        ball.fadeKill()
+      }
+    })
   }
 
   loseLife (): void {
@@ -167,11 +173,10 @@ export default class PlayScene extends Scene {
     this.audio.play('explosion')
     this.prefabs.blocks.resetScoreMultiplier()
     this.lifeCounter.decrement()
+    ball.kill()
     if (this.lifeCounter.number === 0) {
-      ball.kill()
       this.gameOver()
     } else {
-      ball.kill()
       ball.show()
       this.putBallOnPaddle()
     }

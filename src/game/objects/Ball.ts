@@ -144,6 +144,16 @@ class Ball extends Physics.Arcade.Image {
     }
   }
 
+  fadeKill () {
+    this.scene.tweens.add({
+      targets: this,
+      alpha: 0,
+      ease: 'Quad.easeOut',
+      duration: 250,
+      onComplete: this.disableFull.bind(this)
+    })
+  }
+
   get velocityX (): number {
     return this.body.velocity.x
   }

@@ -58,17 +58,23 @@ class Blocks {
     )
   }
 
-  killBlock (toKill: Block): void {
-    const containerGroup: BlockGroup | undefined = this.blockGroups.find(
-      group => group.contains(toKill)
-    )
-    if (!containerGroup) {
-      return
-    }
-    toKill.body.enable = false
-    this.emitHitParticles(toKill)
-    this.showPoints(toKill, containerGroup.points * this.scoreMultiplier)
-    this.fadeOut(toKill).then(() => containerGroup.killBlock(toKill))
+  killBlock (toKill: Block): Promise<undefined> {
+    return new Promise((resolve, reject) => {
+      const containerGroup: BlockGroup | undefined = this.blockGroups.find(
+        group => group.contains(toKill)
+      )
+      if (!containerGroup) {
+        reject(new Error('Block belongs to no group'))
+        return
+      }
+      toKill.body.enable = false
+      this.emitHitParticles(toKill)
+      this.showPoints(toKill, containerGroup.points * this.scoreMultiplier)
+      this.fadeOut(toKill).then(() => {
+        containerGroup.killBlock(toKill)
+        resolve()
+      })
+    })
   }
 
   fadeOut (block: Block): Promise<undefined> {
@@ -140,7 +146,12 @@ class Blocks {
     return this.blockGroups.reduce(
       (acc: PhysicsSprite[], group: BlockGroup) => {
         return acc.concat(group.getChildren() as PhysicsSprite[])
-      }, [])
+      }, []
+    )
+  }
+
+  get allDead (): boolean {
+    return this.blockGroups.every(group => group.countActive() === 0)
   }
 }
 
