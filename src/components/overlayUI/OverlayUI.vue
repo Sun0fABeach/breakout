@@ -41,10 +41,10 @@ export default {
       this.text.visible = false
       this.button.visible = false
     })
-    comms.on('game over', () => {
+    comms.on('game over', won => {
       this.text = {
         visible: true,
-        text: 'Game Over'
+        text: won ? 'You win' : 'Game Over'
       }
       this.button = {
         visible: true,

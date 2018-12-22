@@ -59,7 +59,7 @@ class Ball extends Physics.Arcade.Image {
 
   show (): void {
     this.setTexture('ball')
-    this.enableBody(false, 0, 0, false, true) // just show, don't enable body
+    this.enableBody(false, 0, 0, false, true) // just show, don't activate
   }
 
   disablePhysics (): void {
@@ -144,13 +144,33 @@ class Ball extends Physics.Arcade.Image {
     }
   }
 
-  fadeKill () {
-    this.scene.tweens.add({
-      targets: this,
-      alpha: 0,
-      ease: 'Quad.easeOut',
-      duration: 250,
-      onComplete: this.disableFull.bind(this)
+  fadeKill (): Promise<undefined> {
+    return new Promise(resolve => {
+      this.scene.tweens.add({
+        targets: this,
+        alpha: 0,
+        ease: 'Quad.easeOut',
+        duration: 250,
+        onComplete: () => {
+          this.disableFull()
+          resolve()
+        }
+      })
+    })
+  }
+
+  fadeIn (): Promise<undefined> {
+    this.setVisible(true) // in case it was hidden before
+    this.setAlpha(0)
+
+    return new Promise(resolve => {
+      this.scene.tweens.add({
+        targets: this,
+        alpha: 1,
+        ease: 'Quad.easeIn',
+        duration: 250,
+        onComplete: resolve
+      })
     })
   }
 

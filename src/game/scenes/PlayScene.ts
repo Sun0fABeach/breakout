@@ -84,8 +84,8 @@ export default class PlayScene extends Scene {
     this.score.reset()
     this.lifeCounter.reset()
     this.prefabs.blocks.reset()
-    this.prefabs.ball.show()
     this.putBallOnPaddle()
+    this.prefabs.ball.fadeIn()
     this.activatePauseButton()
   }
 
@@ -162,7 +162,7 @@ export default class PlayScene extends Scene {
     blocks.bumpScoreMultiplier()
     blocks.killBlock(block).then(() => {
       if (blocks.allDead) {
-        ball.fadeKill()
+        ball.fadeKill().then(() => this.gameOver(true))
       }
     })
   }
@@ -182,10 +182,10 @@ export default class PlayScene extends Scene {
     }
   }
 
-  gameOver (): void {
+  gameOver (won: boolean = false): void {
     // @ts-ignore - no need to pass fn argument here
     this.input.keyboard.removeListener(keys.pause)
-    comms.emit('game over')
+    comms.emit('game over', won)
     comms.once('start play', this.restart.bind(this))
   }
 
