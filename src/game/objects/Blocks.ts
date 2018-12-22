@@ -77,7 +77,7 @@ class Blocks {
     })
   }
 
-  fadeOut (block: Block): Promise<undefined> {
+  private fadeOut (block: Block): Promise<undefined> {
     return new Promise(resolve => {
       this.scene.tweens.add({
         targets: block,
@@ -89,7 +89,7 @@ class Blocks {
     })
   }
 
-  emitHitParticles (block: Block): void {
+  private emitHitParticles (block: Block): void {
     this.emitters.forEach(emitter => {
       emitter.setEmitZone({
         type: 'edge',
@@ -102,7 +102,7 @@ class Blocks {
     })
   }
 
-  showPoints (block: Block, points: number) {
+  private showPoints (block: Block, points: number) {
     const pointsText: PointsText = this.pointsTextGroup.getFirstDead(true)
     // for some reason, pointsText not created active == true by group
     pointsText.setActive(true)
@@ -134,7 +134,7 @@ class Blocks {
     this.emitScoreMultiplier()
   }
 
-  emitScoreMultiplier (): void {
+  private emitScoreMultiplier (): void {
     comms.emit('multiplier change', this.scoreMult)
   }
 

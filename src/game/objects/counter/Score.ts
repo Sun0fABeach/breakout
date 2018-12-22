@@ -5,8 +5,8 @@ class Score extends BaseCounter {
     super(startingScore)
   }
 
-  _emit (): void {
-    super._emit('score change')
+  emit (): void {
+    super.emit('score change')
   }
 }
 

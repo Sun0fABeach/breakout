@@ -12,7 +12,7 @@ export default class PauseScene extends Scene {
     comms.on('resume', this.resume.bind(this))
   }
 
-  resume (): void {
+  private resume (): void {
     this.scene.pause()
     this.scene.resume('PlayScene')
   }

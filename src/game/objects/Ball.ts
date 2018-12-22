@@ -73,11 +73,6 @@ class Ball extends Physics.Arcade.Image {
     this.disableBody(true, true) // disable & hide
   }
 
-  explode (): void {
-    this.explodeBottom()
-    this.disableFull()
-  }
-
   fadeKill (): Promise<void> {
     return this.fadeOut().then(() => this.disableFull())
   }
@@ -92,7 +87,9 @@ class Ball extends Physics.Arcade.Image {
     return this.fade(1, 'Quad.easeIn')
   }
 
-  fade (alpha: number, ease: string, duration: number = 250): Promise<void> {
+  private fade (
+    alpha: number, ease: string, duration: number = 250
+  ): Promise<void> {
     return new Promise(resolve => {
       this.scene.tweens.add({
         targets: this,
@@ -102,6 +99,29 @@ class Ball extends Physics.Arcade.Image {
         onComplete: resolve
       })
     })
+  }
+
+  explode (): void {
+    this.explodeBottom()
+    this.disableFull()
+  }
+
+  private explodeBottom (): void {
+    Object.values(this.emitters.explosion).forEach(emitter => {
+      emitter.resume()
+      emitter.setAngle(this.explosionAngleRange(this.body.velocity.angle()))
+      emitter.explode(60, this.x, this.world.bounds.height - 4)
+    })
+  }
+
+  private explosionAngleRange (radians: number): { min: number, max: number } {
+    type ShiftFunc = (base: number, amount: number, limit: number) => number
+
+    let deg: number = PhaserMath.RadToDeg(radians)
+    const shiftFunc: ShiftFunc =
+      deg > 270 ? PhaserMath.MinSub : PhaserMath.MaxAdd
+    deg = shiftFunc(deg, 20, 270) // shift range towards center up
+    return this.particleAngleRange(deg, 140)
   }
 
   setVelocityFromAngle (angleRad: number): void {
@@ -118,24 +138,6 @@ class Ball extends Physics.Arcade.Image {
   set spin (spinDirection: Direction) {
     const sign = spinDirection === Direction.Left ? -1 : +1
     this.setAngularVelocity(sign * this.angularVelocity)
-  }
-
-  explodeBottom (): void {
-    Object.values(this.emitters.explosion).forEach(emitter => {
-      emitter.resume()
-      emitter.setAngle(this.explosionAngleRange(this.body.velocity.angle()))
-      emitter.explode(60, this.x, this.world.bounds.height - 4)
-    })
-  }
-
-  explosionAngleRange (radians: number): { min: number, max: number } {
-    type ShiftFunc = (base: number, amount: number, limit: number) => number
-
-    let deg: number = PhaserMath.RadToDeg(radians)
-    const shiftFunc: ShiftFunc =
-      deg > 270 ? PhaserMath.MinSub : PhaserMath.MaxAdd
-    deg = shiftFunc(deg, 20, 270) // shift range towards center up
-    return this.particleAngleRange(deg, 140)
   }
 
   puff (up: boolean, down: boolean, left: boolean, right: boolean): void {
@@ -165,7 +167,7 @@ class Ball extends Physics.Arcade.Image {
     })
   }
 
-  particleAngleRange (deg: number, spreadRange: number):
+  private particleAngleRange (deg: number, spreadRange: number):
     { min: number, max: number } {
     return {
       min: deg - spreadRange / 2,

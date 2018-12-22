@@ -36,7 +36,7 @@ export default class PlayScene extends Scene {
     comms.once('start play', this.setupPlay.bind(this))
   }
 
-  setupPlay (): void {
+  private setupPlay (): void {
     particlesInit(this)
 
     const ball = new Ball(this, 400, 300)
@@ -54,7 +54,7 @@ export default class PlayScene extends Scene {
     this.setupInitialFadeIn(ball, ...blocks.all)
   }
 
-  setupInitialFadeIn (...objects: { alpha: number }[]): void {
+  private setupInitialFadeIn (...objects: { alpha: number }[]): void {
     objects.forEach(obj => {
       obj.alpha = 0
       this.tweens.add({
@@ -66,21 +66,21 @@ export default class PlayScene extends Scene {
     })
   }
 
-  initPauseHandling (): void {
+  private initPauseHandling (): void {
     this.activatePauseButton()
     comms.on('pause', this.pause.bind(this))
   }
 
-  activatePauseButton (): void {
+  private activatePauseButton (): void {
     this.input.keyboard.on(keys.pause, () => comms.emit('pause'))
   }
 
-  pause (): void {
+  private pause (): void {
     this.scene.pause()
     this.scene.run('PauseScene')
   }
 
-  restart (): void {
+  private restart (): void {
     this.score.reset()
     this.lifeCounter.reset()
     this.prefabs.blocks.reset()
@@ -89,7 +89,7 @@ export default class PlayScene extends Scene {
     this.activatePauseButton()
   }
 
-  putBallOnPaddle (): void {
+  private putBallOnPaddle (): void {
     const { ball, paddle } = this.prefabs
 
     ball.disableFull()
@@ -102,7 +102,7 @@ export default class PlayScene extends Scene {
     ball.fadeIn()
   }
 
-  launchBallFromPaddle (): void {
+  private launchBallFromPaddle (): void {
     const { paddle, blocks } = this.prefabs
 
     paddle.removeBall(true) // destroys ball object
@@ -117,7 +117,7 @@ export default class PlayScene extends Scene {
     blocks.setBallForCollider(ball)
   }
 
-  bounceBallOffPaddle (ball: Ball, paddle: Paddle): void {
+  private bounceBallOffPaddle (ball: Ball, paddle: Paddle): void {
     this.audio.play('wooden')
     this.setBallVelocity(
       Phaser.Math.Angle.Between(paddle.x, paddle.y, ball.x, ball.y)
@@ -126,7 +126,7 @@ export default class PlayScene extends Scene {
     this.prefabs.blocks.resetScoreMultiplier()
   }
 
-  setBallVelocity (angleRad: number): void {
+  private setBallVelocity (angleRad: number): void {
     /* if the angle is too horizontal, adjust it a
        little to make the ball go slightly upwards */
     const flatRight: number = 0
@@ -140,7 +140,7 @@ export default class PlayScene extends Scene {
     this.prefabs.ball.setVelocityFromAngle(angleRad)
   }
 
-  ballHitWorldBounds (
+  private ballHitWorldBounds (
     ballBody: PhysicsBody,
     up: boolean, down: boolean, left: boolean, right: boolean
   ): void {
@@ -154,7 +154,7 @@ export default class PlayScene extends Scene {
     }
   }
 
-  blockHit (ball: Ball, block: PhysicsSprite, points: number): void {
+  private blockHit (ball: Ball, block: PhysicsSprite, points: number): void {
     const { blocks } = this.prefabs
 
     this.audio.play('ding')
@@ -168,7 +168,7 @@ export default class PlayScene extends Scene {
     })
   }
 
-  loseLife (): void {
+  private loseLife (): void {
     const { ball } = this.prefabs
 
     this.audio.play('explosion')
@@ -183,14 +183,16 @@ export default class PlayScene extends Scene {
     }
   }
 
-  gameOver (won: boolean = false): void {
+  private gameOver (won: boolean = false): void {
     // @ts-ignore - no need to pass fn argument here
     this.input.keyboard.removeListener(keys.pause)
     comms.emit('game over', won)
     comms.once('start play', this.restart.bind(this))
   }
 
-  spinBallOnCollision ({ up, right, down, left }: ArcadeBodyCollision): void {
+  private spinBallOnCollision (
+    { up, right, down, left }: ArcadeBodyCollision
+  ): void {
     const ball: Ball = this.prefabs.ball
 
     if (up) {

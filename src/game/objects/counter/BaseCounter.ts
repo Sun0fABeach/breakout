@@ -5,25 +5,25 @@ abstract class BaseCounter {
 
   constructor (private readonly countTotal: number) {
     this.countCurrent = countTotal
-    this._emit()
+    this.emit()
   }
 
   increment (val: number = 1): void {
     this.countCurrent += val
-    this._emit()
+    this.emit()
   }
 
   decrement (val: number = 1): void {
     this.countCurrent -= val
-    this._emit()
+    this.emit()
   }
 
   reset (): void {
     this.countCurrent = this.countTotal
-    this._emit()
+    this.emit()
   }
 
-  _emit (eventName: string = 'count change'): void {
+  protected emit (eventName: string = 'count change'): void {
     comms.emit(eventName, this.countCurrent)
   }
 
