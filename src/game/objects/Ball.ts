@@ -58,8 +58,11 @@ class Ball extends Physics.Arcade.Image {
   }
 
   show (): void {
-    this.setTexture('ball')
-    this.enableBody(false, 0, 0, false, true) // just show, don't activate
+    this.setVisible(true)
+  }
+
+  hide (): void {
+    this.setVisible(false)
   }
 
   disablePhysics (): void {
@@ -68,6 +71,37 @@ class Ball extends Physics.Arcade.Image {
 
   disableFull (): void {
     this.disableBody(true, true) // disable & hide
+  }
+
+  explode (): void {
+    this.explodeBottom()
+    this.disableFull()
+  }
+
+  fadeKill (): Promise<void> {
+    return this.fadeOut().then(() => this.disableFull())
+  }
+
+  fadeOut (): Promise<void> {
+    return this.fade(0, 'Quad.easeOut')
+  }
+
+  fadeIn (): Promise<void> {
+    this.show() // in case it was hidden before
+    this.setAlpha(0)
+    return this.fade(1, 'Quad.easeIn')
+  }
+
+  fade (alpha: number, ease: string, duration: number = 250): Promise<void> {
+    return new Promise(resolve => {
+      this.scene.tweens.add({
+        targets: this,
+        alpha,
+        ease,
+        duration,
+        onComplete: resolve
+      })
+    })
   }
 
   setVelocityFromAngle (angleRad: number): void {
@@ -86,12 +120,7 @@ class Ball extends Physics.Arcade.Image {
     this.setAngularVelocity(sign * this.angularVelocity)
   }
 
-  kill (): void {
-    this.explode()
-    this.disableFull()
-  }
-
-  explode (): void {
+  explodeBottom (): void {
     Object.values(this.emitters.explosion).forEach(emitter => {
       emitter.resume()
       emitter.setAngle(this.explosionAngleRange(this.body.velocity.angle()))
@@ -142,36 +171,6 @@ class Ball extends Physics.Arcade.Image {
       min: deg - spreadRange / 2,
       max: deg + spreadRange / 2
     }
-  }
-
-  fadeKill (): Promise<undefined> {
-    return new Promise(resolve => {
-      this.scene.tweens.add({
-        targets: this,
-        alpha: 0,
-        ease: 'Quad.easeOut',
-        duration: 250,
-        onComplete: () => {
-          this.disableFull()
-          resolve()
-        }
-      })
-    })
-  }
-
-  fadeIn (): Promise<undefined> {
-    this.setVisible(true) // in case it was hidden before
-    this.setAlpha(0)
-
-    return new Promise(resolve => {
-      this.scene.tweens.add({
-        targets: this,
-        alpha: 1,
-        ease: 'Quad.easeIn',
-        duration: 250,
-        onComplete: resolve
-      })
-    })
   }
 
   get velocityX (): number {

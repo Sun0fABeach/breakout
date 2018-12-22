@@ -173,7 +173,7 @@ export default class PlayScene extends Scene {
     this.audio.play('explosion')
     this.prefabs.blocks.resetScoreMultiplier()
     this.lifeCounter.decrement()
-    ball.kill()
+    ball.explode()
     if (this.lifeCounter.number === 0) {
       this.gameOver()
     } else {
