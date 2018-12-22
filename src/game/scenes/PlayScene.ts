@@ -92,13 +92,14 @@ export default class PlayScene extends Scene {
   putBallOnPaddle (): void {
     const { ball, paddle } = this.prefabs
 
-    ball.disablePhysics()
+    ball.disableFull()
     paddle.mountBall(ball)
 
     const sign = Phaser.Math.Between(0, 1) === 0 ? -1 : +1 // left or right
     this.ballPaddleOffset.x = sign * paddle.halfWidth / 3
     this.ballPaddleOffset.y = -(paddle.halfHeight + ball.halfHeight - 1)
     ball.setPosition(this.ballPaddleOffset.x, this.ballPaddleOffset.y)
+    ball.fadeIn()
   }
 
   launchBallFromPaddle (): void {
