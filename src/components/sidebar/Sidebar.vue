@@ -27,7 +27,7 @@ export default {
     return {
       numLives: 0,
       score: 0,
-      scoreMultiplier: 0,
+      scoreMultiplier: 1,
       paused: false,
       gameOver: false
     }
