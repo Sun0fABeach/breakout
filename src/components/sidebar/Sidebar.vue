@@ -29,12 +29,12 @@ export default {
       score: 0,
       scoreMultiplier: 1,
       paused: false,
-      gameOver: false
+      gameActive: false
     }
   },
   methods: {
     pauseInput () {
-      if (!this.gameOver) {
+      if (this.gameActive) {
         comms.emit(this.paused ? 'resume' : 'pause')
       }
     }
@@ -45,8 +45,8 @@ export default {
     comms.on('multiplier change', newMult => { this.scoreMultiplier = newMult })
     comms.on('pause', () => { this.paused = true })
     comms.on('resume', () => { this.paused = false })
-    comms.on('game over', () => { this.gameOver = true })
-    comms.on('start play', () => { this.gameOver = false })
+    comms.on('game over', () => { this.gameActive = false })
+    comms.on('start play', () => { this.gameActive = true })
   }
 }
 </script>
