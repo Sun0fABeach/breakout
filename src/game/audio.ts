@@ -6,7 +6,10 @@ class Audio {
       thud: 0.4,
       wooden: 0.6,
       explosion: 0.16,
-      ding: 0.5
+      ding: 0.5,
+      letsGo: 0.7,
+      ohNo: 0.4,
+      ohYeah: 0.6
     }
   }
 

@@ -34,6 +34,7 @@ export default class PlayScene extends Scene {
 
     comms.emit('pre play')
     comms.once('start play', this.setupPlay.bind(this))
+    comms.on('start play', () => this.audio.play('letsGo'))
   }
 
   private setupPlay (): void {
@@ -186,8 +187,21 @@ export default class PlayScene extends Scene {
   private gameOver (won: boolean = false): void {
     // @ts-ignore - no need to pass fn argument here
     this.input.keyboard.removeListener(keys.pause)
-    comms.emit('game over', won)
-    comms.once('start play', this.restart.bind(this))
+
+    const doEvents = () => {
+      comms.emit('game over', won)
+      comms.once('start play', this.restart.bind(this))
+    }
+
+    if (won) {
+      this.audio.play('ohYeah')
+      doEvents()
+    } else {
+      setTimeout(() => { // wait for ball explosion to quiet down
+        setTimeout(() => this.audio.play('ohNo'), 750)
+        doEvents()
+      }, 250)
+    }
   }
 
   private spinBallOnCollision (
