@@ -1,5 +1,5 @@
 import { Scene } from 'phaser'
-import comms from '@/vuePhaserComms'
+import store from '@/store'
 import { keys } from '@/game/globals'
 
 export default class PauseScene extends Scene {
@@ -8,8 +8,15 @@ export default class PauseScene extends Scene {
   }
 
   create (): void {
-    this.input.keyboard.on(keys.pause, () => comms.emit('resume'))
-    comms.on('resume', this.resume.bind(this))
+    this.input.keyboard.on(
+      keys.pause,
+      () => store.commit('changeGameState', 'running')
+    )
+    store.subscribe(({ type, payload: newState }) => {
+      if (type === 'changeGameState' && newState === 'running') {
+        this.resume()
+      }
+    })
   }
 
   private resume (): void {

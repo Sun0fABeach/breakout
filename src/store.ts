@@ -5,12 +5,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-
+    paused: false,
+    gameState: null
   },
   mutations: {
-
-  },
-  actions: {
-
+    pause (state, active) {
+      state.paused = active
+    },
+    changeGameState (state, newGameState) {
+      state.gameState = newGameState
+    }
   }
 })

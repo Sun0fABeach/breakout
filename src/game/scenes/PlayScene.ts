@@ -1,5 +1,5 @@
 import Phaser, { Scene } from 'phaser'
-import comms from '@/vuePhaserComms'
+import store from '@/store'
 import Ball from '@/game/objects/Ball'
 import Paddle from '@/game/objects/Paddle'
 import Blocks from '@/game/objects/Blocks'
@@ -32,9 +32,21 @@ export default class PlayScene extends Scene {
     this.prefabs.paddle = new Paddle(this, 400, 550)
     this.prefabs.cursor = this.input.keyboard.createCursorKeys()
 
-    comms.emit('pre play')
-    comms.once('start play', this.setupPlay.bind(this))
-    comms.on('start play', () => this.audio.play('letsGo'))
+    store.commit('changeGameState', 'pre play')
+
+    store.subscribe(({ type, payload: gameState }) => {
+      const stateToHandlerMap: { [index: string]: () => void } = {
+        'start play': this.setupPlay.bind(this),
+        'restart play': this.restart.bind(this)
+      }
+      if (
+        type === 'changeGameState' &&
+        Object.keys(stateToHandlerMap).indexOf(gameState) !== -1
+      ) {
+        this.audio.play('letsGo')
+        stateToHandlerMap[gameState]()
+      }
+    })
   }
 
   private setupPlay (): void {
@@ -53,6 +65,8 @@ export default class PlayScene extends Scene {
 
     this.initPauseHandling()
     this.setupInitialFadeIn(ball, ...blocks.all)
+
+    store.commit('changeGameState', 'running')
   }
 
   private setupInitialFadeIn (...objects: { alpha: number }[]): void {
@@ -69,11 +83,18 @@ export default class PlayScene extends Scene {
 
   private initPauseHandling (): void {
     this.activatePauseButton()
-    comms.on('pause', this.pause.bind(this))
+    store.subscribe(({ type, payload: newState }) => {
+      if (type === 'changeGameState' && newState === 'paused') {
+        this.pause()
+      }
+    })
   }
 
   private activatePauseButton (): void {
-    this.input.keyboard.on(keys.pause, () => comms.emit('pause'))
+    this.input.keyboard.on(
+      keys.pause,
+      () => store.commit('changeGameState', 'paused')
+    )
   }
 
   private pause (): void {
@@ -88,6 +109,7 @@ export default class PlayScene extends Scene {
     this.putBallOnPaddle()
     this.prefabs.ball.fadeIn()
     this.activatePauseButton()
+    store.commit('changeGameState', 'running')
   }
 
   private putBallOnPaddle (): void {
@@ -188,18 +210,13 @@ export default class PlayScene extends Scene {
     // @ts-ignore - no need to pass fn argument here
     this.input.keyboard.removeListener(keys.pause)
 
-    const doEvents = () => {
-      comms.emit('game over', won)
-      comms.once('start play', this.restart.bind(this))
-    }
-
     if (won) {
       this.audio.play('ohYeah')
-      doEvents()
+      store.commit('changeGameState', 'won')
     } else {
       setTimeout(() => { // wait for ball explosion to quiet down
         setTimeout(() => this.audio.play('ohNo'), 750)
-        doEvents()
+        store.commit('changeGameState', 'lost')
       }, 250)
     }
   }

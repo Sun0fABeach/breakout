@@ -6,62 +6,50 @@
 </template>
 
 <script>
-import comms from '@/vuePhaserComms'
 import OverlayUIText from './Text'
 import OverlayUIButton from './Button'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'game',
   components: { OverlayUIText, OverlayUIButton },
-  data () {
-    return {
-      text: {
-        visible: false,
-        text: ''
-      },
-      button: {
-        visible: false,
-        text: ''
+  computed: {
+    ...mapState([
+      'gameState'
+    ]),
+    text () {
+      const stateTextMap = {
+        'paused': 'Paused',
+        'lost': 'Game Over',
+        'won': 'You Win'
+      }
+      return {
+        visible: Object.keys(stateTextMap).indexOf(this.gameState) !== -1,
+        text: stateTextMap[this.gameState],
+        animated: this.gameState !== 'paused'
+      }
+    },
+    button () {
+      const stateTextMap = {
+        'pre play': 'Start',
+        'lost': 'Restart',
+        'won': 'Restart'
+      }
+      return {
+        visible: Object.keys(stateTextMap).indexOf(this.gameState) !== -1,
+        text: stateTextMap[this.gameState]
       }
     }
   },
   methods: {
+    ...mapMutations([
+      'changeGameState'
+    ]),
     buttonClick () {
-      comms.emit('start play')
+      this.changeGameState(
+        (this.gameState === 'pre play' ? '' : 're') + 'start play'
+      )
     }
-  },
-  created () {
-    comms.once('pre play', () => {
-      this.button = {
-        visible: true,
-        text: 'Start'
-      }
-    })
-    comms.on('start play', () => {
-      this.text.visible = false
-      this.button.visible = false
-    })
-    comms.on('game over', won => {
-      this.text = {
-        visible: true,
-        animated: true,
-        text: won ? 'You win' : 'Game Over'
-      }
-      this.button = {
-        visible: true,
-        text: 'Restart'
-      }
-    })
-    comms.on('pause', () => {
-      this.text = {
-        visible: true,
-        animated: false,
-        text: 'Paused'
-      }
-    })
-    comms.on('resume', () => {
-      this.text.visible = false
-    })
   }
 }
 </script>
