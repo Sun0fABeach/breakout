@@ -8,6 +8,7 @@
 <script>
 import OverlayUIText from './Text'
 import OverlayUIButton from './Button'
+import { GameState } from '@/store'
 import { mapState, mapMutations } from 'vuex'
 
 export default {
@@ -19,24 +20,24 @@ export default {
     ]),
     text () {
       const stateTextMap = {
-        'paused': 'Paused',
-        'lost': 'Game Over',
-        'won': 'You Win'
+        [GameState.Paused]: 'Paused',
+        [GameState.Lost]: 'Game Over',
+        [GameState.Won]: 'You Win'
       }
       return {
-        visible: Object.keys(stateTextMap).indexOf(this.gameState) !== -1,
+        visible: this.inStateMap(stateTextMap, this.gameState),
         text: stateTextMap[this.gameState],
-        animated: this.gameState !== 'paused'
+        animated: this.gameState !== GameState.Paused
       }
     },
     button () {
       const stateTextMap = {
-        'pre play': 'Start',
-        'lost': 'Restart',
-        'won': 'Restart'
+        [GameState.PrePlay]: 'Start',
+        [GameState.Lost]: 'Restart',
+        [GameState.Won]: 'Restart'
       }
       return {
-        visible: Object.keys(stateTextMap).indexOf(this.gameState) !== -1,
+        visible: this.inStateMap(stateTextMap, this.gameState),
         text: stateTextMap[this.gameState]
       }
     }
@@ -47,8 +48,14 @@ export default {
     ]),
     buttonClick () {
       this.changeGameState(
-        (this.gameState === 'pre play' ? '' : 're') + 'start play'
+        this.gameState === GameState.PrePlay
+          ? GameState.StartPlay : GameState.RestartPlay
       )
+    },
+    inStateMap (stateMap, state) {
+      return Object.keys(stateMap)
+        .map(key => Number.parseInt(key))
+        .indexOf(state) !== -1
     }
   }
 }

@@ -7,6 +7,7 @@ import Score from '@/game/objects/counter/Score'
 import Audio from '@/game/audio'
 import { init as particlesInit } from '@/game/particleManagers'
 import { Direction, keys } from '@/game/globals'
+import { GameState } from '@/store'
 import { changeGameState, addGameStateHandler } from './stateHelpers'
 
 export default class PlayScene extends Scene {
@@ -32,12 +33,12 @@ export default class PlayScene extends Scene {
     this.prefabs.paddle = new Paddle(this, 400, 550)
     this.prefabs.cursor = this.input.keyboard.createCursorKeys()
 
-    changeGameState('pre play')
-    addGameStateHandler('start play', () => {
+    changeGameState(GameState.PrePlay)
+    addGameStateHandler(GameState.StartPlay, () => {
       this.audio.play('letsGo')
       this.setupPlay()
     })
-    addGameStateHandler('restart play', () => {
+    addGameStateHandler(GameState.RestartPlay, () => {
       this.audio.play('letsGo')
       this.restart()
     })
@@ -60,7 +61,7 @@ export default class PlayScene extends Scene {
     this.initPauseHandling()
     this.setupInitialFadeIn(ball, ...blocks.all)
 
-    changeGameState('running')
+    changeGameState(GameState.Running)
   }
 
   private setupInitialFadeIn (...objects: { alpha: number }[]): void {
@@ -77,13 +78,13 @@ export default class PlayScene extends Scene {
 
   private initPauseHandling (): void {
     this.activatePauseButton()
-    addGameStateHandler('paused', this.pause.bind(this))
+    addGameStateHandler(GameState.Paused, this.pause.bind(this))
   }
 
   private activatePauseButton (): void {
     this.input.keyboard.on(
       keys.pause,
-      () => changeGameState('paused')
+      () => changeGameState(GameState.Paused)
     )
   }
 
@@ -99,7 +100,7 @@ export default class PlayScene extends Scene {
     this.putBallOnPaddle()
     this.prefabs.ball.fadeIn()
     this.activatePauseButton()
-    changeGameState('running')
+    changeGameState(GameState.Running)
   }
 
   private putBallOnPaddle (): void {
@@ -202,11 +203,11 @@ export default class PlayScene extends Scene {
 
     if (won) {
       this.audio.play('ohYeah')
-      changeGameState('won')
+      changeGameState(GameState.Won)
     } else {
       setTimeout(() => { // wait for ball explosion to quiet down
         setTimeout(() => this.audio.play('ohNo'), 750)
-        changeGameState('lost')
+        changeGameState(GameState.Lost)
       }, 250)
     }
   }
