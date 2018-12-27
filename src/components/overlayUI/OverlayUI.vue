@@ -44,12 +44,23 @@ export default {
     comms.on('game over', won => {
       this.text = {
         visible: true,
+        animated: true,
         text: won ? 'You win' : 'Game Over'
       }
       this.button = {
         visible: true,
         text: 'Restart'
       }
+    })
+    comms.on('pause', () => {
+      this.text = {
+        visible: true,
+        animated: false,
+        text: 'Paused'
+      }
+    })
+    comms.on('resume', () => {
+      this.text.visible = false
     })
   }
 }

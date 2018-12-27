@@ -1,8 +1,5 @@
 <template>
-  <transition
-    enter-active-class="spin"
-    leave-active-class="bounceOut"
-  >
+  <transition v-bind="animProps">
     <span v-if="visible">
       {{ text }}
     </span>
@@ -20,6 +17,18 @@ export default {
     visible: {
       type: Boolean,
       default: false
+    },
+    animated: {
+      type: Boolean,
+      default: false
+    }
+  },
+  computed: {
+    animProps () {
+      return this.animated && {
+        'enter-active-class': 'spin',
+        'leave-active-class': 'bounceOut'
+      }
     }
   }
 }
