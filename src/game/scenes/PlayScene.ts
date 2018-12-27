@@ -1,5 +1,4 @@
 import Phaser, { Scene } from 'phaser'
-import store from '@/store'
 import Ball from '@/game/objects/Ball'
 import Paddle from '@/game/objects/Paddle'
 import Blocks from '@/game/objects/Blocks'
@@ -8,6 +7,7 @@ import Score from '@/game/objects/counter/Score'
 import Audio from '@/game/audio'
 import { init as particlesInit } from '@/game/particleManagers'
 import { Direction, keys } from '@/game/globals'
+import { changeGameState, addGameStateHandler } from './stateHelpers'
 
 export default class PlayScene extends Scene {
   private prefabs: { [index: string]: any }
@@ -32,20 +32,14 @@ export default class PlayScene extends Scene {
     this.prefabs.paddle = new Paddle(this, 400, 550)
     this.prefabs.cursor = this.input.keyboard.createCursorKeys()
 
-    store.commit('changeGameState', 'pre play')
-
-    store.subscribe(({ type, payload: gameState }) => {
-      const stateToHandlerMap: { [index: string]: () => void } = {
-        'start play': this.setupPlay.bind(this),
-        'restart play': this.restart.bind(this)
-      }
-      if (
-        type === 'changeGameState' &&
-        Object.keys(stateToHandlerMap).indexOf(gameState) !== -1
-      ) {
-        this.audio.play('letsGo')
-        stateToHandlerMap[gameState]()
-      }
+    changeGameState('pre play')
+    addGameStateHandler('start play', () => {
+      this.audio.play('letsGo')
+      this.setupPlay()
+    })
+    addGameStateHandler('restart play', () => {
+      this.audio.play('letsGo')
+      this.restart()
     })
   }
 
@@ -66,7 +60,7 @@ export default class PlayScene extends Scene {
     this.initPauseHandling()
     this.setupInitialFadeIn(ball, ...blocks.all)
 
-    store.commit('changeGameState', 'running')
+    changeGameState('running')
   }
 
   private setupInitialFadeIn (...objects: { alpha: number }[]): void {
@@ -83,17 +77,13 @@ export default class PlayScene extends Scene {
 
   private initPauseHandling (): void {
     this.activatePauseButton()
-    store.subscribe(({ type, payload: newState }) => {
-      if (type === 'changeGameState' && newState === 'paused') {
-        this.pause()
-      }
-    })
+    addGameStateHandler('paused', this.pause.bind(this))
   }
 
   private activatePauseButton (): void {
     this.input.keyboard.on(
       keys.pause,
-      () => store.commit('changeGameState', 'paused')
+      () => changeGameState('paused')
     )
   }
 
@@ -109,7 +99,7 @@ export default class PlayScene extends Scene {
     this.putBallOnPaddle()
     this.prefabs.ball.fadeIn()
     this.activatePauseButton()
-    store.commit('changeGameState', 'running')
+    changeGameState('running')
   }
 
   private putBallOnPaddle (): void {
@@ -212,11 +202,11 @@ export default class PlayScene extends Scene {
 
     if (won) {
       this.audio.play('ohYeah')
-      store.commit('changeGameState', 'won')
+      changeGameState('won')
     } else {
       setTimeout(() => { // wait for ball explosion to quiet down
         setTimeout(() => this.audio.play('ohNo'), 750)
-        store.commit('changeGameState', 'lost')
+        changeGameState('lost')
       }, 250)
     }
   }
