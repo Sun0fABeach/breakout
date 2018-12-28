@@ -1,8 +1,8 @@
 import { Physics, GameObjects } from 'phaser'
 import { managers as particleManagers } from '@/game/particleManagers'
-import comms from '@/vuePhaserComms'
 import Ball from '@/game/objects/Ball'
 import PointsText from '@/game/objects/text/PointsText'
+import store from '@/store'
 
 type Block = PhysicsSprite
 type CollisionCb = (
@@ -15,7 +15,6 @@ class Blocks {
   private readonly blockGroups: BlockGroup[]
   private readonly pointsTextGroup: GameObjects.Group
   private readonly emitters: ParticleEmitter[]
-  private scoreMult : number
 
   constructor (private readonly scene: Scene) {
     const padX = 100
@@ -23,8 +22,6 @@ class Blocks {
     const colGap = 100
     const rowGap = 50
     const numCols = 7
-
-    this.scoreMult = 1
 
     this.blockGroups = [
       { type: 'Green', value: 250 },
@@ -40,7 +37,7 @@ class Blocks {
           x: padX, y: padY + rowGap * idx, stepX: colGap
         }
       }
-      return new BlockGroup(this, scene, config, blockDef.value)
+      return new BlockGroup(scene, config, blockDef.value)
     })
 
     this.pointsTextGroup = new GameObjects.Group(scene, {
@@ -69,7 +66,9 @@ class Blocks {
       }
       toKill.body.enable = false
       this.emitHitParticles(toKill)
-      this.showPoints(toKill, containerGroup.points * this.scoreMultiplier)
+      this.showPoints(
+        toKill, containerGroup.points * store.state.scoreMultiplier
+      )
       this.fadeOut(toKill).then(() => {
         containerGroup.killBlock(toKill)
         resolve()
@@ -125,21 +124,15 @@ class Blocks {
   }
 
   bumpScoreMultiplier (): void {
-    this.scoreMult += 0.5
-    this.emitScoreMultiplier()
+    store.commit('bumpScoreMultiplier', 0.5)
   }
 
   resetScoreMultiplier (): void {
-    this.scoreMult = 1
-    this.emitScoreMultiplier()
-  }
-
-  private emitScoreMultiplier (): void {
-    comms.emit('multiplier change', this.scoreMult)
+    store.commit('resetScoreMultiplier')
   }
 
   get scoreMultiplier (): number {
-    return this.scoreMult
+    return store.state.scoreMultiplier
   }
 
   get all (): PhysicsSprite[] {
@@ -159,7 +152,6 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
   private ballCollider: Collider | null
 
   constructor (
-    private readonly master: Blocks,
     scene: Scene,
     config: GroupCreateConfig,
     private readonly scoreVal: number
@@ -200,7 +192,7 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
         callback(
           ball as Ball,
           block as PhysicsSprite,
-          self.scoreVal * self.master.scoreMultiplier
+          self.scoreVal * store.state.scoreMultiplier
         )
       },
       undefined,

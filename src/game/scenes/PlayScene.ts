@@ -2,19 +2,15 @@ import Phaser, { Scene } from 'phaser'
 import Ball from '@/game/objects/Ball'
 import Paddle from '@/game/objects/Paddle'
 import Blocks from '@/game/objects/Blocks'
-import LifeCounter from '@/game/objects/counter/LifeCounter'
-import Score from '@/game/objects/counter/Score'
 import Audio from '@/game/audio'
 import { init as particlesInit } from '@/game/particleManagers'
 import { Direction, keys } from '@/game/globals'
-import { GameState } from '@/store'
+import store, { GameState } from '@/store'
 import { changeGameState, addGameStateHandler } from './stateHelpers'
 
 export default class PlayScene extends Scene {
   private prefabs: { [index: string]: any }
   private readonly ballPaddleOffset: { x: number, y: number }
-  private readonly lifeCounter: LifeCounter
-  private readonly score: Score
   private readonly audio: Audio
 
   constructor () {
@@ -22,8 +18,6 @@ export default class PlayScene extends Scene {
 
     /* init these objects here, since they don't need to wait for phaser */
     this.ballPaddleOffset = { x: 0, y: 0 }
-    this.score = new Score(0)
-    this.lifeCounter = new LifeCounter(3)
     this.audio = new Audio(this)
     this.prefabs = {} // filled in create()
   }
@@ -94,8 +88,7 @@ export default class PlayScene extends Scene {
   }
 
   private restart (): void {
-    this.score.reset()
-    this.lifeCounter.reset()
+    ['Lives', 'Score'].forEach(counter => store.commit('reset' + counter))
     this.prefabs.blocks.reset()
     this.putBallOnPaddle()
     this.prefabs.ball.fadeIn()
@@ -172,7 +165,7 @@ export default class PlayScene extends Scene {
     const { blocks } = this.prefabs
 
     this.audio.play('ding')
-    this.score.increment(points)
+    store.commit('bumpScore', points)
     this.spinBallOnCollision(ball.body.touching)
     blocks.bumpScoreMultiplier()
     blocks.killBlock(block).then(() => {
@@ -187,9 +180,9 @@ export default class PlayScene extends Scene {
 
     this.audio.play('explosion')
     this.prefabs.blocks.resetScoreMultiplier()
-    this.lifeCounter.decrement()
+    store.commit('loseLife')
     ball.explode()
-    if (this.lifeCounter.number === 0) {
+    if (store.state.lives === 0) {
       this.gameOver()
     } else {
       ball.show()

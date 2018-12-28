@@ -2,7 +2,7 @@
   <div id="game-controls">
     <h1>Breakout!</h1>
 
-    <SidebarField label="Lives">{{ numLives }}</SidebarField>
+    <SidebarField label="Lives">{{ lives }}</SidebarField>
     <SidebarField label="Score">{{ score }}</SidebarField>
     <SidebarField label="Multiplier">{{ scoreMultiplier }}</SidebarField>
 
@@ -11,28 +11,14 @@
 </template>
 
 <script>
-import comms from '@/vuePhaserComms'
 import SidebarField from './Field'
 import SidebarKeys from './Keys'
+import { mapState } from 'vuex'
 
 export default {
   name: 'sidebar',
   components: { SidebarField, SidebarKeys },
-  data () {
-    return {
-      numLives: 0,
-      score: 0,
-      scoreMultiplier: 1,
-      gameActive: false
-    }
-  },
-  created () {
-    comms.on('life change', newAmount => { this.numLives = newAmount })
-    comms.on('score change', newScore => { this.score = newScore })
-    comms.on('multiplier change', newMult => { this.scoreMultiplier = newMult })
-    comms.on('game over', () => { this.gameActive = false })
-    comms.on('start play', () => { this.gameActive = true })
-  }
+  computed: mapState(['lives', 'score', 'scoreMultiplier'])
 }
 </script>
 

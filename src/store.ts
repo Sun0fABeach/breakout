@@ -16,15 +16,36 @@ enum GameState {
 
 export default new Vuex.Store({
   state: {
+    gameState: GameState.None,
     paused: false,
-    gameState: GameState.None
+    score: 0,
+    scoreMultiplier: 1,
+    lives: 3
   },
   mutations: {
+    changeGameState (state, newGameState: GameState) {
+      state.gameState = newGameState
+    },
     pause (state, active: boolean) {
       state.paused = active
     },
-    changeGameState (state, newGameState: GameState) {
-      state.gameState = newGameState
+    bumpScore (state, val) {
+      state.score += val
+    },
+    resetScore (state) {
+      state.score = 0
+    },
+    bumpScoreMultiplier (state, val) {
+      state.scoreMultiplier += val
+    },
+    resetScoreMultiplier (state) {
+      state.scoreMultiplier = 1
+    },
+    loseLife (state) {
+      state.lives--
+    },
+    resetLives (state) {
+      state.lives = 3
     }
   }
 })
