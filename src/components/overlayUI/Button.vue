@@ -37,6 +37,7 @@ button {
   text-shadow: 0.125rem 0.125rem 0.125rem grey;
   background-color: transparent;
   border: none;
+  outline: none;
   cursor: pointer;
 }
 
