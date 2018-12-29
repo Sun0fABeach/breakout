@@ -9,7 +9,8 @@ class Audio {
       ding: 0.5,
       letsGo: 0.7,
       ohNo: 0.4,
-      ohYeah: 0.6
+      ohYeah: 0.6,
+      swish: 1
     }
   }
 

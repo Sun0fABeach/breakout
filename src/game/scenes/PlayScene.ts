@@ -36,6 +36,9 @@ export default class PlayScene extends Scene {
       this.audio.play('letsGo')
       this.restart()
     })
+
+    // play sound slightly into bounce-in animation of start button
+    setTimeout(() => this.audio.play('swish'), 325)
   }
 
   private setupPlay (): void {
