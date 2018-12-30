@@ -167,15 +167,18 @@ export default class PlayScene extends Scene {
   private blockHit (ball: Ball, block: PhysicsSprite, points: number): void {
     const { blocks } = this.prefabs
 
-    this.audio.play('ding')
     store.commit('bumpScore', points)
     this.spinBallOnCollision(ball.body.touching)
     blocks.bumpScoreMultiplier()
-    blocks.killBlock(block).then(() => {
-      if (blocks.allDead) {
-        ball.fadeKill().then(() => this.gameOver(true))
-      }
-    })
+    blocks.killBlock(block)
+
+    if (blocks.allHit) {
+      ball.explode()
+      this.gameOver(true)
+      this.audio.play('gong')
+    } else {
+      this.audio.play('ding')
+    }
   }
 
   private loseLife (): void {
@@ -184,7 +187,7 @@ export default class PlayScene extends Scene {
     this.audio.play('explosion')
     this.prefabs.blocks.resetScoreMultiplier()
     store.commit('loseLife')
-    ball.explode()
+    ball.explodeBottom()
     if (store.state.lives === 0) {
       this.gameOver()
     } else {
@@ -197,15 +200,15 @@ export default class PlayScene extends Scene {
     // @ts-ignore - no need to pass fn argument here
     this.input.keyboard.removeListener(keys.pause)
 
-    if (won) {
-      this.audio.play('ohYeah')
-      changeGameState(GameState.Won)
-    } else {
-      setTimeout(() => { // wait for ball explosion to quiet down
-        setTimeout(() => this.audio.play('ohNo'), 750)
+    setTimeout(() => { // wait for ball explosion to quiet down
+      if (won) {
+        changeGameState(GameState.Won)
+        setTimeout(() => this.audio.play('ohYeah'), 750)
+      } else {
         changeGameState(GameState.Lost)
-      }, 250)
-    }
+        setTimeout(() => this.audio.play('ohNo'), 750)
+      }
+    }, won ? 1250 : 500)
   }
 
   private spinBallOnCollision (

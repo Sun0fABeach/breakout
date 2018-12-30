@@ -34,6 +34,8 @@ const ohYeahOGG = require('@/game/assets/sounds/oh-yeah.ogg')
 const ohYeahMP3 = require('@/game/assets/sounds/oh-yeah.mp3')
 const swishOGG = require('@/game/assets/sounds/swish.ogg')
 const swishMP3 = require('@/game/assets/sounds/swish.mp3')
+const gongOGG = require('@/game/assets/sounds/gong.ogg')
+const gongMP3 = require('@/game/assets/sounds/gong.mp3')
 
 export default class BootScene extends Scene {
   constructor () {
@@ -63,6 +65,7 @@ export default class BootScene extends Scene {
     this.load.audio('ohNo', [ohNoMP3, ohNoOGG])
     this.load.audio('ohYeah', [ohYeahMP3, ohYeahOGG])
     this.load.audio('swish', [swishMP3, swishOGG])
+    this.load.audio('gong', [gongMP3, gongOGG])
   }
 
   create (): void {

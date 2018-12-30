@@ -102,16 +102,20 @@ class Ball extends Physics.Arcade.Image {
   }
 
   explode (): void {
-    this.explodeBottom()
+    Object.values(this.emitters.explosion).forEach(emitter => {
+      emitter.resume()
+      emitter.explode(60, this.x, this.y)
+    })
     this.disableFull()
   }
 
-  private explodeBottom (): void {
+  explodeBottom (): void {
     Object.values(this.emitters.explosion).forEach(emitter => {
       emitter.resume()
       emitter.setAngle(this.explosionAngleRange(this.body.velocity.angle()))
       emitter.explode(60, this.x, this.world.bounds.height - 4)
     })
+    this.disableFull()
   }
 
   private explosionAngleRange (radians: number): { min: number, max: number } {
@@ -124,8 +128,16 @@ class Ball extends Physics.Arcade.Image {
     return this.particleAngleRange(deg, 140)
   }
 
+  private particleAngleRange (deg: number, spreadRange: number):
+    { min: number, max: number } {
+    return {
+      min: deg - spreadRange / 2,
+      max: deg + spreadRange / 2
+    }
+  }
+
   setVelocityFromAngle (angleRad: number): void {
-    super.setVelocity(
+    this.setVelocity(
       Math.cos(angleRad) * this.velocityFactor,
       Math.sin(angleRad) * this.velocityFactor
     )
@@ -165,14 +177,6 @@ class Ball extends Physics.Arcade.Image {
       emitter.setAngle(this.particleAngleRange(directionDeg, 180))
       emitter.explode(2, ...coords)
     })
-  }
-
-  private particleAngleRange (deg: number, spreadRange: number):
-    { min: number, max: number } {
-    return {
-      min: deg - spreadRange / 2,
-      max: deg + spreadRange / 2
-    }
   }
 
   get velocityX (): number {

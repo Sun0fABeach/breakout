@@ -143,8 +143,8 @@ class Blocks {
     )
   }
 
-  get allDead (): boolean {
-    return this.blockGroups.every(group => group.countActive() === 0)
+  get allHit (): boolean {
+    return this.blockGroups.every(group => group.allHit)
   }
 }
 
@@ -203,6 +203,11 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
   setBallForCollider (ball: Ball): void {
     // @ts-ignore
     this.ballCollider.object1 = ball
+  }
+
+  get allHit (): boolean {
+    const children: Block[] = this.getChildren() as Block[]
+    return children.every((block: Block) => !block.body.enable)
   }
 
   get points (): number {
