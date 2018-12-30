@@ -14,13 +14,18 @@ enum GameState {
   Won
 }
 
+/* dict of base values to which states (with same name) can be reset */
+const baseVals = {
+  score: 0,
+  scoreMultiplier: 1,
+  lives: 3
+}
+
 export default new Vuex.Store({
   state: {
     gameState: GameState.None,
     paused: false,
-    score: 0,
-    scoreMultiplier: 1,
-    lives: 3
+    ...baseVals
   },
   mutations: {
     changeGameState (state, newGameState: GameState) {
@@ -33,19 +38,19 @@ export default new Vuex.Store({
       state.score += val
     },
     resetScore (state) {
-      state.score = 0
+      state.score = baseVals.score
     },
     bumpScoreMultiplier (state, val) {
       state.scoreMultiplier += val
     },
     resetScoreMultiplier (state) {
-      state.scoreMultiplier = 1
+      state.scoreMultiplier = baseVals.scoreMultiplier
     },
     loseLife (state) {
       state.lives--
     },
     resetLives (state) {
-      state.lives = 3
+      state.lives = baseVals.lives
     }
   }
 })
