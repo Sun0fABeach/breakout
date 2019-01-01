@@ -11,7 +11,7 @@ class Ball extends Physics.Arcade.Image {
   private readonly emitters: EmitterDict
 
   constructor (scene: Scene, x: number, y: number) {
-    super(scene, x, y, 'ball')
+    super(scene, x, y, 'sprites', 'ball')
     this.velocityFactor = 400
     this.angularVelocity = 200
     this.world = scene.physics.world
@@ -48,7 +48,7 @@ class Ball extends Physics.Arcade.Image {
         active: false,
         blendMode: Phaser.BlendModes.SCREEN,
         speed: 15,
-        scale: { start: 0.05, end: 0.07 },
+        scale: { start: 0.5, end: 0.7 },
         lifespan: 600,
         alpha: 0.15
       })

@@ -2,21 +2,8 @@ import { Scene } from 'phaser'
 
 /* import assets via require, so Typescript doesn't complain. */
 
-const sky = require('@/game/assets/sky.png')
-
-const paddle = require('@/game/assets/paddleRed.png')
-const ball = require('@/game/assets/ballGrey.png')
-
-const blockGreen = require('@/game/assets/blockGreen.png')
-const blockGrey = require('@/game/assets/blockGrey.png')
-const blockPurple = require('@/game/assets/blockPurple.png')
-const blockRed = require('@/game/assets/blockRed.png')
-const blockYellow = require('@/game/assets/blockYellow.png')
-
-const particleStarSmall = require('@/game/assets/particles/starSmall.png')
-const particleStarMedium = require('@/game/assets/particles/starMedium.png')
-const particleStarBig = require('@/game/assets/particles/starBig.png')
-const puff = require('@/game/assets/particles/whitePuff.png')
+const spriteAtlas = require('@/game/assets/images/spritesheet.json')
+const spriteSheet = require('@/game/assets/images/spritesheet.png')
 
 const thudOGG = require('@/game/assets/sounds/thud.ogg')
 const thudMP3 = require('@/game/assets/sounds/thud.mp3')
@@ -43,19 +30,7 @@ export default class BootScene extends Scene {
   }
 
   preload (): void {
-    this.load.image('sky', sky)
-    this.load.image('paddle', paddle)
-    this.load.image('ball', ball)
-    this.load.image('particleStarSmall', particleStarSmall)
-    this.load.image('particleStarMedium', particleStarMedium)
-    this.load.image('particleStarBig', particleStarBig)
-    this.load.image('puff', puff)
-
-    this.load.image('blockGreen', blockGreen)
-    this.load.image('blockGrey', blockGrey)
-    this.load.image('blockPurple', blockPurple)
-    this.load.image('blockRed', blockRed)
-    this.load.image('blockYellow', blockYellow)
+    this.load.atlas('sprites', spriteSheet, spriteAtlas)
 
     this.load.audio('thud', [thudMP3, thudOGG])
     this.load.audio('explosion', [explosionMP3, explosionOGG])

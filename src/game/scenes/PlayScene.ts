@@ -23,7 +23,7 @@ export default class PlayScene extends Scene {
   }
 
   create (): void {
-    this.add.image(400, 300, 'sky')
+    this.add.image(400, 300, 'sprites', 'sky')
     this.prefabs.paddle = new Paddle(this, 400, 550)
     this.prefabs.cursor = this.input.keyboard.createCursorKeys()
 

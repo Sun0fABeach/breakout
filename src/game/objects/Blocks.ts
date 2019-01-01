@@ -31,7 +31,8 @@ class Blocks {
       { type: 'Yellow', value: 50 }
     ].map((blockDef, idx) => {
       const config: GroupCreateConfig = {
-        key: 'block' + blockDef.type,
+        key: 'sprites',
+        frame: 'block' + blockDef.type,
         repeat: numCols - 1,
         setXY: {
           x: padX, y: padY + rowGap * idx, stepX: colGap

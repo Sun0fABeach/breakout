@@ -5,8 +5,8 @@ function changeGameState (newState: GameState) {
 }
 
 interface stateChangeObj {
-  type: string,
-  payload: GameState
+  readonly type: string,
+  readonly payload: GameState
 }
 
 function addGameStateHandler (state: GameState, handler: () => void) {
