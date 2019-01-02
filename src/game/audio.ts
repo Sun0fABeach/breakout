@@ -17,7 +17,7 @@ class Audio {
 
   play (name: string, vol?: number): void {
     const volume: number = vol === undefined ? this.volumes[name] : vol
-    this.scene.sound.play(name, { volume })
+    this.scene.sound.playAudioSprite('audiosprites', name, { volume })
   }
 }
 
