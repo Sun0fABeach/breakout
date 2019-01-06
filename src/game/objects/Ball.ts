@@ -11,7 +11,7 @@ class Ball extends Physics.Arcade.Image {
   private readonly emitters: EmitterDict
 
   constructor (scene: Scene, x: number, y: number) {
-    super(scene, x, y, 'sprites', 'ball')
+    super(scene, x, y, 'other', 'ball')
     this.velocityFactor = 400
     this.angularVelocity = 200
     this.world = scene.physics.world

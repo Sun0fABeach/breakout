@@ -2,8 +2,10 @@ import { Scene } from 'phaser'
 
 /* import assets via require, so Typescript doesn't complain. */
 
-const spriteAtlas = require('@/game/assets/images/spritesheet.json')
-const spriteSheet = require('@/game/assets/images/spritesheet.png')
+const spriteAtlasBlocks = require('@/game/assets/images/spritesheetBlocks.json')
+const spriteSheetBlocks = require('@/game/assets/images/spritesheetBlocks.png')
+const spriteAtlasOther = require('@/game/assets/images/spritesheetOther.json')
+const spriteSheetOther = require('@/game/assets/images/spritesheetOther.png')
 const audioSpriteAtlas = require('@/game/assets/sounds/audiosprite.json')
 const audioSpriteSheetOGG = require('@/game/assets/sounds/audiosprite.ogg')
 const audioSpriteSheetMP3 = require('@/game/assets/sounds/audiosprite.mp3')
@@ -15,9 +17,14 @@ export default class BootScene extends Scene {
 
   preload (): void {
     this.load.atlas(
-      'sprites',
-      spriteSheet,
-      spriteAtlas
+      'blocks',
+      spriteSheetBlocks,
+      spriteAtlasBlocks
+    )
+    this.load.atlas(
+      'other',
+      spriteSheetOther,
+      spriteAtlasOther
     )
     this.load.audioSprite(
       'audiosprites',

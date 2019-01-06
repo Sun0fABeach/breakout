@@ -31,7 +31,7 @@ class Blocks {
       { type: 'Yellow', value: 50 }
     ].map((blockDef, idx) => {
       const config: GroupCreateConfig = {
-        key: 'sprites',
+        key: 'blocks',
         frame: 'block' + blockDef.type,
         repeat: numCols - 1,
         setXY: {

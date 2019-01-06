@@ -10,7 +10,7 @@ class Paddle extends GameObjects.Container {
 
   constructor (scene: Scene, x: number, y: number) {
     super(scene, x, y)
-    this.img = scene.add.image(0, 0, 'sprites', 'paddle')
+    this.img = scene.add.image(0, 0, 'other', 'paddle')
     this.add(this.img)
     this.setSize(this.img.displayWidth, this.img.displayHeight)
 

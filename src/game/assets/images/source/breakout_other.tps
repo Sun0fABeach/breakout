@@ -74,7 +74,7 @@
         <key>jpgQuality</key>
         <uint>80</uint>
         <key>pngOptimizationLevel</key>
-        <uint>0</uint>
+        <uint>1</uint>
         <key>webpQualityLevel</key>
         <uint>101</uint>
         <key>textureSubPath</key>
@@ -102,7 +102,7 @@
         <key>algorithmSettings</key>
         <struct type="AlgorithmSettings">
             <key>algorithm</key>
-            <enum type="AlgorithmSettings::AlgorithmId">Basic</enum>
+            <enum type="AlgorithmSettings::AlgorithmId">MaxRects</enum>
             <key>freeSizeMode</key>
             <enum type="AlgorithmSettings::AlgorithmFreeSizeMode">Best</enum>
             <key>sizeConstraints</key>
@@ -132,7 +132,7 @@
             <key>json</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>../../spritesheet.json</filename>
+                <filename>../spritesheetOther.json</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -149,7 +149,7 @@
             <string></string>
         </struct>
         <key>autoAliasEnabled</key>
-        <false/>
+        <true/>
         <key>trimSpriteNames</key>
         <true/>
         <key>prependSmartFolderName</key>
@@ -169,7 +169,7 @@
             <key>trimMargin</key>
             <uint>1</uint>
             <key>trimMode</key>
-            <enum type="SpriteSettings::TrimMode">None</enum>
+            <enum type="SpriteSettings::TrimMode">Trim</enum>
             <key>tracerTolerance</key>
             <int>200</int>
             <key>heuristicMask</key>
@@ -191,30 +191,6 @@
                 <rect>6,6,11,11</rect>
                 <key>scale9Paddings</key>
                 <rect>6,6,11,11</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">blockBlue.png</key>
-            <key type="filename">blockBlueStrong.png</key>
-            <key type="filename">blockGreen.png</key>
-            <key type="filename">blockGreenStrong.png</key>
-            <key type="filename">blockGrey.png</key>
-            <key type="filename">blockGreyStrong.png</key>
-            <key type="filename">blockPurple.png</key>
-            <key type="filename">blockPurpleStrong.png</key>
-            <key type="filename">blockRed.png</key>
-            <key type="filename">blockRedStrong.png</key>
-            <key type="filename">blockYellow.png</key>
-            <key type="filename">blockYellowStrong.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>16,8,32,16</rect>
-                <key>scale9Paddings</key>
-                <rect>16,8,32,16</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -287,16 +263,20 @@
         </map>
         <key>fileList</key>
         <array>
-            <filename>.</filename>
+            <filename>sky.png</filename>
+            <filename>paddle.png</filename>
+            <filename>ball.png</filename>
+            <filename>particles/starSmall.png</filename>
+            <filename>particles/starBig.png</filename>
+            <filename>particles/starMedium.png</filename>
+            <filename>particles/puff.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
         <key>replaceList</key>
         <array/>
         <key>ignoredWarnings</key>
-        <array>
-            <string>phaser3-exporter-beta</string>
-        </array>
+        <array/>
         <key>commonDivisorX</key>
         <uint>1</uint>
         <key>commonDivisorY</key>
