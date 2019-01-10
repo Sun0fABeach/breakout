@@ -9,6 +9,7 @@ const spriteSheetOther = require('@/game/assets/images/spritesheetOther.png')
 const audioSpriteAtlas = require('@/game/assets/sounds/audiosprite.json')
 const audioSpriteSheetOGG = require('@/game/assets/sounds/audiosprite.ogg')
 const audioSpriteSheetMP3 = require('@/game/assets/sounds/audiosprite.mp3')
+const blocksLvl1 = require('@/game/assets/blocksLvl1.json')
 
 export default class BootScene extends Scene {
   constructor () {
@@ -16,6 +17,7 @@ export default class BootScene extends Scene {
   }
 
   preload (): void {
+    this.load.tilemapTiledJSON('blocksLvl1', blocksLvl1)
     this.load.atlas(
       'blocks',
       spriteSheetBlocks,

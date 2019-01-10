@@ -5,6 +5,10 @@ import PointsText from '@/game/objects/text/PointsText'
 import store from '@/store'
 
 type Block = PhysicsSprite
+type BlockDef = {
+  readonly type: string,
+  readonly value: number
+}
 type CollisionCb = (
   ball: Ball,
   block: PhysicsSprite,
@@ -17,28 +21,24 @@ class Blocks {
   private readonly emitters: ParticleEmitter[]
 
   constructor (private readonly scene: Scene) {
-    const padX = 100
-    const padY = 50
-    const colGap = 100
-    const rowGap = 50
-    const numCols = 7
-
-    this.blockGroups = [
+    const tilemap: Phaser.Tilemaps.Tilemap = scene.add.tilemap('blocksLvl1')
+    const types: BlockDef[] = [
       { type: 'Green', value: 250 },
       { type: 'Grey', value: 200 },
       { type: 'Purple', value: 150 },
       { type: 'Red', value: 100 },
       { type: 'Yellow', value: 50 }
-    ].map((blockDef, idx) => {
-      const config: GroupCreateConfig = {
-        key: 'blocks',
-        frame: 'block' + blockDef.type,
-        repeat: numCols - 1,
-        setXY: {
-          x: padX, y: padY + rowGap * idx, stepX: colGap
-        }
-      }
-      return new BlockGroup(scene, config, blockDef.value)
+    ]
+
+    this.blockGroups = types.map((blockDef: BlockDef) => {
+      const spriteName: string = 'block' + blockDef.type
+      const blocks: GameObject[] = tilemap.createFromObjects(
+        'Blocks', spriteName, { key: 'blocks', frame: spriteName }
+      )
+      blocks.forEach((block: GameObject) => {
+        scene.physics.world.enableBody(block, Physics.Arcade.STATIC_BODY)
+      })
+      return new BlockGroup(scene, blocks, blockDef.value)
     })
 
     this.pointsTextGroup = new GameObjects.Group(scene, {
@@ -106,8 +106,11 @@ class Blocks {
     const pointsText: PointsText = this.pointsTextGroup.getFirstDead(true)
     // for some reason, pointsText not created active == true by group
     pointsText.setActive(true)
-    const blockCenter: Phaser.Math.Vector2 = block.body.center
-    pointsText.setDisplay(blockCenter.x, blockCenter.y, points)
+    pointsText.setDisplay(
+      block.x,
+      block.y,
+      points
+    )
     pointsText.show().then(() => this.pointsTextGroup.killAndHide(pointsText))
   }
 
@@ -154,11 +157,10 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
 
   constructor (
     scene: Scene,
-    config: GroupCreateConfig,
+    blocks: GameObject[],
     private readonly scoreVal: number
   ) {
-    super(scene.physics.world, scene)
-    this.createFromConfig(config)
+    super(scene.physics.world, scene, blocks)
     this.ballCollider = null
   }
 
