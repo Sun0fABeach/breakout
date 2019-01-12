@@ -2,26 +2,14 @@
  "infinite":false,
  "layers":[
         {
-         "data":[0],
-         "height":1,
-         "id":1,
-         "name":"Tile Layer 1",
-         "opacity":1,
-         "type":"tilelayer",
-         "visible":true,
-         "width":1,
-         "x":0,
-         "y":0
-        }, 
-        {
          "draworder":"topdown",
          "id":2,
          "name":"Blocks",
          "objects":[
                 {
-                 "gid":31,
+                 "gid":7,
                  "height":32,
-                 "id":24,
+                 "id":39,
                  "name":"blockPurple",
                  "rotation":0,
                  "type":"",
@@ -31,9 +19,9 @@
                  "y":90
                 }, 
                 {
-                 "gid":31,
+                 "gid":7,
                  "height":32,
-                 "id":25,
+                 "id":40,
                  "name":"blockPurple",
                  "rotation":0,
                  "type":"",
@@ -43,9 +31,9 @@
                  "y":90
                 }, 
                 {
-                 "gid":31,
+                 "gid":7,
                  "height":32,
-                 "id":26,
+                 "id":41,
                  "name":"blockPurple",
                  "rotation":0,
                  "type":"",
@@ -55,9 +43,9 @@
                  "y":90
                 }, 
                 {
-                 "gid":31,
+                 "gid":7,
                  "height":32,
-                 "id":27,
+                 "id":42,
                  "name":"blockPurple",
                  "rotation":0,
                  "type":"",
@@ -67,9 +55,9 @@
                  "y":90
                 }, 
                 {
-                 "gid":31,
+                 "gid":7,
                  "height":32,
-                 "id":28,
+                 "id":43,
                  "name":"blockPurple",
                  "rotation":0,
                  "type":"",
@@ -79,9 +67,57 @@
                  "y":90
                 }, 
                 {
-                 "gid":33,
+                 "gid":9,
                  "height":32,
-                 "id":29,
+                 "id":44,
+                 "name":"blockRed",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":648,
+                 "y":170
+                }, 
+                {
+                 "gid":9,
+                 "height":32,
+                 "id":45,
+                 "name":"blockRed",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":508,
+                 "y":170
+                }, 
+                {
+                 "gid":9,
+                 "height":32,
+                 "id":46,
+                 "name":"blockRed",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":368,
+                 "y":170
+                }, 
+                {
+                 "gid":9,
+                 "height":32,
+                 "id":47,
+                 "name":"blockRed",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":228,
+                 "y":170
+                }, 
+                {
+                 "gid":9,
+                 "height":32,
+                 "id":48,
                  "name":"blockRed",
                  "rotation":0,
                  "type":"",
@@ -91,111 +127,63 @@
                  "y":170
                 }, 
                 {
-                 "gid":33,
+                 "gid":11,
                  "height":32,
-                 "id":30,
-                 "name":"blockRed",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":228,
-                 "y":170
-                }, 
-                {
-                 "gid":33,
-                 "height":32,
-                 "id":31,
-                 "name":"blockRed",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":368,
-                 "y":170
-                }, 
-                {
-                 "gid":33,
-                 "height":32,
-                 "id":32,
-                 "name":"blockRed",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":508,
-                 "y":170
-                }, 
-                {
-                 "gid":33,
-                 "height":32,
-                 "id":33,
-                 "name":"blockRed",
+                 "id":49,
+                 "name":"blockYellow",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":64,
                  "x":648,
-                 "y":170
+                 "y":250
                 }, 
                 {
-                 "gid":35,
+                 "gid":11,
                  "height":32,
-                 "id":34,
+                 "id":50,
+                 "name":"blockYellow",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":508,
+                 "y":250
+                }, 
+                {
+                 "gid":11,
+                 "height":32,
+                 "id":51,
+                 "name":"blockYellow",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":368,
+                 "y":250
+                }, 
+                {
+                 "gid":11,
+                 "height":32,
+                 "id":52,
+                 "name":"blockYellow",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":228,
+                 "y":250
+                }, 
+                {
+                 "gid":11,
+                 "height":32,
+                 "id":53,
                  "name":"blockYellow",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":64,
                  "x":88,
-                 "y":250
-                }, 
-                {
-                 "gid":35,
-                 "height":32,
-                 "id":35,
-                 "name":"blockYellow",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":228,
-                 "y":250
-                }, 
-                {
-                 "gid":35,
-                 "height":32,
-                 "id":36,
-                 "name":"blockYellow",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":368,
-                 "y":250
-                }, 
-                {
-                 "gid":35,
-                 "height":32,
-                 "id":37,
-                 "name":"blockYellow",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":508,
-                 "y":250
-                }, 
-                {
-                 "gid":35,
-                 "height":32,
-                 "id":38,
-                 "name":"blockYellow",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":648,
                  "y":250
                 }],
          "opacity":1,
@@ -205,152 +193,15 @@
          "y":0
         }],
  "nextlayerid":3,
- "nextobjectid":39,
+ "nextobjectid":55,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.2.1",
  "tileheight":600,
  "tilesets":[
         {
-         "columns":2,
-         "firstgid":1,
-         "grid":
-            {
-             "height":1,
-             "orientation":"orthogonal",
-             "width":1
-            },
-         "margin":0,
-         "name":"Breakout Tiles",
-         "spacing":0,
-         "tilecount":12,
-         "tileheight":32,
-         "tiles":[
-                {
-                 "id":12,
-                 "image":"images\/source\/blockBlue.png",
-                 "imageheight":32,
-                 "imagewidth":64,
-                 "properties":[
-                        {
-                         "name":"sprite",
-                         "type":"string",
-                         "value":"blockBlue"
-                        }],
-                 "type":"blockNormal"
-                }, 
-                {
-                 "id":13,
-                 "image":"images\/source\/blockBlueStrong.png",
-                 "imageheight":32,
-                 "imagewidth":64,
-                 "type":"blockStrong"
-                }, 
-                {
-                 "id":14,
-                 "image":"images\/source\/blockGreen.png",
-                 "imageheight":32,
-                 "imagewidth":64,
-                 "properties":[
-                        {
-                         "name":"sprite",
-                         "type":"string",
-                         "value":"blockGreen"
-                        }],
-                 "type":"blockNormal"
-                }, 
-                {
-                 "id":15,
-                 "image":"images\/source\/blockGreenStrong.png",
-                 "imageheight":32,
-                 "imagewidth":64,
-                 "type":"blockStrong"
-                }, 
-                {
-                 "id":16,
-                 "image":"images\/source\/blockGrey.png",
-                 "imageheight":32,
-                 "imagewidth":64,
-                 "properties":[
-                        {
-                         "name":"sprite",
-                         "type":"string",
-                         "value":"blockGrey"
-                        }],
-                 "type":"blockNormal"
-                }, 
-                {
-                 "id":17,
-                 "image":"images\/source\/blockGreyStrong.png",
-                 "imageheight":32,
-                 "imagewidth":64,
-                 "type":"blockStrong"
-                }, 
-                {
-                 "id":18,
-                 "image":"images\/source\/blockPurple.png",
-                 "imageheight":32,
-                 "imagewidth":64,
-                 "properties":[
-                        {
-                         "name":"sprite",
-                         "type":"string",
-                         "value":"blockPurple"
-                        }],
-                 "type":"blockNormal"
-                }, 
-                {
-                 "id":19,
-                 "image":"images\/source\/blockPurpleStrong.png",
-                 "imageheight":32,
-                 "imagewidth":64,
-                 "type":"blockStrong"
-                }, 
-                {
-                 "id":20,
-                 "image":"images\/source\/blockRed.png",
-                 "imageheight":32,
-                 "imagewidth":64,
-                 "properties":[
-                        {
-                         "name":"sprite",
-                         "type":"string",
-                         "value":"blockRed"
-                        }],
-                 "type":"blockNormal"
-                }, 
-                {
-                 "id":21,
-                 "image":"images\/source\/blockRedStrong.png",
-                 "imageheight":32,
-                 "imagewidth":64,
-                 "type":"blockStrong"
-                }, 
-                {
-                 "id":22,
-                 "image":"images\/source\/blockYellow.png",
-                 "imageheight":32,
-                 "imagewidth":64,
-                 "properties":[
-                        {
-                         "name":"sprite",
-                         "type":"string",
-                         "value":"blockYellow"
-                        }],
-                 "type":"blockNormal"
-                }, 
-                {
-                 "id":23,
-                 "image":"images\/source\/blockYellowStrong.png",
-                 "imageheight":32,
-                 "imagewidth":64,
-                 "type":"blockStrong"
-                }],
-         "tilewidth":64
-        }, 
-        {
          "columns":12,
-         "firstgid":25,
+         "firstgid":1,
          "image":"images\/spritesheetBlocks.png",
          "imageheight":32,
          "imagewidth":779,
