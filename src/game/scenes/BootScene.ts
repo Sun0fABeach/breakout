@@ -11,10 +11,10 @@ const audioSpriteAtlas = require('@/game/assets/sounds/audiosprite.json')
 const audioSpriteSheetOGG = require('@/game/assets/sounds/audiosprite.ogg')
 const audioSpriteSheetMP3 = require('@/game/assets/sounds/audiosprite.mp3')
 
-const blocks: { [index: string]: string } = {}
+const blocks: string[] = []
 
 for (let i = 1; i <= numLevels; ++i) {
-  blocks[`lvl${i}`] = require(`@/game/assets/blocksLvl${i}.json`)
+  blocks[i] = require(`@/game/assets/blocksLvl${i}.json`)
 }
 
 export default class BootScene extends Scene {
@@ -24,7 +24,7 @@ export default class BootScene extends Scene {
 
   preload (): void {
     for (let i = 1; i <= numLevels; ++i) {
-      this.load.tilemapTiledJSON(`blocksLvl${i}`, blocks[`lvl${i}`])
+      this.load.tilemapTiledJSON(`blocksLvl${i}`, blocks[i])
     }
     this.load.atlas(
       'blocks',

@@ -95,12 +95,17 @@ export default class PlayScene extends Scene {
     this.scene.run('PauseScene')
   }
 
-  private restart (): void {
+  private async restart (): Promise<void> {
     ['Lives', 'Score'].forEach(counter => store.commit('reset' + counter))
-    this.prefabs.blocks.reset()
+
+    await this.prefabs.blocks.fadeKillAll()
+    this.setupNextBlocks(true)
+
     this.putBallOnPaddle()
     this.prefabs.ball.fadeIn()
+
     this.activatePauseButton()
+
     changeGameState(GameState.Running)
   }
 
@@ -178,12 +183,28 @@ export default class PlayScene extends Scene {
     blocks.killBlock(block)
 
     if (blocks.allHit) {
-      ball.explode()
-      this.gameOver(true)
       this.audio.play('gong')
+      ball.explode()
+
+      if (this.setupNextBlocks()) {
+        this.putBallOnPaddle()
+        ball.fadeIn()
+      } else {
+        this.gameOver(true)
+      }
     } else {
       this.audio.play('ding')
     }
+  }
+
+  private setupNextBlocks (reset: boolean = false): Blocks | null {
+    const nextBlocks: Blocks | null = this.levels[reset ? 'reset' : 'next']()
+    if (nextBlocks instanceof Blocks) {
+      nextBlocks.setupBallCollider(this.prefabs.ball, this.blockHit.bind(this))
+      this.fadeIn(...nextBlocks.all)
+      this.prefabs.blocks = nextBlocks
+    }
+    return nextBlocks
   }
 
   private loseLife (): void {

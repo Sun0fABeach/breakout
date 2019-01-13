@@ -29,7 +29,12 @@ class Blocks {
       { type: 'Grey', value: 200 },
       { type: 'Purple', value: 150 },
       { type: 'Red', value: 100 },
-      { type: 'Yellow', value: 50 }
+      { type: 'Yellow', value: 50 },
+      { type: 'GreenStrong', value: 250 },
+      { type: 'GreyStrong', value: 200 },
+      { type: 'PurpleStrong', value: 150 },
+      { type: 'RedStrong', value: 100 },
+      { type: 'YellowStrong', value: 50 }
     ]
 
     this.blockGroups = types.map((blockDef: BlockDef) => {
@@ -79,13 +84,28 @@ class Blocks {
     })
   }
 
-  private fadeOut (block: Block): Promise<undefined> {
+  killAll (): void {
+    this.blockGroups.forEach(group => group.killAll())
+  }
+
+  fadeKillAll (
+    duration: number = 500,
+    easing: string = 'Linear'
+  ): Promise<void> {
+    return this.fadeOut(this.all, duration, easing).then(() => this.killAll())
+  }
+
+  private fadeOut (
+    blocks: Block | Block[],
+    duration: number = 300,
+    easing: string = 'Expo.easeOut'
+  ): Promise<void> {
     return new Promise(resolve => {
       this.scene.tweens.add({
-        targets: block,
+        targets: blocks,
         alpha: 0,
-        ease: 'Expo.easeOut',
-        duration: 300,
+        ease: easing,
+        duration: duration,
         onComplete: resolve
       })
     })
@@ -169,6 +189,16 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
   killBlock (block: Block): void {
     this.killAndHide(block)
     block.body.enable = false
+  }
+
+  killAll (): void {
+    for (
+      let alive: Block = this.getFirstAlive();
+      alive !== null;
+      alive = this.getFirstAlive()
+    ) {
+      this.killBlock(alive)
+    }
   }
 
   reset (): void {
