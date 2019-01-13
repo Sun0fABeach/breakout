@@ -2,6 +2,7 @@ import Phaser, { Scene } from 'phaser'
 import Ball from '@/game/objects/Ball'
 import Paddle from '@/game/objects/Paddle'
 import Blocks from '@/game/objects/Blocks'
+import Levels from '@/game/Levels'
 import Audio from '@/game/Audio'
 import { init as particlesInit } from '@/game/particleManagers'
 import { Direction, keys } from '@/game/globals'
@@ -12,6 +13,7 @@ export default class PlayScene extends Scene {
   private prefabs: { [index: string]: any }
   private readonly ballPaddleOffset: { x: number, y: number }
   private readonly audio: Audio
+  private readonly levels: Levels
 
   constructor () {
     super({ key: 'PlayScene' })
@@ -19,6 +21,7 @@ export default class PlayScene extends Scene {
     /* init these objects here, since they don't need to wait for phaser */
     this.ballPaddleOffset = { x: 0, y: 0 }
     this.audio = new Audio(this)
+    this.levels = new Levels(this)
     this.prefabs = {} // filled in create()
   }
 
@@ -47,7 +50,9 @@ export default class PlayScene extends Scene {
     const ball = new Ball(this, 400, 300)
 
     this.prefabs.paddle.setupBallCollider(ball, this.bounceBallOffPaddle)
-    const blocks = new Blocks(this)
+
+    this.levels.init()
+    const blocks = this.levels.next() as Blocks // this will not be null
     blocks.setupBallCollider(ball, this.blockHit.bind(this))
 
     this.prefabs = { ball, blocks, ...this.prefabs }
@@ -56,12 +61,12 @@ export default class PlayScene extends Scene {
     this.physics.world.on('worldbounds', this.ballHitWorldBounds, this)
 
     this.initPauseHandling()
-    this.setupInitialFadeIn(ball, ...blocks.all)
+    this.fadeIn(ball, ...blocks.all)
 
     changeGameState(GameState.Running)
   }
 
-  private setupInitialFadeIn (...objects: { alpha: number }[]): void {
+  private fadeIn (...objects: { alpha: number }[]): void {
     objects.forEach(obj => {
       obj.alpha = 0
       this.tweens.add({

@@ -20,8 +20,10 @@ class Blocks {
   private readonly pointsTextGroup: GameObjects.Group
   private readonly emitters: ParticleEmitter[]
 
-  constructor (private readonly scene: Scene) {
-    const tilemap: Phaser.Tilemaps.Tilemap = scene.add.tilemap('blocksLvl1')
+  constructor (
+    private readonly scene: Scene,
+    tilemap: Phaser.Tilemaps.Tilemap
+  ) {
     const types: BlockDef[] = [
       { type: 'Green', value: 250 },
       { type: 'Grey', value: 200 },
