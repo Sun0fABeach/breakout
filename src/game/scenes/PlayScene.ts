@@ -30,6 +30,10 @@ export default class PlayScene extends Scene {
     this.prefabs.paddle = new Paddle(this, 400, 550)
     this.prefabs.cursor = this.input.keyboard.createCursorKeys()
 
+    particlesInit(this)
+    Blocks.init(this)
+    this.levels.init()
+
     changeGameState(GameState.PrePlay)
     addGameStateHandler(GameState.StartPlay, () => {
       this.audio.play('letsGo')
@@ -45,13 +49,10 @@ export default class PlayScene extends Scene {
   }
 
   private setupPlay (): void {
-    particlesInit(this)
-
     const ball = new Ball(this, 400, 300)
 
     this.prefabs.paddle.setupBallCollider(ball, this.bounceBallOffPaddle)
 
-    this.levels.init()
     const blocks = this.levels.next() as Blocks // this will not be null
     blocks.setupBallCollider(ball, this.blockHit.bind(this))
 

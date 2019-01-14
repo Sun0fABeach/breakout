@@ -16,28 +16,27 @@ type CollisionCb = (
 ) => any
 
 class Blocks {
+  static pointsTextGroup: GameObjects.Group
+  static emitters: ParticleEmitter[]
+  private static types: BlockDef[] = [
+    { type: 'Green', value: 250 },
+    { type: 'Grey', value: 200 },
+    { type: 'Purple', value: 150 },
+    { type: 'Red', value: 100 },
+    { type: 'Yellow', value: 50 },
+    { type: 'GreenStrong', value: 250 },
+    { type: 'GreyStrong', value: 200 },
+    { type: 'PurpleStrong', value: 150 },
+    { type: 'RedStrong', value: 100 },
+    { type: 'YellowStrong', value: 50 }
+  ]
   private readonly blockGroups: BlockGroup[]
-  private readonly pointsTextGroup: GameObjects.Group
-  private readonly emitters: ParticleEmitter[]
 
   constructor (
     private readonly scene: Scene,
     tilemap: Phaser.Tilemaps.Tilemap
   ) {
-    const types: BlockDef[] = [
-      { type: 'Green', value: 250 },
-      { type: 'Grey', value: 200 },
-      { type: 'Purple', value: 150 },
-      { type: 'Red', value: 100 },
-      { type: 'Yellow', value: 50 },
-      { type: 'GreenStrong', value: 250 },
-      { type: 'GreyStrong', value: 200 },
-      { type: 'PurpleStrong', value: 150 },
-      { type: 'RedStrong', value: 100 },
-      { type: 'YellowStrong', value: 50 }
-    ]
-
-    this.blockGroups = types.map((blockDef: BlockDef) => {
+    this.blockGroups = Blocks.types.map((blockDef: BlockDef) => {
       const spriteName: string = 'block' + blockDef.type
       const blocks: GameObject[] = tilemap.createFromObjects(
         'Blocks', spriteName, { key: 'blocks', frame: spriteName }
@@ -47,12 +46,15 @@ class Blocks {
       })
       return new BlockGroup(scene, blocks, blockDef.value)
     })
+  }
 
-    this.pointsTextGroup = new GameObjects.Group(scene, {
+  /* needs to be called before constructing instances! */
+  static init (scene: Scene): void {
+    Blocks.pointsTextGroup = new GameObjects.Group(scene, {
       classType: PointsText
     })
 
-    this.emitters = ['small', 'medium'].map(type =>
+    Blocks.emitters = ['small', 'medium'].map(type =>
       particleManagers.stars[type].createEmitter({
         active: false,
         blendMode: Phaser.BlendModes.SCREEN,
@@ -112,7 +114,7 @@ class Blocks {
   }
 
   private emitHitParticles (block: Block): void {
-    this.emitters.forEach(emitter => {
+    Blocks.emitters.forEach(emitter => {
       emitter.setEmitZone({
         type: 'edge',
         source: block.getBounds(),
@@ -125,7 +127,7 @@ class Blocks {
   }
 
   private showPoints (block: Block, points: number) {
-    const pointsText: PointsText = this.pointsTextGroup.getFirstDead(true)
+    const pointsText: PointsText = Blocks.pointsTextGroup.getFirstDead(true)
     // for some reason, pointsText not created active == true by group
     pointsText.setActive(true)
     pointsText.setDisplay(
@@ -133,7 +135,7 @@ class Blocks {
       block.y,
       points
     )
-    pointsText.show().then(() => this.pointsTextGroup.killAndHide(pointsText))
+    pointsText.show().then(() => Blocks.pointsTextGroup.killAndHide(pointsText))
   }
 
   reset (): void {
