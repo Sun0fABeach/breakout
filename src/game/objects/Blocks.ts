@@ -1,5 +1,5 @@
 import { Physics, GameObjects } from 'phaser'
-import { managers as particleManagers } from '@/game/particleManagers'
+import Particles from '@/game/Particles'
 import Ball from '@/game/objects/Ball'
 import PointsText from '@/game/objects/text/PointsText'
 import store from '@/store'
@@ -55,7 +55,7 @@ class Blocks {
     })
 
     Blocks.emitters = ['small', 'medium'].map(type =>
-      particleManagers.stars[type].createEmitter({
+      Particles.managers.stars[type].createEmitter({
         active: false,
         blendMode: Phaser.BlendModes.SCREEN,
         scale: { start: 0.8, end: 0 },

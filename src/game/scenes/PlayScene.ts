@@ -4,7 +4,7 @@ import Paddle from '@/game/objects/Paddle'
 import Blocks from '@/game/objects/Blocks'
 import Levels from '@/game/Levels'
 import Audio from '@/game/Audio'
-import { init as particlesInit } from '@/game/particleManagers'
+import Particles from '@/game/Particles'
 import { Direction, keys } from '@/game/globals'
 import store, { GameState } from '@/store'
 import { changeGameState, addGameStateHandler } from './stateHelpers'
@@ -30,7 +30,7 @@ export default class PlayScene extends Scene {
     this.prefabs.paddle = new Paddle(this, 400, 550)
     this.prefabs.cursor = this.input.keyboard.createCursorKeys()
 
-    particlesInit(this)
+    Particles.init(this)
     Blocks.init(this)
     this.levels.init()
 

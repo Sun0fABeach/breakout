@@ -1,5 +1,5 @@
 import Phaser, { Physics, Math as PhaserMath } from 'phaser'
-import { managers as particleManagers } from '@/game/particleManagers'
+import Particles from '@/game/Particles'
 import { Direction } from '@/game/globals'
 
 type EmitterDict = { [index: string]: ParticleEmitter[] }
@@ -31,7 +31,7 @@ class Ball extends Physics.Arcade.Image {
     const emitters: EmitterDict = {}
 
     emitters.explosion = ['small', 'medium', 'big'].map(type =>
-      particleManagers.stars[type].createEmitter({
+      Particles.managers.stars[type].createEmitter({
         active: false,
         blendMode: Phaser.BlendModes.SCREEN,
         speed: { min: 50, max: 500 },
@@ -44,7 +44,7 @@ class Ball extends Physics.Arcade.Image {
       })
     )
     emitters.puff = [
-      particleManagers.puff.createEmitter({
+      Particles.managers.puff.createEmitter({
         active: false,
         blendMode: Phaser.BlendModes.SCREEN,
         speed: 15,
