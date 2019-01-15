@@ -7,21 +7,17 @@ import Audio from '@/game/Audio'
 import Particles from '@/game/Particles'
 import { Direction, keys } from '@/game/globals'
 import store, { GameState } from '@/store'
-import { changeGameState, addGameStateHandler } from './stateHelpers'
+import StateAction from '@/game/StateAction'
 
 export default class PlayScene extends Scene {
   private prefabs: { [index: string]: any }
   private readonly ballPaddleOffset: { x: number, y: number }
-  private readonly audio: Audio
-  private readonly levels: Levels
 
   constructor () {
     super({ key: 'PlayScene' })
 
     /* init these objects here, since they don't need to wait for phaser */
     this.ballPaddleOffset = { x: 0, y: 0 }
-    this.audio = new Audio(this)
-    this.levels = new Levels(this)
     this.prefabs = {} // filled in create()
   }
 
@@ -30,22 +26,23 @@ export default class PlayScene extends Scene {
     this.prefabs.paddle = new Paddle(this, 400, 550)
     this.prefabs.cursor = this.input.keyboard.createCursorKeys()
 
+    Audio.init(this)
     Particles.init(this)
     Blocks.init(this)
-    this.levels.init()
+    Levels.init(this)
 
-    changeGameState(GameState.PrePlay)
-    addGameStateHandler(GameState.StartPlay, () => {
-      this.audio.play('letsGo')
+    StateAction.change(GameState.PrePlay)
+    StateAction.addHandler(GameState.StartPlay, () => {
+      Audio.play('letsGo')
       this.setupPlay()
     })
-    addGameStateHandler(GameState.RestartPlay, () => {
-      this.audio.play('letsGo')
+    StateAction.addHandler(GameState.RestartPlay, () => {
+      Audio.play('letsGo')
       this.restart()
     })
 
     // play sound slightly into bounce-in animation of start button
-    setTimeout(() => this.audio.play('swish'), 325)
+    setTimeout(() => Audio.play('swish'), 325)
   }
 
   private setupPlay (): void {
@@ -53,7 +50,7 @@ export default class PlayScene extends Scene {
 
     this.prefabs.paddle.setupBallCollider(ball, this.bounceBallOffPaddle)
 
-    const blocks = this.levels.next() as Blocks // this will not be null
+    const blocks = Levels.next() as Blocks // this will not be null
     blocks.setupBallCollider(ball, this.blockHit.bind(this))
 
     this.prefabs = { ball, blocks, ...this.prefabs }
@@ -64,7 +61,7 @@ export default class PlayScene extends Scene {
     this.initPauseHandling()
     this.fadeIn(ball, ...blocks.all)
 
-    changeGameState(GameState.Running)
+    StateAction.change(GameState.Running)
   }
 
   private fadeIn (...objects: { alpha: number }[]): void {
@@ -81,13 +78,13 @@ export default class PlayScene extends Scene {
 
   private initPauseHandling (): void {
     this.activatePauseButton()
-    addGameStateHandler(GameState.Paused, this.pause.bind(this))
+    StateAction.addHandler(GameState.Paused, this.pause.bind(this))
   }
 
   private activatePauseButton (): void {
     this.input.keyboard.on(
       keys.pause,
-      () => changeGameState(GameState.Paused)
+      () => StateAction.change(GameState.Paused)
     )
   }
 
@@ -107,7 +104,7 @@ export default class PlayScene extends Scene {
 
     this.activatePauseButton()
 
-    changeGameState(GameState.Running)
+    StateAction.change(GameState.Running)
   }
 
   private putBallOnPaddle (): void {
@@ -139,7 +136,7 @@ export default class PlayScene extends Scene {
   }
 
   private bounceBallOffPaddle (ball: Ball, paddle: Paddle): void {
-    this.audio.play('wooden')
+    Audio.play('wooden')
     this.setBallVelocity(
       Phaser.Math.Angle.Between(paddle.x, paddle.y, ball.x, ball.y)
     )
@@ -169,7 +166,7 @@ export default class PlayScene extends Scene {
       this.loseLife()
     } else {
       // call like this to enable multiple layered thuds:
-      this.audio.play('thud')
+      Audio.play('thud')
       this.prefabs.ball.puff(up, false, left, right)
       this.spinBallOnCollision({ up, right, down, left, none: false })
     }
@@ -184,7 +181,7 @@ export default class PlayScene extends Scene {
     blocks.killBlock(block)
 
     if (blocks.allHit) {
-      this.audio.play('gong')
+      Audio.play('gong')
       ball.explode()
 
       if (this.setupNextBlocks()) {
@@ -194,12 +191,12 @@ export default class PlayScene extends Scene {
         this.gameOver(true)
       }
     } else {
-      this.audio.play('ding')
+      Audio.play('ding')
     }
   }
 
   private setupNextBlocks (reset: boolean = false): Blocks | null {
-    const nextBlocks: Blocks | null = this.levels[reset ? 'reset' : 'next']()
+    const nextBlocks: Blocks | null = Levels[reset ? 'reset' : 'next']()
     if (nextBlocks instanceof Blocks) {
       nextBlocks.setupBallCollider(this.prefabs.ball, this.blockHit.bind(this))
       this.fadeIn(...nextBlocks.all)
@@ -211,7 +208,7 @@ export default class PlayScene extends Scene {
   private loseLife (): void {
     const { ball } = this.prefabs
 
-    this.audio.play('explosion')
+    Audio.play('explosion')
     this.prefabs.blocks.resetScoreMultiplier()
     store.commit('loseLife')
     ball.explodeBottom()
@@ -229,11 +226,11 @@ export default class PlayScene extends Scene {
 
     setTimeout(() => { // wait for ball explosion to quiet down
       if (won) {
-        changeGameState(GameState.Won)
-        setTimeout(() => this.audio.play('ohYeah'), 750)
+        StateAction.change(GameState.Won)
+        setTimeout(() => Audio.play('ohYeah'), 750)
       } else {
-        changeGameState(GameState.Lost)
-        setTimeout(() => this.audio.play('ohNo'), 750)
+        StateAction.change(GameState.Lost)
+        setTimeout(() => Audio.play('ohNo'), 750)
       }
     }, won ? 1250 : 500)
   }

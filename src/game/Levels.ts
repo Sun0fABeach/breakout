@@ -2,31 +2,28 @@ import Blocks from '@/game/objects/Blocks'
 import { numLevels } from '@/game/globals'
 
 class Levels {
-  private currentLvl: number
-  private readonly tileMaps: Phaser.Tilemaps.Tilemap[]
+  private static scene: Scene
+  private static current: number = 0
+  private static readonly tileMaps: Phaser.Tilemaps.Tilemap[] = []
 
-  constructor (private readonly scene: Scene) {
-    this.currentLvl = 0
-    this.tileMaps = []
-  }
-
-  init (): void {
+  static init (scene: Scene): void {
+    Levels.scene = scene
     for (let i: number = 1; i <= numLevels; ++i) {
-      this.tileMaps[i] = this.scene.add.tilemap(`blocksLvl${i}`)
+      Levels.tileMaps[i] = scene.add.tilemap(`blocksLvl${i}`)
     }
   }
 
-  next (): Blocks | null {
-    if (this.currentLvl === numLevels) {
+  static next (): Blocks | null {
+    if (Levels.current === numLevels) {
       return null
     }
-    this.currentLvl++
-    return new Blocks(this.scene, this.tileMaps[this.currentLvl])
+    Levels.current++
+    return new Blocks(Levels.scene, Levels.tileMaps[Levels.current])
   }
 
-  reset (): Blocks {
-    this.currentLvl = 0
-    return this.next() as Blocks // will not be null
+  static reset (): Blocks {
+    Levels.current = 0
+    return Levels.next() as Blocks // will not be null
   }
 }
 
