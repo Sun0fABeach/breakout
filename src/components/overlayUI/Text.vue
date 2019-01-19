@@ -26,8 +26,8 @@ export default {
   computed: {
     animProps () {
       return this.animated && {
-        'enter-active-class': 'spin',
-        'leave-active-class': 'bounceOut'
+        'enter-active-class': 'animated spin',
+        'leave-active-class': 'animated bounceOut'
       }
     }
   }

@@ -110,7 +110,7 @@
 
 @keyframes spinIn {
   from {
-    transform: scale(0);
+    transform: scale(0) rotate(0deg);
   }
 
   77% {
