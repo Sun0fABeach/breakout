@@ -25,7 +25,7 @@ export default {
         [GameState.Won]: 'You Win'
       }
       return {
-        visible: this.inStateMap(stateTextMap, this.gameState),
+        visible: !!stateTextMap[this.gameState],
         text: stateTextMap[this.gameState],
         animated: this.gameState !== GameState.Paused
       }
@@ -37,7 +37,7 @@ export default {
         [GameState.Won]: 'Restart'
       }
       return {
-        visible: this.inStateMap(stateTextMap, this.gameState),
+        visible: !!stateTextMap[this.gameState],
         text: stateTextMap[this.gameState]
       }
     }
@@ -51,11 +51,6 @@ export default {
         this.gameState === GameState.PrePlay
           ? GameState.StartPlay : GameState.RestartPlay
       )
-    },
-    inStateMap (stateMap, state) {
-      return Object.keys(stateMap)
-        .map(key => Number.parseInt(key))
-        .indexOf(state) !== -1
     }
   }
 }
