@@ -1,5 +1,6 @@
 import Blocks from '@/game/objects/Blocks'
 import { numLevels } from '@/game/globals'
+import store from '@/store'
 
 class Levels {
   private static scene: Scene
@@ -14,15 +15,15 @@ class Levels {
   }
 
   static next (): Blocks | null {
-    if (Levels.current === numLevels) {
+    if (store.state.level === numLevels) {
       return null
     }
-    Levels.current++
-    return new Blocks(Levels.scene, Levels.tileMaps[Levels.current])
+    store.commit('nextLevel')
+    return new Blocks(Levels.scene, Levels.tileMaps[store.state.level])
   }
 
   static reset (): Blocks {
-    Levels.current = 0
+    store.commit('resetLevel')
     return Levels.next() as Blocks // will not be null
   }
 }

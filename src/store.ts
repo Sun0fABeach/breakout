@@ -18,7 +18,8 @@ enum GameState {
 const baseVals = {
   score: 0,
   scoreMultiplier: 1,
-  lives: 3
+  lives: 3,
+  level: 0
 }
 
 export default new Vuex.Store({
@@ -51,6 +52,12 @@ export default new Vuex.Store({
     },
     resetLives (state) {
       state.lives = baseVals.lives
+    },
+    nextLevel (state) {
+      state.level++
+    },
+    resetLevel (state) {
+      state.level = baseVals.level
     }
   }
 })
