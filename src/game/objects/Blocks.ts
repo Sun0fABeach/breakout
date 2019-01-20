@@ -140,7 +140,6 @@ class Blocks {
 
   reset (): void {
     this.blockGroups.forEach(group => group.reset())
-    this.resetScoreMultiplier()
   }
 
   setupBallCollider (ball: Ball, callback: CollisionCb): void {
@@ -149,18 +148,6 @@ class Blocks {
 
   setBallForCollider (ball: Ball): void {
     this.blockGroups.forEach(group => group.setBallForCollider(ball))
-  }
-
-  bumpScoreMultiplier (): void {
-    store.commit('bumpScoreMultiplier', 0.5)
-  }
-
-  resetScoreMultiplier (): void {
-    store.commit('resetScoreMultiplier')
-  }
-
-  get scoreMultiplier (): number {
-    return store.state.scoreMultiplier
   }
 
   get all (): PhysicsSprite[] {

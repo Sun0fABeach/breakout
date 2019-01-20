@@ -12,12 +12,13 @@ import StateAction from '@/game/StateAction'
 export default class PlayScene extends Scene {
   private prefabs: { [index: string]: any }
   private readonly ballPaddleOffset: { x: number, y: number }
+  private readonly scoreMultBump: number
 
   constructor () {
     super({ key: 'PlayScene' })
 
-    /* init these objects here, since they don't need to wait for phaser */
     this.ballPaddleOffset = { x: 0, y: 0 }
+    this.scoreMultBump = 0.5
     this.prefabs = {} // filled in create()
   }
 
@@ -96,7 +97,7 @@ export default class PlayScene extends Scene {
   private async restart (): Promise<void> {
     await this.prefabs.blocks.fadeKillAll()
 
-    const toReset: String[] = ['Lives', 'Score']
+    const toReset: String[] = ['Lives', 'Score', 'ScoreMultiplier']
     toReset.forEach((counter: String) => store.commit('reset' + counter))
 
     this.setupNextBlocks(true)
@@ -143,7 +144,7 @@ export default class PlayScene extends Scene {
       Phaser.Math.Angle.Between(paddle.x, paddle.y, ball.x, ball.y)
     )
     ball.spin = Direction[ball.x < paddle.x ? 'Left' : 'Right']
-    this.prefabs.blocks.resetScoreMultiplier()
+    store.commit('resetScoreMultiplier')
   }
 
   private setBallVelocity (angleRad: number): void {
@@ -179,7 +180,6 @@ export default class PlayScene extends Scene {
 
     store.commit('bumpScore', points)
     this.spinBallOnCollision(ball.body.touching)
-    blocks.bumpScoreMultiplier()
     blocks.killBlock(block)
 
     if (blocks.allHit) {
@@ -187,6 +187,7 @@ export default class PlayScene extends Scene {
       ball.explode()
 
       if (this.setupNextBlocks()) {
+        store.commit('resetScoreMultiplier')
         this.putBallOnPaddle()
         ball.fadeIn()
       } else {
@@ -194,6 +195,7 @@ export default class PlayScene extends Scene {
       }
     } else {
       Audio.play('ding')
+      store.commit('bumpScoreMultiplier', this.scoreMultBump)
     }
   }
 
@@ -212,10 +214,10 @@ export default class PlayScene extends Scene {
     const { ball } = this.prefabs
 
     Audio.play('explosion')
-    this.prefabs.blocks.resetScoreMultiplier()
     ball.explodeBottom()
-
+    store.commit('resetScoreMultiplier')
     store.commit('loseLife')
+
     if (store.state.lives === 0) {
       this.gameOver()
     } else {
