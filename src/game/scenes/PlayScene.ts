@@ -65,18 +65,6 @@ export default class PlayScene extends Scene {
     StateAction.change(GameState.Running)
   }
 
-  private fadeIn (...objects: { alpha: number }[]): void {
-    objects.forEach(obj => {
-      obj.alpha = 0
-      this.tweens.add({
-        targets: obj,
-        alpha: 1,
-        ease: 'Expo.easeInOut',
-        duration: 1250
-      })
-    })
-  }
-
   private initPauseHandling (): void {
     this.activatePauseButton()
     StateAction.addHandler(GameState.Paused, this.pause.bind(this))
@@ -92,22 +80,6 @@ export default class PlayScene extends Scene {
   private pause (): void {
     this.scene.pause()
     this.scene.run('PauseScene')
-  }
-
-  private async restart (): Promise<void> {
-    await this.prefabs.blocks.fadeKillAll()
-
-    const toReset: String[] = ['Lives', 'Score', 'ScoreMultiplier']
-    toReset.forEach((counter: String) => store.commit('reset' + counter))
-
-    this.setupNextBlocks(true)
-
-    this.putBallOnPaddle()
-    this.prefabs.ball.fadeIn()
-
-    this.activatePauseButton()
-
-    StateAction.change(GameState.Running)
   }
 
   private putBallOnPaddle (): void {
@@ -159,6 +131,30 @@ export default class PlayScene extends Scene {
       angleRad = -(flatLeft - tolerance)
     }
     this.prefabs.ball.setVelocityFromAngle(angleRad)
+  }
+
+  private spinBallOnCollision (
+    { up, right, down, left }: ArcadeBodyCollision
+  ): void {
+    const ball: Ball = this.prefabs.ball
+
+    if (up) {
+      // goes left -> spin right
+      // goes right -> spin left
+      ball.spin = Direction[ball.velocityX < 0 ? 'Right' : 'Left']
+    } else if (right) {
+      // goes up -> spin right
+      // goes down -> spin left
+      ball.spin = Direction[ball.velocityY < 0 ? 'Right' : 'Left']
+    } else if (down) {
+      // goes left -> spin left
+      // goes right -> spin right
+      ball.spin = Direction[ball.velocityX < 0 ? 'Left' : 'Right']
+    } else if (left) {
+      // goes up -> spin left
+      // goes down -> spin right
+      ball.spin = Direction[ball.velocityY < 0 ? 'Left' : 'Right']
+    }
   }
 
   private ballHitWorldBounds (
@@ -241,28 +237,32 @@ export default class PlayScene extends Scene {
     }, won ? 1250 : 500)
   }
 
-  private spinBallOnCollision (
-    { up, right, down, left }: ArcadeBodyCollision
-  ): void {
-    const ball: Ball = this.prefabs.ball
+  private async restart (): Promise<void> {
+    await this.prefabs.blocks.fadeKillAll()
 
-    if (up) {
-      // goes left -> spin right
-      // goes right -> spin left
-      ball.spin = Direction[ball.velocityX < 0 ? 'Right' : 'Left']
-    } else if (right) {
-      // goes up -> spin right
-      // goes down -> spin left
-      ball.spin = Direction[ball.velocityY < 0 ? 'Right' : 'Left']
-    } else if (down) {
-      // goes left -> spin left
-      // goes right -> spin right
-      ball.spin = Direction[ball.velocityX < 0 ? 'Left' : 'Right']
-    } else if (left) {
-      // goes up -> spin left
-      // goes down -> spin right
-      ball.spin = Direction[ball.velocityY < 0 ? 'Left' : 'Right']
-    }
+    const toReset: String[] = ['Lives', 'Score', 'ScoreMultiplier']
+    toReset.forEach((counter: String) => store.commit('reset' + counter))
+
+    this.setupNextBlocks(true)
+
+    this.putBallOnPaddle()
+    this.prefabs.ball.fadeIn()
+
+    this.activatePauseButton()
+
+    StateAction.change(GameState.Running)
+  }
+
+  private fadeIn (...objects: { alpha: number }[]): void {
+    objects.forEach(obj => {
+      obj.alpha = 0
+      this.tweens.add({
+        targets: obj,
+        alpha: 1,
+        ease: 'Expo.easeInOut',
+        duration: 1250
+      })
+    })
   }
 
   update (): void {
