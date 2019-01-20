@@ -4,7 +4,6 @@ import store from '@/store'
 
 class Levels {
   private static scene: Scene
-  private static current: number = 0
   private static readonly tileMaps: Phaser.Tilemaps.Tilemap[] = []
 
   static init (scene: Scene): void {

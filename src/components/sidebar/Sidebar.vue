@@ -3,8 +3,9 @@
     <h1>Breakout!</h1>
 
     <SidebarField label="Lives">{{ lives }}</SidebarField>
-    <SidebarField label="Score">{{ score }}</SidebarField>
+    <SidebarField label="Level">{{ level }}</SidebarField>
     <SidebarField label="Multiplier">{{ scoreMultiplier }}</SidebarField>
+    <SidebarField label="Score">{{ score }}</SidebarField>
 
     <SidebarKeys />
   </div>
@@ -18,7 +19,7 @@ import { mapState } from 'vuex'
 export default {
   name: 'sidebar',
   components: { SidebarField, SidebarKeys },
-  computed: mapState(['lives', 'score', 'scoreMultiplier'])
+  computed: mapState(['lives', 'level', 'score', 'scoreMultiplier'])
 }
 </script>
 

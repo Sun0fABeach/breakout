@@ -94,9 +94,11 @@ export default class PlayScene extends Scene {
   }
 
   private async restart (): Promise<void> {
-    ['Lives', 'Score'].forEach(counter => store.commit('reset' + counter))
-
     await this.prefabs.blocks.fadeKillAll()
+
+    const toReset: String[] = ['Lives', 'Score']
+    toReset.forEach((counter: String) => store.commit('reset' + counter))
+
     this.setupNextBlocks(true)
 
     this.putBallOnPaddle()
@@ -197,6 +199,7 @@ export default class PlayScene extends Scene {
 
   private setupNextBlocks (reset: boolean = false): Blocks | null {
     const nextBlocks: Blocks | null = Levels[reset ? 'reset' : 'next']()
+
     if (nextBlocks instanceof Blocks) {
       nextBlocks.setupBallCollider(this.prefabs.ball, this.blockHit.bind(this))
       this.fadeIn(...nextBlocks.all)
@@ -210,8 +213,9 @@ export default class PlayScene extends Scene {
 
     Audio.play('explosion')
     this.prefabs.blocks.resetScoreMultiplier()
-    store.commit('loseLife')
     ball.explodeBottom()
+
+    store.commit('loseLife')
     if (store.state.lives === 0) {
       this.gameOver()
     } else {
