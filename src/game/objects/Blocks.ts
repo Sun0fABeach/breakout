@@ -7,7 +7,8 @@ import store from '@/store'
 type Block = PhysicsSprite
 type BlockDef = {
   readonly type: string,
-  readonly value: number
+  readonly value: number,
+  readonly strength: number
 }
 type CollisionCb = (
   ball: Ball,
@@ -19,21 +20,21 @@ class Blocks {
   static pointsTextGroup: GameObjects.Group
   static emitters: ParticleEmitter[]
   private static types: BlockDef[] = [
-    { type: 'Green', value: 250 },
-    { type: 'Grey', value: 200 },
-    { type: 'Purple', value: 150 },
-    { type: 'Red', value: 100 },
-    { type: 'Yellow', value: 50 },
-    { type: 'GreenStrong', value: 250 },
-    { type: 'GreyStrong', value: 200 },
-    { type: 'PurpleStrong', value: 150 },
-    { type: 'RedStrong', value: 100 },
-    { type: 'YellowStrong', value: 50 }
+    { type: 'Green', value: 250, strength: 1 },
+    { type: 'Grey', value: 200, strength: 1 },
+    { type: 'Purple', value: 150, strength: 1 },
+    { type: 'Red', value: 100, strength: 1 },
+    { type: 'Yellow', value: 50, strength: 1 },
+    { type: 'GreenStrong', value: 250, strength: 2 },
+    { type: 'GreyStrong', value: 200, strength: 2 },
+    { type: 'PurpleStrong', value: 150, strength: 2 },
+    { type: 'RedStrong', value: 100, strength: 2 },
+    { type: 'YellowStrong', value: 50, strength: 2 }
   ]
   private readonly blockGroups: BlockGroup[]
 
   constructor (
-    private readonly scene: Scene,
+    scene: Scene,
     tilemap: Phaser.Tilemaps.Tilemap
   ) {
     this.blockGroups = Blocks.types.map((blockDef: BlockDef) => {
@@ -44,7 +45,7 @@ class Blocks {
       blocks.forEach((block: GameObject) => {
         scene.physics.world.enableBody(block, Physics.Arcade.STATIC_BODY)
       })
-      return new BlockGroup(scene, blocks, blockDef.value)
+      return new BlockGroup(scene, blocks, blockDef.value, blockDef.strength)
     })
   }
 
@@ -65,77 +66,17 @@ class Blocks {
     )
   }
 
-  killBlock (toKill: Block): Promise<undefined> {
-    return new Promise((resolve, reject) => {
-      const containerGroup: BlockGroup | undefined = this.blockGroups.find(
-        group => group.contains(toKill)
-      )
-      if (!containerGroup) {
-        reject(new Error('Block belongs to no group'))
-        return
-      }
-      toKill.body.enable = false
-      this.emitHitParticles(toKill)
-      this.showPoints(
-        toKill, containerGroup.points * store.state.scoreMultiplier
-      )
-      this.fadeOut(toKill).then(() => {
-        containerGroup.killBlock(toKill)
-        resolve()
-      })
-    })
-  }
-
   killAll (): void {
     this.blockGroups.forEach(group => group.killAll())
   }
 
-  fadeKillAll (
-    duration: number = 500,
-    easing: string = 'Linear'
-  ): Promise<void> {
-    return this.fadeOut(this.all, duration, easing).then(() => this.killAll())
-  }
-
-  private fadeOut (
-    blocks: Block | Block[],
-    duration: number = 300,
-    easing: string = 'Expo.easeOut'
-  ): Promise<void> {
-    return new Promise(resolve => {
-      this.scene.tweens.add({
-        targets: blocks,
-        alpha: 0,
-        ease: easing,
-        duration: duration,
-        onComplete: resolve
+  fadeKillAll (): Promise<{}[]> {
+    return Promise.all(this.blockGroups.map(group =>
+      new Promise(async resolve => {
+        await group.fadeKillAll()
+        resolve()
       })
-    })
-  }
-
-  private emitHitParticles (block: Block): void {
-    Blocks.emitters.forEach(emitter => {
-      emitter.setEmitZone({
-        type: 'edge',
-        source: block.getBounds(),
-        quantity: 20
-      })
-      emitter.resume()
-      // @ts-ignore - no need to pass arguments here
-      emitter.explode()
-    })
-  }
-
-  private showPoints (block: Block, points: number) {
-    const pointsText: PointsText = Blocks.pointsTextGroup.getFirstDead(true)
-    // for some reason, pointsText not created active == true by group
-    pointsText.setActive(true)
-    pointsText.setDisplay(
-      block.x,
-      block.y,
-      points
-    )
-    pointsText.show().then(() => Blocks.pointsTextGroup.killAndHide(pointsText))
+    ))
   }
 
   reset (): void {
@@ -169,15 +110,59 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
   constructor (
     scene: Scene,
     blocks: GameObject[],
-    private readonly scoreVal: number
+    private readonly scoreVal: number,
+    strength: number
   ) {
     super(scene.physics.world, scene, blocks)
+    blocks.forEach((block: GameObject) => block.setData('strength', strength))
     this.ballCollider = null
   }
 
-  killBlock (block: Block): void {
-    this.killAndHide(block)
-    block.body.enable = false
+  setupBallCollider (ball: Ball, callback: CollisionCb): void {
+    const self: BlockGroup = this
+    this.ballCollider = this.scene.physics.add.collider(
+      ball,
+      this,
+      function (this: Scene, ball: GameObject, block: GameObject) {
+        self.showHit(block as Block)
+
+        let strength: number = block.getData('strength')
+        if (strength === 1) {
+          self.fadeKillBlock(block as Block)
+        } else {
+          block.setData('strength', strength - 1)
+        }
+        // eslint-disable-next-line standard/no-callback-literal
+        callback(
+          ball as Ball,
+          block as Block,
+          self.scoreVal * store.state.scoreMultiplier
+        )
+      },
+      undefined,
+      this.scene
+    )
+  }
+
+  setBallForCollider (ball: Ball): void {
+    // @ts-ignore
+    this.ballCollider.object1 = ball
+  }
+
+  private showHit (block: Block): void {
+    this.emitHitParticles(block)
+    this.showPoints(block, this.points * store.state.scoreMultiplier)
+  }
+
+  private killBlock (toKill: Block): void {
+    toKill.body.enable = false
+    this.killAndHide(toKill)
+  }
+
+  private async fadeKillBlock (toKill: Block): Promise<void> {
+    toKill.body.enable = false
+    await this.fadeOut(toKill)
+    this.killBlock(toKill as Block)
   }
 
   killAll (): void {
@@ -188,6 +173,51 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
     ) {
       this.killBlock(alive)
     }
+  }
+
+  async fadeKillAll (
+    duration: number = 500,
+    easing: string = 'Linear'
+  ): Promise<void> {
+    await this.fadeOut(this.getChildren(), duration, easing)
+    this.killAll()
+  }
+
+  private fadeOut (
+    blocks: GameObject | GameObject[],
+    duration: number = 300,
+    easing: string = 'Expo.easeOut'
+  ): Promise<void> {
+    return new Promise(resolve => {
+      this.scene.tweens.add({
+        targets: blocks,
+        alpha: 0,
+        ease: easing,
+        duration: duration,
+        onComplete: resolve
+      })
+    })
+  }
+
+  private emitHitParticles (block: Block): void {
+    Blocks.emitters.forEach(emitter => {
+      emitter.setEmitZone({
+        type: 'edge',
+        source: block.getBounds(),
+        quantity: 20
+      })
+      emitter.resume()
+      // @ts-ignore - no need to pass arguments here
+      emitter.explode()
+    })
+  }
+
+  private showPoints (block: Block, points: number): void {
+    const pointsText: PointsText = Blocks.pointsTextGroup.getFirstDead(true)
+    // for some reason, pointsText not created active == true by group
+    pointsText.setActive(true)
+    pointsText.setDisplay(block.x, block.y, points)
+    pointsText.show().then(() => Blocks.pointsTextGroup.killAndHide(pointsText))
   }
 
   reset (): void {
@@ -204,29 +234,6 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
         duration: 1500
       })
     }
-  }
-
-  setupBallCollider (ball: Ball, callback: CollisionCb): void {
-    const self: BlockGroup = this
-    this.ballCollider = this.scene.physics.add.collider(
-      ball,
-      this,
-      function (this: Scene, ball: GameObject, block: GameObject) {
-        // eslint-disable-next-line standard/no-callback-literal
-        callback(
-          ball as Ball,
-          block as PhysicsSprite,
-          self.scoreVal * store.state.scoreMultiplier
-        )
-      },
-      undefined,
-      this.scene
-    )
-  }
-
-  setBallForCollider (ball: Ball): void {
-    // @ts-ignore
-    this.ballCollider.object1 = ball
   }
 
   get allHit (): boolean {

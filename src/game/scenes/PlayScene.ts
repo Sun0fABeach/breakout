@@ -176,7 +176,6 @@ export default class PlayScene extends Scene {
 
     store.commit('bumpScore', points)
     this.spinBallOnCollision(ball.body.touching)
-    blocks.killBlock(block)
 
     if (blocks.allHit) {
       Audio.play('gong')
