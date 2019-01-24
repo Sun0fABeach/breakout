@@ -17,8 +17,8 @@ type CollisionCb = (
 ) => any
 
 class Blocks {
-  static pointsTextGroup: GameObjects.Group
   static emitters: ParticleEmitter[]
+  private readonly blockGroups: BlockGroup[]
   private static types: BlockDef[] = [
     { type: 'Green', value: 250, strength: 1 },
     { type: 'Grey', value: 200, strength: 1 },
@@ -31,12 +31,15 @@ class Blocks {
     { type: 'RedStrong', value: 100, strength: 2 },
     { type: 'YellowStrong', value: 50, strength: 2 }
   ]
-  private readonly blockGroups: BlockGroup[]
 
   constructor (
     scene: Scene,
     tilemap: Phaser.Tilemaps.Tilemap
   ) {
+    const pointsTextGroup = new GameObjects.Group(scene, {
+      classType: PointsText
+    })
+
     this.blockGroups = Blocks.types.map((blockDef: BlockDef) => {
       const spriteName: string = 'block' + blockDef.type
       const blocks: GameObject[] = tilemap.createFromObjects(
@@ -45,16 +48,14 @@ class Blocks {
       blocks.forEach((block: GameObject) => {
         scene.physics.world.enableBody(block, Physics.Arcade.STATIC_BODY)
       })
-      return new BlockGroup(scene, blocks, blockDef.value, blockDef.strength)
+      return new BlockGroup(
+        scene, blocks, blockDef.value, blockDef.strength, pointsTextGroup
+      )
     })
   }
 
   /* needs to be called before constructing instances! */
   static init (scene: Scene): void {
-    Blocks.pointsTextGroup = new GameObjects.Group(scene, {
-      classType: PointsText
-    })
-
     Blocks.emitters = ['small', 'medium'].map(type =>
       Particles.managers.stars[type].createEmitter({
         active: false,
@@ -111,7 +112,8 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
     scene: Scene,
     blocks: GameObject[],
     private readonly scoreVal: number,
-    strength: number
+    strength: number,
+    private readonly pointsTextGroup: GameObjects.Group
   ) {
     super(scene.physics.world, scene, blocks)
     blocks.forEach((block: GameObject) => block.setData('strength', strength))
@@ -213,11 +215,11 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
   }
 
   private showPoints (block: Block, points: number): void {
-    const pointsText: PointsText = Blocks.pointsTextGroup.getFirstDead(true)
+    const pointsText: PointsText = this.pointsTextGroup.getFirstDead(true)
     // for some reason, pointsText not created active == true by group
     pointsText.setActive(true)
     pointsText.setDisplay(block.x, block.y, points)
-    pointsText.show().then(() => Blocks.pointsTextGroup.killAndHide(pointsText))
+    pointsText.show().then(() => this.pointsTextGroup.killAndHide(pointsText))
   }
 
   reset (): void {
