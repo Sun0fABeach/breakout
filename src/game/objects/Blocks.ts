@@ -164,7 +164,7 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
   private async fadeKillBlock (toKill: Block): Promise<void> {
     toKill.body.enable = false
     await this.fadeOut(toKill)
-    this.killBlock(toKill as Block)
+    this.killBlock(toKill)
   }
 
   killAll (): void {

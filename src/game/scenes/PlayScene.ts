@@ -51,7 +51,7 @@ export default class PlayScene extends Scene {
 
     this.prefabs.paddle.setupBallCollider(ball, this.bounceBallOffPaddle)
 
-    const blocks = Levels.next() as Blocks // this will not be null
+    const blocks = Levels.next()!
     blocks.setupBallCollider(ball, this.blockHit.bind(this))
 
     this.prefabs = { ball, blocks, ...this.prefabs }

@@ -23,7 +23,7 @@ class Levels {
 
   static reset (): Blocks {
     store.commit('resetLevel')
-    return Levels.next() as Blocks // will not be null
+    return Levels.next()!
   }
 }
 
