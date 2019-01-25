@@ -122,22 +122,26 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
 
   setupBallCollider (ball: Ball, callback: CollisionCb): void {
     const self: BlockGroup = this
+
     this.ballCollider = this.scene.physics.add.collider(
       ball,
       this,
-      function (this: Scene, ball: GameObject, block: GameObject) {
-        self.showHit(block as Block)
+      function (this: Scene, ball: GameObject, _block: GameObject) {
+        const block: Block = _block as Block
+
+        self.showHit(block)
 
         let strength: number = block.getData('strength')
         if (strength === 1) {
-          self.fadeKillBlock(block as Block)
+          self.fadeKillBlock(block)
         } else {
+          block.setTexture('blocks', block.frame.name.replace('Strong', ''))
           block.setData('strength', strength - 1)
         }
         // eslint-disable-next-line standard/no-callback-literal
         callback(
           ball as Ball,
-          block as Block,
+          block,
           self.scoreVal * store.state.scoreMultiplier
         )
       },
