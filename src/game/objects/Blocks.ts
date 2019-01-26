@@ -126,22 +126,12 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
     this.ballCollider = this.scene.physics.add.collider(
       ball,
       this,
-      function (this: Scene, ball: GameObject, _block: GameObject) {
-        const block: Block = _block as Block
-
-        self.showHit(block)
-
-        let strength: number = block.getData('strength')
-        if (strength === 1) {
-          self.fadeKillBlock(block)
-        } else {
-          block.setTexture('blocks', block.frame.name.replace('Strong', ''))
-          block.setData('strength', strength - 1)
-        }
+      function (this: Scene, ball: GameObject, block: GameObject) {
+        self.handleHit(block as Block)
         // eslint-disable-next-line standard/no-callback-literal
         callback(
           ball as Ball,
-          block,
+          block as Block,
           self.scoreVal * store.state.scoreMultiplier
         )
       },
@@ -155,9 +145,17 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
     this.ballCollider.object1 = ball
   }
 
-  private showHit (block: Block): void {
-    this.emitHitParticles(block)
+  private handleHit (block: Block): void {
     this.showPoints(block, this.points * store.state.scoreMultiplier)
+
+    let strength: number = block.getData('strength')
+    if (strength === 1) {
+      this.emitHitParticles(block)
+      this.fadeKillBlock(block)
+    } else {
+      block.setTexture('blocks', block.frame.name.replace('Strong', ''))
+      block.setData('strength', strength - 1)
+    }
   }
 
   private killBlock (toKill: Block): void {
