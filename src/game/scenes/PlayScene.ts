@@ -187,7 +187,7 @@ export default class PlayScene extends Scene {
       ball.explode()
 
       if (Levels.hasNext()) {
-        this.transitionNextLevel(ball)
+        this.transitionNextLevel()
       } else {
         this.gameOver(true)
       }
@@ -197,26 +197,28 @@ export default class PlayScene extends Scene {
     }
   }
 
-  private transitionNextLevel (ball: Ball): void {
+  private transitionNextLevel (
+    reset: Boolean = false, timeoutBase: number = 1000
+  ): void {
     this.deactivatePauseButton()
 
     store.commit('resetScoreMultiplier')
 
     setTimeout(() => {
-      store.commit('nextLevel')
+      store.commit(reset ? 'resetLevel' : 'nextLevel')
       StateAction.change(GameState.NextLevel) // shows next level text
-    }, 1000)
+    }, timeoutBase)
 
     setTimeout(() => {
       StateAction.change(GameState.Running) // hides next level text
-    }, 2000)
+    }, timeoutBase + 1000)
 
     setTimeout(() => {
       this.setupNextBlocks()
       this.putBallOnPaddle()
-      ball.fadeIn()
+      this.prefabs.ball.fadeIn()
       this.activatePauseButton()
-    }, 2000)
+    }, timeoutBase + 1000)
   }
 
   private setupNextBlocks (): Blocks | null {
@@ -263,18 +265,10 @@ export default class PlayScene extends Scene {
   private async restart (): Promise<void> {
     await this.prefabs.blocks.fadeKillAll()
 
-    const toReset: String[] = ['Lives', 'Score', 'ScoreMultiplier']
+    const toReset: String[] = ['Lives', 'Score']
     toReset.forEach((counter: String) => store.commit('reset' + counter))
 
-    store.commit('resetLevel')
-    this.setupNextBlocks()
-
-    this.putBallOnPaddle()
-    this.prefabs.ball.fadeIn()
-
-    this.activatePauseButton()
-
-    StateAction.change(GameState.Running)
+    this.transitionNextLevel(true, 500)
   }
 
   private fadeIn (...objects: { alpha: number }[]): void {
