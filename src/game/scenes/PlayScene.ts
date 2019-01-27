@@ -51,7 +51,7 @@ export default class PlayScene extends Scene {
 
     this.prefabs.paddle.setupBallCollider(ball, this.bounceBallOffPaddle)
 
-    const blocks = Levels.next()!
+    const blocks: Blocks = Levels.next()
     blocks.setupBallCollider(ball, this.blockHit.bind(this))
 
     this.prefabs = { ball, blocks, ...this.prefabs }
@@ -75,6 +75,11 @@ export default class PlayScene extends Scene {
       keys.pause,
       () => StateAction.change(GameState.Paused)
     )
+  }
+
+  private deactivatePauseButton (): void {
+    // @ts-ignore - no need to pass fn argument here
+    this.input.keyboard.removeListener(keys.pause)
   }
 
   private pause (): void {
@@ -181,10 +186,8 @@ export default class PlayScene extends Scene {
       Audio.play('gong')
       ball.explode()
 
-      if (this.setupNextBlocks()) {
-        store.commit('resetScoreMultiplier')
-        this.putBallOnPaddle()
-        ball.fadeIn()
+      if (Levels.hasNext()) {
+        this.transitionNextLevel(ball)
       } else {
         this.gameOver(true)
       }
@@ -194,8 +197,30 @@ export default class PlayScene extends Scene {
     }
   }
 
-  private setupNextBlocks (reset: boolean = false): Blocks | null {
-    const nextBlocks: Blocks | null = Levels[reset ? 'reset' : 'next']()
+  private transitionNextLevel (ball: Ball): void {
+    this.deactivatePauseButton()
+
+    store.commit('resetScoreMultiplier')
+
+    setTimeout(() => {
+      store.commit('nextLevel')
+      StateAction.change(GameState.NextLevel) // shows next level text
+    }, 1000)
+
+    setTimeout(() => {
+      StateAction.change(GameState.Running) // hides next level text
+    }, 2000)
+
+    setTimeout(() => {
+      this.setupNextBlocks()
+      this.putBallOnPaddle()
+      ball.fadeIn()
+      this.activatePauseButton()
+    }, 2000)
+  }
+
+  private setupNextBlocks (): Blocks | null {
+    const nextBlocks: Blocks = Levels.next()
 
     if (nextBlocks instanceof Blocks) {
       nextBlocks.setupBallCollider(this.prefabs.ball, this.blockHit.bind(this))
@@ -222,8 +247,7 @@ export default class PlayScene extends Scene {
   }
 
   private gameOver (won: boolean = false): void {
-    // @ts-ignore - no need to pass fn argument here
-    this.input.keyboard.removeListener(keys.pause)
+    this.deactivatePauseButton()
 
     setTimeout(() => { // wait for ball explosion to quiet down
       if (won) {
@@ -242,7 +266,8 @@ export default class PlayScene extends Scene {
     const toReset: String[] = ['Lives', 'Score', 'ScoreMultiplier']
     toReset.forEach((counter: String) => store.commit('reset' + counter))
 
-    this.setupNextBlocks(true)
+    store.commit('resetLevel')
+    this.setupNextBlocks()
 
     this.putBallOnPaddle()
     this.prefabs.ball.fadeIn()

@@ -13,17 +13,12 @@ class Levels {
     }
   }
 
-  static next (): Blocks | null {
-    if (store.state.level === numLevels) {
-      return null
-    }
-    store.commit('nextLevel')
-    return new Blocks(Levels.scene, Levels.tileMaps[store.state.level])
+  static hasNext (): Boolean {
+    return store.state.level < numLevels
   }
 
-  static reset (): Blocks {
-    store.commit('resetLevel')
-    return Levels.next()!
+  static next (): Blocks {
+    return new Blocks(Levels.scene, Levels.tileMaps[store.state.level])
   }
 }
 

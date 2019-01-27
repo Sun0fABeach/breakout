@@ -16,18 +16,26 @@ export default {
   components: { OverlayUIText, OverlayUIButton },
   computed: {
     ...mapState([
-      'gameState'
+      'gameState',
+      'level'
     ]),
     text () {
       const stateTextMap = {
         [GameState.Paused]: 'Paused',
         [GameState.Lost]: 'Game Over',
-        [GameState.Won]: 'You Win'
+        [GameState.Won]: 'You Win',
+        [GameState.NextLevel]: 'Level ',
       }
+
+      let text = stateTextMap[this.gameState]
+      if (this.gameState === GameState.NextLevel) {
+        text += this.level
+      }
+
       return {
         visible: !!stateTextMap[this.gameState],
-        text: stateTextMap[this.gameState],
-        animated: this.gameState !== GameState.Paused
+        animated: this.gameState !== GameState.Paused,
+        text
       }
     },
     button () {

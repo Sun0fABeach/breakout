@@ -8,6 +8,7 @@ enum GameState {
   PrePlay,
   StartPlay,
   RestartPlay,
+  NextLevel,
   Running,
   Paused,
   Lost,
@@ -19,7 +20,7 @@ const baseVals = {
   score: 0,
   scoreMultiplier: 1,
   lives: 3,
-  level: 0
+  level: 1
 }
 
 export default new Vuex.Store({
