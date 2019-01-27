@@ -116,15 +116,19 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
     private readonly pointsTextGroup: GameObjects.Group
   ) {
     super(scene.physics.world, scene, blocks)
-
-    const blks: Block[] = blocks as Block[]
-    blks.forEach((block: Block) => {
-      block.setData('strength', strength)
-      if (strength > 1) {
-        block.setTint(0xffffff, 0x333333, 0x333333, 0xffffff)
-      }
-    })
+    blocks.forEach((block: GameObject) =>
+      this.prepareBlock(block as Block, strength)
+    )
     this.ballCollider = null
+  }
+
+  private prepareBlock (block: Block, strength: number): void {
+    block.setData('strength', strength)
+    if (strength > 1) {
+      block.setTint(0xffffff, 0x333333, 0x333333, 0xffffff)
+    }
+    const body = block.body as ArcadePhysics.StaticBody
+    body.updateFromGameObject() // might be transformed in tiled, so adjust body
   }
 
   setupBallCollider (ball: Ball, callback: CollisionCb): void {
