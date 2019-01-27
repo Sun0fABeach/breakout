@@ -6,8 +6,7 @@ import Levels from '@/game/Levels'
 import Audio from '@/game/Audio'
 import Particles from '@/game/Particles'
 import { Direction, keys } from '@/game/globals'
-import store, { GameState } from '@/store'
-import StateAction from '@/game/StateAction'
+import Store, { GameState } from '@/game/Store'
 
 export default class PlayScene extends Scene {
   private prefabs: { [index: string]: any }
@@ -32,12 +31,12 @@ export default class PlayScene extends Scene {
     Blocks.init(this)
     Levels.init(this)
 
-    StateAction.change(GameState.PrePlay)
-    StateAction.addHandler(GameState.StartPlay, () => {
+    Store.changeGameState(GameState.PrePlay)
+    Store.onGameStateChange(GameState.StartPlay, () => {
       Audio.play('letsGo')
       this.setupPlay()
     })
-    StateAction.addHandler(GameState.RestartPlay, () => {
+    Store.onGameStateChange(GameState.RestartPlay, () => {
       Audio.play('letsGo')
       this.restart()
     })
@@ -62,18 +61,18 @@ export default class PlayScene extends Scene {
     this.initPauseHandling()
     this.fadeIn(ball, ...blocks.all)
 
-    StateAction.change(GameState.Running)
+    Store.changeGameState(GameState.Running)
   }
 
   private initPauseHandling (): void {
     this.activatePauseButton()
-    StateAction.addHandler(GameState.Paused, this.pause.bind(this))
+    Store.onGameStateChange(GameState.Paused, this.pause.bind(this))
   }
 
   private activatePauseButton (): void {
     this.input.keyboard.on(
       keys.pause,
-      () => StateAction.change(GameState.Paused)
+      () => Store.changeGameState(GameState.Paused)
     )
   }
 
@@ -121,7 +120,7 @@ export default class PlayScene extends Scene {
       Phaser.Math.Angle.Between(paddle.x, paddle.y, ball.x, ball.y)
     )
     ball.spin = Direction[ball.x < paddle.x ? 'Left' : 'Right']
-    store.commit('resetScoreMultiplier')
+    Store.resetScoreMultiplier()
   }
 
   private setBallVelocity (angleRad: number): void {
@@ -179,7 +178,7 @@ export default class PlayScene extends Scene {
   private blockHit (ball: Ball, block: PhysicsSprite, points: number): void {
     const { blocks } = this.prefabs
 
-    store.commit('bumpScore', points)
+    Store.bumpScore(points)
     this.spinBallOnCollision(ball.body.touching)
 
     if (blocks.allHit) {
@@ -193,7 +192,7 @@ export default class PlayScene extends Scene {
       }
     } else {
       Audio.play('ding')
-      store.commit('bumpScoreMultiplier', this.scoreMultBump)
+      Store.bumpScoreMultiplier(this.scoreMultBump)
     }
   }
 
@@ -202,15 +201,15 @@ export default class PlayScene extends Scene {
   ): void {
     this.deactivatePauseButton()
 
-    store.commit('resetScoreMultiplier')
+    Store.resetScoreMultiplier()
 
     setTimeout(() => {
-      store.commit(reset ? 'resetLevel' : 'nextLevel')
-      StateAction.change(GameState.NextLevel) // shows next level text
+      Store[reset ? 'resetLevel' : 'nextLevel']()
+      Store.changeGameState(GameState.NextLevel) // shows next level text
     }, timeoutBase)
 
     setTimeout(() => {
-      StateAction.change(GameState.Running) // hides next level text
+      Store.changeGameState(GameState.Running) // hides next level text
     }, timeoutBase + 1000)
 
     setTimeout(() => {
@@ -237,10 +236,10 @@ export default class PlayScene extends Scene {
 
     Audio.play('explosion')
     ball.explodeBottom()
-    store.commit('resetScoreMultiplier')
-    store.commit('loseLife')
+    Store.resetScoreMultiplier()
+    Store.loseLife()
 
-    if (store.state.lives === 0) {
+    if (Store.lives === 0) {
       this.gameOver()
     } else {
       ball.show()
@@ -253,10 +252,10 @@ export default class PlayScene extends Scene {
 
     setTimeout(() => { // wait for ball explosion to quiet down
       if (won) {
-        StateAction.change(GameState.Won)
+        Store.changeGameState(GameState.Won)
         setTimeout(() => Audio.play('ohYeah'), 750)
       } else {
-        StateAction.change(GameState.Lost)
+        Store.changeGameState(GameState.Lost)
         setTimeout(() => Audio.play('ohNo'), 750)
       }
     }, won ? 1250 : 500)
@@ -264,10 +263,8 @@ export default class PlayScene extends Scene {
 
   private async restart (): Promise<void> {
     await this.prefabs.blocks.fadeKillAll()
-
-    const toReset: String[] = ['Lives', 'Score']
-    toReset.forEach((counter: String) => store.commit('reset' + counter))
-
+    Store.resetLives()
+    Store.resetScore()
     this.transitionNextLevel(true, 500)
   }
 

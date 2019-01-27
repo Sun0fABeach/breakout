@@ -1,6 +1,6 @@
 import Blocks from '@/game/objects/Blocks'
 import { numLevels } from '@/game/globals'
-import store from '@/store'
+import Store from '@/game/Store'
 
 class Levels {
   private static scene: Scene
@@ -14,11 +14,11 @@ class Levels {
   }
 
   static hasNext (): Boolean {
-    return store.state.level < numLevels
+    return Store.level < numLevels
   }
 
   static next (): Blocks {
-    return new Blocks(Levels.scene, Levels.tileMaps[store.state.level])
+    return new Blocks(Levels.scene, Levels.tileMaps[Store.level])
   }
 }
 

@@ -2,7 +2,7 @@ import { Physics, GameObjects } from 'phaser'
 import Particles from '@/game/Particles'
 import Ball from '@/game/objects/Ball'
 import PointsText from '@/game/objects/text/PointsText'
-import store from '@/store'
+import Store from '@/game/Store'
 
 type Block = PhysicsSprite
 type BlockDef = {
@@ -143,7 +143,7 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
         callback(
           ball as Ball,
           block as Block,
-          self.scoreVal * store.state.scoreMultiplier
+          self.scoreVal * Store.scoreMultiplier
         )
       },
       undefined,
@@ -157,7 +157,7 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
   }
 
   private handleHit (block: Block): void {
-    this.showPoints(block, this.points * store.state.scoreMultiplier)
+    this.showPoints(block, this.points * Store.scoreMultiplier)
 
     let strength: number = block.getData('strength')
     if (strength === 1) {

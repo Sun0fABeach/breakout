@@ -1,7 +1,6 @@
 import { Scene } from 'phaser'
 import { keys } from '@/game/globals'
-import { GameState } from '@/store'
-import StateAction from '@/game/StateAction'
+import Store, { GameState } from '@/game/Store'
 
 export default class PauseScene extends Scene {
   constructor () {
@@ -11,9 +10,9 @@ export default class PauseScene extends Scene {
   create (): void {
     this.input.keyboard.on(
       keys.pause,
-      () => StateAction.change(GameState.Running)
+      () => Store.changeGameState(GameState.Running)
     )
-    StateAction.addHandler(GameState.Running, this.resume.bind(this))
+    Store.onGameStateChange(GameState.Running, this.resume.bind(this))
   }
 
   private resume (): void {
