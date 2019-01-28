@@ -166,8 +166,8 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
     } else {
       block.clearTint()
       block.setTexture('blocks', block.frame.name.replace('Strong', ''))
-      block.setData('strength', strength - 1)
     }
+    block.setData('strength', strength - 1)
   }
 
   private killBlock (toKill: Block): void {

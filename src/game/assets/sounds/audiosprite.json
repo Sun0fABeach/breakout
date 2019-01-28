@@ -9,44 +9,49 @@
       "end": 1.5173015873015874,
       "loop": false
     },
-    "explosion": {
+    "dong": {
       "start": 3,
-      "end": 7.921473922902495,
+      "end": 5.316190476190476,
+      "loop": false
+    },
+    "explosion": {
+      "start": 7,
+      "end": 11.921473922902495,
       "loop": false
     },
     "gong": {
-      "start": 9,
-      "end": 19.19952380952381,
+      "start": 13,
+      "end": 23.19952380952381,
       "loop": false
     },
     "letsGo": {
-      "start": 21,
-      "end": 21.991587301587302,
+      "start": 25,
+      "end": 25.991587301587302,
       "loop": false
     },
     "ohNo": {
-      "start": 23,
-      "end": 24.258095238095237,
+      "start": 27,
+      "end": 28.258095238095237,
       "loop": false
     },
     "ohYeah": {
-      "start": 26,
-      "end": 28,
+      "start": 30,
+      "end": 32,
       "loop": false
     },
     "thud": {
-      "start": 29,
-      "end": 29.444784580498865,
+      "start": 33,
+      "end": 33.44478458049887,
       "loop": false
     },
     "wooden": {
-      "start": 31,
-      "end": 32.153673469387755,
+      "start": 35,
+      "end": 36.153673469387755,
       "loop": false
     },
     "swish": {
-      "start": 34,
-      "end": 34.34249433106576,
+      "start": 38,
+      "end": 38.34249433106576,
       "loop": false
     }
   }

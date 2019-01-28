@@ -191,7 +191,7 @@ export default class PlayScene extends Scene {
         this.gameOver(true)
       }
     } else {
-      Audio.play('ding')
+      Audio.play(block.getData('strength') === 0 ? 'ding' : 'dong')
       Store.bumpScoreMultiplier(this.scoreMultBump)
     }
   }
