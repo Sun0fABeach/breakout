@@ -1,6 +1,7 @@
 {
   "resources": [
-    "audiosprite.ogg"
+    "audiosprite.ogg",
+    "audiosprite.mp3"
   ],
   "spritemap": {
     "ding": {
