@@ -12,7 +12,7 @@ class Ball extends Physics.Arcade.Image {
 
   constructor (scene: Scene, x: number, y: number) {
     super(scene, x, y, 'other', 'ball')
-    this.velocityFactor = 400
+    this.velocityFactor = 350
     this.angularVelocity = 200
     this.world = scene.physics.world
 
