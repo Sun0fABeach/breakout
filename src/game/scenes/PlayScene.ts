@@ -179,7 +179,6 @@ export default class PlayScene extends Scene {
     const { blocks } = this.prefabs
 
     Store.bumpScore(points)
-    this.spinBallOnCollision(ball.body.touching)
 
     if (blocks.allHit) {
       Audio.play('gong')
@@ -191,8 +190,9 @@ export default class PlayScene extends Scene {
         this.gameOver(true)
       }
     } else {
-      Audio.play(block.getData('strength') === 0 ? 'ding' : 'dong')
+      this.spinBallOnCollision(ball.body.touching)
       Store.bumpScoreMultiplier(this.scoreMultBump)
+      Audio.play(block.getData('strength') === 0 ? 'ding' : 'dong')
     }
   }
 
