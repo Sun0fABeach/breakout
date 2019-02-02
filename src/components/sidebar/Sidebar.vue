@@ -2,24 +2,41 @@
   <div id="game-controls">
     <h1>Breakout!</h1>
 
-    <SidebarField label="Lives">{{ lives }}</SidebarField>
-    <SidebarField label="Level">{{ level }}</SidebarField>
-    <SidebarField label="Multiplier">{{ scoreMultiplier }}</SidebarField>
-    <SidebarField label="Score">{{ score }}</SidebarField>
+    <div>
+      <SidebarField label="Lives">{{ lives }}</SidebarField>
+      <SidebarField label="Level">{{ level }}</SidebarField>
+      <SidebarField label="Multiplier">{{ scoreMultiplier }}</SidebarField>
+      <SidebarField label="Score">{{ score }}</SidebarField>
+      <SidebarKeys />
 
-    <SidebarKeys />
+      <HighscoreOverlay v-show="showHSOverlay" />
+    </div>
   </div>
 </template>
 
 <script>
 import SidebarField from './Field'
 import SidebarKeys from './Keys'
+import HighscoreOverlay from './HighscoreOverlay'
+import { GameState } from '@/store'
 import { mapState } from 'vuex'
 
 export default {
   name: 'sidebar',
-  components: { SidebarField, SidebarKeys },
-  computed: mapState(['lives', 'level', 'score', 'scoreMultiplier'])
+  components: {
+    SidebarField,
+    SidebarKeys,
+    HighscoreOverlay
+  },
+  computed: {
+    ...mapState([
+      'lives', 'level', 'score', 'scoreMultiplier', 'gameState'
+    ]),
+    showHSOverlay () {
+      return this.gameState === GameState.Lost ||
+              this.gameState === GameState.Won
+    }
+  }
 }
 </script>
 
@@ -32,13 +49,21 @@ export default {
   background-color: aliceblue;
   font-family: 'Courier New', Courier, monospace;
   z-index: 1; // above game surface
+  overflow-x: hidden; // for highscore overlay slide-in
 
-  > :not(:first-child) {
-    margin-top: 1rem;
-  }
+  > div { // content container
+    position: relative; // for abs. positioned highscore overlay
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 
-  > :last-child {
-    margin-top: auto;
+    > :not(:last-child) {
+      margin-top: 1rem;
+    }
+
+    > :nth-last-child(2) { // the key legend
+      margin-top: auto;
+    }
   }
 }
 
