@@ -86,6 +86,24 @@ export default class PlayScene extends Scene {
     this.scene.run('PauseScene')
   }
 
+  private deactivateCursorButtons (): void {
+    Object.values(this.prefabs.cursor as Phaser.Input.Keyboard.Key[])
+      .forEach((button: Phaser.Input.Keyboard.Key) => {
+        // @ts-ignore reset is not a static function
+        button.reset()
+        button.preventDefault = false
+        button.enabled = false
+      })
+  }
+
+  private activateCursorButtons (): void {
+    Object.values(this.prefabs.cursor as Phaser.Input.Keyboard.Key[])
+      .forEach((button: Phaser.Input.Keyboard.Key) => {
+        button.preventDefault = true
+        button.enabled = true
+      })
+  }
+
   private putBallOnPaddle (): void {
     const { ball, paddle } = this.prefabs
 
@@ -198,7 +216,7 @@ export default class PlayScene extends Scene {
 
   private transitionNextLevel (
     reset: Boolean = false, timeoutBase: number = 1000
-  ): void {
+  ): Promise<void> {
     this.deactivatePauseButton()
 
     Store.resetScoreMultiplier()
@@ -212,12 +230,15 @@ export default class PlayScene extends Scene {
       Store.changeGameState(GameState.Running) // hides next level text
     }, timeoutBase + 1000)
 
-    setTimeout(() => {
-      this.setupNextBlocks()
-      this.putBallOnPaddle()
-      this.prefabs.ball.fadeIn()
-      this.activatePauseButton()
-    }, timeoutBase + 1000)
+    return new Promise(resolve => {
+      setTimeout(() => {
+        this.setupNextBlocks()
+        this.putBallOnPaddle()
+        this.prefabs.ball.fadeIn()
+        this.activatePauseButton()
+        resolve()
+      }, timeoutBase + 1000)
+    })
   }
 
   private setupNextBlocks (): Blocks | null {
@@ -251,6 +272,7 @@ export default class PlayScene extends Scene {
     this.deactivatePauseButton()
 
     setTimeout(() => { // wait for ball explosion to quiet down
+      this.deactivateCursorButtons()
       if (won) {
         Store.changeGameState(GameState.Won)
         setTimeout(() => Audio.play('ohYeah'), 750)
@@ -265,7 +287,8 @@ export default class PlayScene extends Scene {
     await this.prefabs.blocks.fadeKillAll()
     Store.resetLives()
     Store.resetScore()
-    this.transitionNextLevel(true, 500)
+    await this.transitionNextLevel(true, 500)
+    this.activateCursorButtons()
   }
 
   private fadeIn (...objects: { alpha: number }[]): void {
