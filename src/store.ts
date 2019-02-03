@@ -3,6 +3,11 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+interface ScoreData {
+  name: string,
+  score: number
+}
+
 enum GameState {
   None,
   PrePlay,
@@ -25,6 +30,7 @@ const baseVals = {
 
 export default new Vuex.Store({
   state: {
+    highScores: [] as ScoreData[],
     gameState: GameState.None,
     paused: false,
     ...baseVals
@@ -33,16 +39,17 @@ export default new Vuex.Store({
     changeGameState (state, newGameState: GameState) {
       state.gameState = newGameState
     },
+
     pause (state, active: boolean) {
       state.paused = active
     },
-    bumpScore (state, val) {
+    bumpScore (state, val: number) {
       state.score += val
     },
     resetScore (state) {
       state.score = baseVals.score
     },
-    bumpScoreMultiplier (state, val) {
+    bumpScoreMultiplier (state, val: number) {
       state.scoreMultiplier += val
     },
     resetScoreMultiplier (state) {
@@ -59,6 +66,10 @@ export default new Vuex.Store({
     },
     resetLevel (state) {
       state.level = baseVals.level
+    },
+
+    addHighscore (state, scoreData: ScoreData) {
+      state.highScores.push(scoreData)
     }
   }
 })

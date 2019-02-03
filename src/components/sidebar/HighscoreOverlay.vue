@@ -9,7 +9,14 @@
       <form @submit.prevent.stop>
         <label>
           Your name
-          <input type="text" name="user_name" ref="input" maxlength="16" />
+          <input
+            type="text"
+            name="user_name"
+            maxlength="16"
+            v-model="name"
+            @keyup.enter="submit"
+            ref="input"
+          />
         </label>
         <SidebarButton class="submit-button" @click="submit">
           Submit Score
@@ -21,6 +28,7 @@
 
 <script>
 import SidebarButton from './Button'
+import { mapMutations } from 'vuex'
 
 export default {
   name: 'sidebarHighscoreOverlay',
@@ -37,15 +45,15 @@ export default {
   },
   data () {
     return {
-      displayedScore: this.score
+      displayedScore: 0, // set in watcher
+      name: ''
     }
   },
   watch: {
     open (isOpen) {
       if (isOpen) {
-        /* copy to component-local variable so it doesn't display 0 while
-         * sidebar closes. this might happen if the store resets the score to
-         * 0 faster than we close the sidebar.
+        /* the store might reset the score to 0 faster than we close the
+         * sidebar, so copy the score to component-local variable for displaying
          */
         this.displayedScore = this.score
       }
@@ -58,8 +66,16 @@ export default {
       }
     },
     submit () {
-      console.log('submit')
-    }
+      if (this.name) {
+        this.addHighscore({
+          name: this.name,
+          score: this.score
+        })
+      }
+    },
+    ...mapMutations([
+      'addHighscore'
+    ])
   }
 }
 </script>
