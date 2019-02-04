@@ -19,21 +19,29 @@
 
 <script>
 import SidebarButton from './Button'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'sidebar-hs-form',
-  components: { SidebarButton },
+  components: {
+    SidebarButton
+  },
   data () {
     return {
       name: ''
     }
   },
+  computed: mapState([
+    'score'
+  ]),
   methods: {
     submit () {
-      if (this.name) {
-        this.$emit('submit', this.name)
-      }
-    }
+      this.addHighscore({ name: this.name, score: this.score })
+      this.$emit('submitted')
+    },
+    ...mapMutations([
+      'addHighscore'
+    ])
   }
 }
 </script>

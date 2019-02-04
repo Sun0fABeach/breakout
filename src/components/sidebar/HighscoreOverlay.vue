@@ -5,31 +5,39 @@
         <span>Final Score</span>
         <span>{{ displayedScore }}</span>
       </div>
-      <HighscoreForm @submit="submit" ref="form" />
+      <HighscoreContent :overlayOpen="open" />
     </div>
   </transition>
 </template>
 
 <script>
-import HighscoreForm from './HighscoreForm'
-import { mapMutations } from 'vuex'
+import HighscoreContent from './HighscoreContent'
+import { mapState } from 'vuex'
 
 export default {
   name: 'sidebarHighscoreOverlay',
-  components: { HighscoreForm },
+  components: {
+    HighscoreContent
+  },
   props: {
     open: {
       type: Boolean,
       default: false
-    },
-    score: {
-      type: Number,
-      required: true
     }
   },
   data () {
     return {
       displayedScore: 0 // set in watcher
+    }
+  },
+  computed: mapState([
+    'score'
+  ]),
+  methods: {
+    focusInput () {
+      if (this.open) {
+        this.$el.querySelector('input').focus()
+      }
     }
   },
   watch: {
@@ -41,19 +49,6 @@ export default {
         this.displayedScore = this.score
       }
     }
-  },
-  methods: {
-    focusInput () {
-      if (this.open) {
-        this.$refs.form.$refs.input.focus()
-      }
-    },
-    submit (name) {
-      this.addHighscore({ name, score: this.score })
-    },
-    ...mapMutations([
-      'addHighscore'
-    ])
   }
 }
 </script>
@@ -76,7 +71,7 @@ export default {
     left: 100%;
   }
 
-  > div { // score display
+  > div:first-child { // score display
     display: flex;
     flex-direction: column;
     margin-top: 0.5rem;
@@ -89,10 +84,6 @@ export default {
       font-size: 1.5rem;
       margin-top: 0.25rem;
     }
-  }
-
-  > #sidebar-hs-form {
-      margin-top: 1.25rem;
   }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div id="sidebar-content">
     <SidebarGameInfo v-bind="{ lives, level, scoreMultiplier, score }" />
-    <SidebarHighscoreOverlay :open="showHSOverlay" :score="score" />
+    <SidebarHighscoreOverlay :open="showHSOverlay" />
   </div>
 </template>
 
