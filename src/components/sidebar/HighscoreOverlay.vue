@@ -55,6 +55,8 @@ export default {
 
 <style lang="scss" scoped>
 #sidebar-hs-overlay {
+  display: flex;
+  flex-direction: column;
   position: absolute;
   top: 0;
   bottom: 0;

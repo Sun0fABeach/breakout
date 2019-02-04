@@ -35,13 +35,13 @@ export default {
     'score'
   ]),
   methods: {
+    ...mapMutations([
+      'addHighscore'
+    ]),
     submit () {
       this.addHighscore({ name: this.name, score: this.score })
       this.$emit('submitted')
-    },
-    ...mapMutations([
-      'addHighscore'
-    ])
+    }
   }
 }
 </script>
