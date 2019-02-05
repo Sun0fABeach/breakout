@@ -8,9 +8,8 @@
 </template>
 
 <script>
-import HighscoreForm from './HighscoreForm'
-import HighscoreList from './HighscoreList'
-
+import HighscoreForm from './Form'
+import HighscoreList from './List'
 
 export default {
   name: 'sidebarHighscoreContent',

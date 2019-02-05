@@ -6,16 +6,16 @@
 </template>
 
 <script>
+import SidebarHighscoreOverlay from './highscoreOverlay/HighscoreOverlay'
 import SidebarGameInfo from './GameInfo'
-import SidebarHighscoreOverlay from './HighscoreOverlay'
 import { GameState } from '@/store'
 import { mapState } from 'vuex'
 
 export default {
   name: 'sidebarContent',
   components: {
-    SidebarGameInfo,
-    SidebarHighscoreOverlay
+    SidebarHighscoreOverlay,
+    SidebarGameInfo
   },
   computed: {
     ...mapState([

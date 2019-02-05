@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'sidebar-hs-list'
+  name: 'sidebarHighscoreList'
 }
 </script>
 

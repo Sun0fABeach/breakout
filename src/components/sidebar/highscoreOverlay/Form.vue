@@ -18,11 +18,11 @@
 </template>
 
 <script>
-import SidebarButton from './Button'
+import SidebarButton from '../Button'
 import { mapState, mapMutations } from 'vuex'
 
 export default {
-  name: 'sidebar-hs-form',
+  name: 'sidebarHighscoreForm',
   components: {
     SidebarButton
   },

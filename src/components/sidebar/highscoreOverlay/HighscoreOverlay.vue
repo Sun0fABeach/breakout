@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import HighscoreContent from './HighscoreContent'
+import HighscoreContent from './Content'
 import { mapState } from 'vuex'
 
 export default {
