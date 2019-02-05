@@ -11,6 +11,7 @@
 <script>
 import SidebarField from './Field'
 import SidebarKeys from './Keys'
+import { mapState } from 'vuex'
 
 export default {
   name: 'sidebarGameInfo',
@@ -18,23 +19,10 @@ export default {
     SidebarField,
     SidebarKeys
   },
-  props: {
-    lives: {
-      type: Number,
-      required: true
-    },
-    level: {
-      type: Number,
-      required: true
-    },
-    scoreMultiplier: {
-      type: Number,
-      required: true
-    },
-    score: {
-      type: Number,
-      required: true
-    }
+  computed: {
+    ...mapState([
+      'lives', 'level', 'scoreMultiplier', 'score'
+    ]),
   }
 }
 </script>

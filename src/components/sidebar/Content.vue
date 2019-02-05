@@ -1,6 +1,6 @@
 <template>
   <div id="sidebar-content">
-    <SidebarGameInfo v-bind="{ lives, level, scoreMultiplier, score }" />
+    <SidebarGameInfo />
     <SidebarHighscoreOverlay :open="showHSOverlay" />
   </div>
 </template>
@@ -19,7 +19,7 @@ export default {
   },
   computed: {
     ...mapState([
-      'gameState', 'lives', 'level', 'scoreMultiplier', 'score'
+      'gameState'
     ]),
     showHSOverlay () {
       return this.gameState === GameState.Lost ||
