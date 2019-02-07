@@ -5,7 +5,7 @@
       <input
         type="text"
         name="user_name"
-        maxlength="16"
+        maxlength="12"
         v-model.trim="name"
         @keyup.enter="submit"
         ref="input"

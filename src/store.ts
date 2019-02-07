@@ -30,7 +30,7 @@ const baseVals = {
 
 export default new Vuex.Store({
   state: {
-    highScores: [] as ScoreData[],
+    highscores: [] as ScoreData[],
     gameState: GameState.None,
     paused: false,
     ...baseVals
@@ -69,7 +69,7 @@ export default new Vuex.Store({
     },
 
     addHighscore (state, scoreData: ScoreData) {
-      state.highScores.push(scoreData)
+      state.highscores.push(scoreData)
     }
   }
 })
