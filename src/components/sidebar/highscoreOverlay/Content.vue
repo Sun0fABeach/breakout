@@ -50,7 +50,7 @@ export default {
 #sidebar-hs-content {
   flex-grow: 1;
   display: flex; // stretches content to full height
-  margin-top: 1.25rem;
+  margin-top: 1.125rem;
 
   .fade-enter-active, .fade-leave-active {
     transition: opacity 0.5s;
