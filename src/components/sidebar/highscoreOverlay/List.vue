@@ -14,7 +14,6 @@
 
     <paginate-links
       for="highscoreList"
-      :show-step-links="true"
       :hide-single-page="true"
       :limit="2"
     />
@@ -48,21 +47,19 @@ export default {
 
   > h2 {
     margin: 0 0 0.375rem;
-    color: grey;
   }
 
   > table {
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0.5rem 0.375rem; // add space between rows
   }
 
   .paginate-links {
     display: flex;
     justify-content: space-between;
+    border-top: 1px solid grey;
     margin-top: auto;
     margin-bottom: 0;
-    padding: 0 0.375rem;
+    padding: 0.5rem 0 0;
     list-style-type: none;
     font-size: 1.25rem;
   }
@@ -70,9 +67,32 @@ export default {
 </style>
 
 <style lang="scss">
-/* pagination link items are created dynamically, so we can't use scoped here */
-.paginate-links > * {
-  padding: 0.25rem;
-  cursor: pointer;
+/* pagination items/links are created dynamically, so can't use scoped here */
+#sidebar-hs-list {
+  > table th {
+    padding-top: 0.5rem;
+    padding-right: 0.375rem;
+    color: dimgrey;
+  }
+
+  .paginate-links {
+    li {
+      border: 1px solid transparent;
+      border-radius: 0.25rem;
+      cursor: pointer;
+
+      &:hover {
+        border-color: grey;
+      }
+      &:first-child, &:last-child {
+        font-weight: bold;
+      }
+    }
+
+    a {
+      display: inline-block;
+      padding: 0.125rem 0.25rem;
+    }
+  }
 }
 </style>
