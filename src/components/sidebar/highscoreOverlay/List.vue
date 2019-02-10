@@ -8,7 +8,6 @@
           v-for="(entry, idx) in paginated('highscoreList')"
           :key="idx"
           v-bind="entry"
-          :rank="idx + 1"
         />
       </paginate>
     </table>

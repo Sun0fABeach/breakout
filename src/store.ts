@@ -5,7 +5,8 @@ Vue.use(Vuex)
 
 interface ScoreData {
   name: string,
-  score: number
+  score: number,
+  rank: number
 }
 
 enum GameState {
@@ -69,7 +70,17 @@ export default new Vuex.Store({
     },
 
     addHighscore (state, scoreData: ScoreData) {
-      state.highscores.push(scoreData)
+      let idx: number = state.highscores.findIndex((entry: ScoreData) =>
+        entry.score <= scoreData.score
+      )
+      if (idx === -1) {
+        idx = state.highscores.length
+      }
+      scoreData.rank = idx + 1
+      state.highscores.splice(idx, 0, scoreData)
+      state.highscores.slice(idx + 1).forEach((entry: ScoreData) =>
+        entry.rank++
+      )
     }
   }
 })
