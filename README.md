@@ -1,4 +1,4 @@
-# Breakout (work in progress)
+# Breakout
 
 #### Classic breakout done in Vue + Phaser 3.
 
