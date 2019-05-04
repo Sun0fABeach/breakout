@@ -11,22 +11,22 @@
   },
   "dependencies": {
     "phaser": "^3.16.2",
-    "vue": "^2.6.6",
+    "vue": "^2.6.10",
     "vue-paginate": "^3.6.0",
     "vuex": "^3.1.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.4.0",
-    "@vue/cli-plugin-eslint": "^3.4.0",
-    "@vue/cli-plugin-typescript": "^3.4.0",
-    "@vue/cli-service": "^3.4.0",
+    "@vue/cli-plugin-babel": "^3.7.0",
+    "@vue/cli-plugin-eslint": "^3.7.0",
+    "@vue/cli-plugin-typescript": "^3.7.0",
+    "@vue/cli-service": "^3.7.0",
     "@vue/eslint-config-standard": "^4.0.0",
     "@vue/eslint-config-typescript": "^3.2.0",
-    "node-sass": "^4.11.0",
+    "node-sass": "^4.12.0",
     "sass-loader": "^7.0.1",
-    "serve": "^10.1.2",
-    "typescript": "^3.3.3",
-    "vue-template-compiler": "^2.6.6"
+    "serve": "^11.0.0",
+    "typescript": "^3.4.5",
+    "vue-template-compiler": "^2.6.10"
   },
   "keywords": [
     "vue",
