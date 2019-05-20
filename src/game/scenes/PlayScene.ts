@@ -22,14 +22,14 @@ export default class PlayScene extends Scene {
   }
 
   create (): void {
+    Audio.init(this)
+    Particles.init(this) // needs to come before Blocks.init
+    Blocks.init(this)
+    Levels.init(this)
+
     this.add.image(400, 300, 'other', 'sky')
     this.prefabs.paddle = new Paddle(this, 400, 550)
     this.prefabs.cursor = this.input.keyboard.createCursorKeys()
-
-    Audio.init(this)
-    Particles.init(this)
-    Blocks.init(this)
-    Levels.init(this)
 
     Store.changeGameState(GameState.PrePlay)
     Store.onGameStateChange(GameState.StartPlay, () => {
