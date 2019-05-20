@@ -27,8 +27,19 @@ export default class PlayScene extends Scene {
     Blocks.init(this)
     Levels.init(this)
 
-    this.add.image(400, 300, 'other', 'sky')
-    this.prefabs.paddle = new Paddle(this, 400, 550)
+    const worldDimensions = this.physics.world.bounds
+
+    this.add.image(
+      worldDimensions.width / 2,
+      worldDimensions.height / 2,
+      'other',
+      'sky'
+    )
+    this.prefabs.paddle = new Paddle(
+      this,
+      worldDimensions.width / 2,
+      worldDimensions.height - 50
+    )
     this.prefabs.cursor = this.input.keyboard.createCursorKeys()
 
     Store.changeGameState(GameState.PrePlay)
@@ -46,7 +57,7 @@ export default class PlayScene extends Scene {
   }
 
   private setupPlay (): void {
-    const ball = new Ball(this, 400, 300)
+    const ball = new Ball(this, 0, 0)
 
     this.prefabs.paddle.setupBallCollider(ball, this.bounceBallOffPaddle)
 
