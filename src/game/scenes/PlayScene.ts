@@ -235,6 +235,9 @@ export default class PlayScene extends Scene {
         this.setupNextBlocks()
         this.putBallOnPaddle()
         this.prefabs.ball.fadeIn()
+        if (reset) {
+          this.prefabs.paddle.fadeIn()
+        }
         this.activatePauseButton()
         resolve()
       }, timeoutBase + 1000)
@@ -253,7 +256,7 @@ export default class PlayScene extends Scene {
   }
 
   private loseLife (): void {
-    const { ball } = this.prefabs
+    const { ball, paddle } = this.prefabs
 
     Audio.play('explosion')
     ball.explodeBottom()
@@ -261,6 +264,8 @@ export default class PlayScene extends Scene {
     Store.loseLife()
 
     if (Store.lives === 0) {
+      paddle.explode()
+      paddle.resetPosition()
       this.gameOver()
     } else {
       ball.show()
@@ -270,10 +275,13 @@ export default class PlayScene extends Scene {
 
   private gameOver (won: boolean = false): void {
     this.deactivatePauseButton()
+    if (!won) { // paddle explodes, so deactivate right away
+      this.deactivateCursorButtons()
+    }
 
     setTimeout(() => { // wait for ball explosion to quiet down
-      this.deactivateCursorButtons()
       if (won) {
+        this.deactivateCursorButtons()
         Store.changeGameState(GameState.Won)
         setTimeout(() => Audio.play('ohYeah'), 750)
       } else {
