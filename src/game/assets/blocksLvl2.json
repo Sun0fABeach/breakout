@@ -7,7 +7,7 @@
          "name":"Blocks",
          "objects":[
                 {
-                 "gid":7,
+                 "gid":22,
                  "height":32,
                  "id":24,
                  "name":"blockPurple",
@@ -19,7 +19,7 @@
                  "y":90
                 }, 
                 {
-                 "gid":7,
+                 "gid":22,
                  "height":32,
                  "id":25,
                  "name":"blockPurple",
@@ -31,7 +31,7 @@
                  "y":90
                 }, 
                 {
-                 "gid":7,
+                 "gid":22,
                  "height":32,
                  "id":27,
                  "name":"blockPurple",
@@ -43,7 +43,7 @@
                  "y":90
                 }, 
                 {
-                 "gid":7,
+                 "gid":22,
                  "height":32,
                  "id":28,
                  "name":"blockPurple",
@@ -55,7 +55,7 @@
                  "y":90
                 }, 
                 {
-                 "gid":9,
+                 "gid":25,
                  "height":32,
                  "id":29,
                  "name":"blockRed",
@@ -67,7 +67,7 @@
                  "y":160
                 }, 
                 {
-                 "gid":9,
+                 "gid":25,
                  "height":32,
                  "id":30,
                  "name":"blockRed",
@@ -79,7 +79,7 @@
                  "y":160
                 }, 
                 {
-                 "gid":9,
+                 "gid":25,
                  "height":32,
                  "id":32,
                  "name":"blockRed",
@@ -91,7 +91,7 @@
                  "y":160
                 }, 
                 {
-                 "gid":9,
+                 "gid":25,
                  "height":32,
                  "id":33,
                  "name":"blockRed",
@@ -103,7 +103,7 @@
                  "y":160
                 }, 
                 {
-                 "gid":11,
+                 "gid":28,
                  "height":32,
                  "id":34,
                  "name":"blockYellow",
@@ -115,7 +115,7 @@
                  "y":230
                 }, 
                 {
-                 "gid":11,
+                 "gid":28,
                  "height":32,
                  "id":35,
                  "name":"blockYellow",
@@ -127,7 +127,7 @@
                  "y":230
                 }, 
                 {
-                 "gid":11,
+                 "gid":28,
                  "height":32,
                  "id":36,
                  "name":"blockYellow",
@@ -139,7 +139,7 @@
                  "y":230
                 }, 
                 {
-                 "gid":11,
+                 "gid":28,
                  "height":32,
                  "id":37,
                  "name":"blockYellow",
@@ -151,7 +151,7 @@
                  "y":230
                 }, 
                 {
-                 "gid":11,
+                 "gid":28,
                  "height":32,
                  "id":38,
                  "name":"blockYellow",
@@ -163,7 +163,7 @@
                  "y":230
                 }, 
                 {
-                 "gid":8,
+                 "gid":24,
                  "height":32,
                  "id":56,
                  "name":"blockPurpleStrong",
@@ -175,7 +175,7 @@
                  "y":90
                 }, 
                 {
-                 "gid":8,
+                 "gid":24,
                  "height":32,
                  "id":57,
                  "name":"blockPurpleStrong",
@@ -187,7 +187,7 @@
                  "y":90
                 }, 
                 {
-                 "gid":10,
+                 "gid":27,
                  "height":32,
                  "id":58,
                  "name":"blockRedStrong",
@@ -199,7 +199,7 @@
                  "y":160
                 }, 
                 {
-                 "gid":10,
+                 "gid":27,
                  "height":32,
                  "id":59,
                  "name":"blockRedStrong",
@@ -211,7 +211,7 @@
                  "y":160
                 }, 
                 {
-                 "gid":11,
+                 "gid":28,
                  "height":32,
                  "id":60,
                  "name":"blockYellow",
@@ -232,7 +232,7 @@
  "nextobjectid":61,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.2.1",
+ "tiledversion":"2019.05.08",
  "tileheight":600,
  "tilesets":[
         {
@@ -368,6 +368,10 @@
                  "type":"blockStrong"
                 }],
          "tilewidth":64
+        }, 
+        {
+         "firstgid":13,
+         "source":"images\/source\/editor_files\/blocks_tileset.json"
         }],
  "tilewidth":800,
  "type":"map",
