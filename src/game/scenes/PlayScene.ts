@@ -32,7 +32,7 @@ export default class PlayScene extends Scene {
     this.add.image(
       worldDimensions.width / 2,
       worldDimensions.height / 2,
-      'other',
+      'spritesheet',
       'sky'
     )
     this.prefabs.paddle = new Paddle(

@@ -4,7 +4,7 @@
         <key>fileFormatVersion</key>
         <int>4</int>
         <key>texturePackerVersion</key>
-        <string>4.11.1</string>
+        <string>5.0.0</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -132,7 +132,7 @@
             <key>json</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>../spritesheetOther.json</filename>
+                <filename>../../spritesheet.json</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -181,7 +181,7 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">ball.png</key>
+            <key type="filename">../ball.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -194,7 +194,31 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">paddle.png</key>
+            <key type="filename">../blockBlue.png</key>
+            <key type="filename">../blockBlueStrong.png</key>
+            <key type="filename">../blockGreen.png</key>
+            <key type="filename">../blockGreenStrong.png</key>
+            <key type="filename">../blockGrey.png</key>
+            <key type="filename">../blockGreyStrong.png</key>
+            <key type="filename">../blockPurple.png</key>
+            <key type="filename">../blockPurpleStrong.png</key>
+            <key type="filename">../blockRed.png</key>
+            <key type="filename">../blockRedStrong.png</key>
+            <key type="filename">../blockYellow.png</key>
+            <key type="filename">../blockYellowStrong.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,8,32,16</rect>
+                <key>scale9Paddings</key>
+                <rect>16,8,32,16</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../paddle.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -207,7 +231,7 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">particles/puff.png</key>
+            <key type="filename">../particles/puff.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -220,8 +244,8 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">particles/starBig.png</key>
-            <key type="filename">particles/starSmall.png</key>
+            <key type="filename">../particles/starBig.png</key>
+            <key type="filename">../particles/starSmall.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -234,7 +258,7 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">particles/starMedium.png</key>
+            <key type="filename">../particles/starMedium.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -247,7 +271,7 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">sky.png</key>
+            <key type="filename">../sky.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -263,13 +287,25 @@
         </map>
         <key>fileList</key>
         <array>
-            <filename>sky.png</filename>
-            <filename>paddle.png</filename>
-            <filename>ball.png</filename>
-            <filename>particles/starSmall.png</filename>
-            <filename>particles/starBig.png</filename>
-            <filename>particles/starMedium.png</filename>
-            <filename>particles/puff.png</filename>
+            <filename>../ball.png</filename>
+            <filename>../blockBlue.png</filename>
+            <filename>../blockBlueStrong.png</filename>
+            <filename>../blockGreen.png</filename>
+            <filename>../blockGreenStrong.png</filename>
+            <filename>../blockGrey.png</filename>
+            <filename>../blockGreyStrong.png</filename>
+            <filename>../blockPurple.png</filename>
+            <filename>../blockPurpleStrong.png</filename>
+            <filename>../blockRed.png</filename>
+            <filename>../blockRedStrong.png</filename>
+            <filename>../blockYellow.png</filename>
+            <filename>../blockYellowStrong.png</filename>
+            <filename>../paddle.png</filename>
+            <filename>../sky.png</filename>
+            <filename>../particles/starSmall.png</filename>
+            <filename>../particles/starMedium.png</filename>
+            <filename>../particles/starBig.png</filename>
+            <filename>../particles/puff.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

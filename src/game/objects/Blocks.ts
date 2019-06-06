@@ -43,7 +43,7 @@ class Blocks {
     this.blockGroups = Blocks.types.map((blockDef: BlockDef) => {
       const spriteName: string = 'block' + blockDef.type
       const blocks: GameObject[] = tilemap.createFromObjects(
-        'Blocks', spriteName, { key: 'blocks', frame: spriteName }
+        'Blocks', spriteName, { key: 'spritesheet', frame: spriteName }
       )
       blocks.forEach((block: GameObject) => {
         scene.physics.world.enableBody(block, Physics.Arcade.STATIC_BODY)
@@ -165,7 +165,7 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
       this.fadeKillBlock(block)
     } else {
       block.clearTint()
-      block.setTexture('blocks', block.frame.name.replace('Strong', ''))
+      block.setTexture('spritesheet', block.frame.name.replace('Strong', ''))
     }
     block.setData('strength', strength - 1)
   }

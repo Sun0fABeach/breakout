@@ -3,10 +3,8 @@ import { numLevels } from '@/game/globals'
 
 /* import assets via require, so Typescript doesn't complain. */
 
-const spriteAtlasBlocks = require('@/game/assets/images/spritesheetBlocks.json')
-const spriteSheetBlocks = require('@/game/assets/images/spritesheetBlocks.png')
-const spriteAtlasOther = require('@/game/assets/images/spritesheetOther.json')
-const spriteSheetOther = require('@/game/assets/images/spritesheetOther.png')
+const spriteAtlas = require('@/game/assets/images/spritesheet.json')
+const spriteSheet = require('@/game/assets/images/spritesheet.png')
 const audioSpriteAtlas = require('@/game/assets/sounds/audiosprite.json')
 const audioSpriteSheetOGG = require('@/game/assets/sounds/audiosprite.ogg')
 const audioSpriteSheetMP3 = require('@/game/assets/sounds/audiosprite.mp3')
@@ -28,14 +26,9 @@ export default class BootScene extends Scene {
       this.load.tilemapTiledJSON(`blocksLvl${i}`, blocks[i])
     }
     this.load.atlas(
-      'blocks',
-      spriteSheetBlocks,
-      spriteAtlasBlocks
-    )
-    this.load.atlas(
-      'other',
-      spriteSheetOther,
-      spriteAtlasOther
+      'spritesheet',
+      spriteSheet,
+      spriteAtlas
     )
     this.load.audioSprite(
       'audiosprites',

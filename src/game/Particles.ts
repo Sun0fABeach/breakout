@@ -12,12 +12,14 @@ class Particles {
     const stars: ManagerDict = ['Small', 'Medium', 'Big'].reduce(
       (res: ManagerDict, type: string) => {
         const key = type.toLowerCase()
-        res[key] = scene.add.particles('other', `star${type}`)
+        res[key] = scene.add.particles('spritesheet', `star${type}`)
         res[key].depth = Infinity
         return res
       }, {}
     )
-    const puff: ParticleEmitterManager = scene.add.particles('other', 'puff')
+    const puff: ParticleEmitterManager = scene.add.particles(
+      'spritesheet', 'puff'
+    )
     puff.depth = Infinity
 
     Particles.managers = { stars, puff }
