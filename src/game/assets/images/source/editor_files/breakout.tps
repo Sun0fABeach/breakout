@@ -218,6 +218,24 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">../blockBlueSpeed.png</key>
+            <key type="filename">../blockGreenSpeed.png</key>
+            <key type="filename">../blockGreySpeed.png</key>
+            <key type="filename">../blockPurpleSpeed.png</key>
+            <key type="filename">../blockRedSpeed.png</key>
+            <key type="filename">../blockYellowSpeed.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>12,12,24,24</rect>
+                <key>scale9Paddings</key>
+                <rect>12,12,24,24</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">../paddle.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -306,6 +324,12 @@
             <filename>../particles/starMedium.png</filename>
             <filename>../particles/starBig.png</filename>
             <filename>../particles/puff.png</filename>
+            <filename>../blockBlueSpeed.png</filename>
+            <filename>../blockGreenSpeed.png</filename>
+            <filename>../blockGreySpeed.png</filename>
+            <filename>../blockPurpleSpeed.png</filename>
+            <filename>../blockRedSpeed.png</filename>
+            <filename>../blockYellowSpeed.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
