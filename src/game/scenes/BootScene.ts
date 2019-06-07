@@ -23,6 +23,8 @@ export default class BootScene extends Scene {
 
   preload (): void {
     for (let i = 1; i <= numLevels; ++i) {
+      /* this will trigger a warning "can't load external tilesets", which can
+       * be ignored. we get the tiles from a separate spritesheet. */
       this.load.tilemapTiledJSON(`blocksLvl${i}`, blocks[i])
     }
     this.load.atlas(
