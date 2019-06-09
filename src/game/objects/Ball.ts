@@ -5,16 +5,17 @@ import { Direction } from '@/game/globals'
 type EmitterDict = { [index: string]: ParticleEmitter[] }
 
 class Ball extends Physics.Arcade.Image {
-  private readonly velocityFactor: number
-  private readonly angularVelocity: number
+  private speed: number // in pixels per second
+  private readonly speedBase: number = 350
+  private readonly speedIncrease: number = 100
+  private readonly angularVelocity: number = 200
   private readonly world: ArcadePhysics.World
   private readonly emitters: EmitterDict
 
   constructor (scene: Scene, x: number, y: number) {
     super(scene, x, y, 'spritesheet', 'ball')
-    this.velocityFactor = 350
-    this.angularVelocity = 200
     this.world = scene.physics.world
+    this.speed = this.speedBase
 
     /* game object not registered with scene and it's body is not enabled when
        it is *not* constructed via scene factory */
@@ -23,6 +24,7 @@ class Ball extends Physics.Arcade.Image {
     this.setCollideWorldBounds(true)
     this.body.onWorldBounds = true // enable worldbounds event
     this.setBounce(1)
+    this.setSpeed(this.speedBase, false)
 
     this.emitters = this.setupEmitters(scene)
   }
@@ -138,9 +140,30 @@ class Ball extends Physics.Arcade.Image {
 
   setVelocityFromAngle (angleRad: number): void {
     this.setVelocity(
-      Math.cos(angleRad) * this.velocityFactor,
-      Math.sin(angleRad) * this.velocityFactor
+      Math.cos(angleRad) * 9999, // actual speed limited via setMaxSpeed()
+      Math.sin(angleRad) * 9999
     )
+  }
+
+  increaseSpeed (apply: boolean = true): void {
+    this.setSpeed(this.speed + this.speedIncrease, apply)
+  }
+
+  resetSpeed (apply: boolean = true): void {
+    this.setSpeed(this.speedBase, apply)
+  }
+
+  private setSpeed (newSpeed: number, apply: boolean): void {
+    // @ts-ignore typdefs don't know this method
+    this.body.setMaxSpeed(newSpeed)
+    this.speed = newSpeed
+
+    if (apply) {
+      /* do one physics step to be able to apply speed after collision
+       * (direction needs to change first) */
+      this.scene.physics.world.step(0)
+      this.setVelocityFromAngle((this.body as ArcadePhysics.Body).angle)
+    }
   }
 
   stop (): void {

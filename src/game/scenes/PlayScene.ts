@@ -145,14 +145,16 @@ export default class PlayScene extends Scene {
 
   private bounceBallOffPaddle (ball: Ball, paddle: Paddle): void {
     Audio.play('wooden')
-    this.setBallVelocity(
-      Phaser.Math.Angle.Between(paddle.x, paddle.y, ball.x, ball.y)
-    )
+    ball.resetSpeed(false)
+    ball.setVelocityFromAngle(this.ballLaunchAngle(ball, paddle))
     ball.spin = Direction[ball.x < paddle.x ? 'Left' : 'Right']
     Store.resetScoreMultiplier()
   }
 
-  private setBallVelocity (angleRad: number): void {
+  private ballLaunchAngle (ball: Ball, paddle: Paddle): number {
+    let angleRad: number = Phaser.Math.Angle.Between(
+      paddle.x, paddle.y, ball.x, ball.y
+    )
     /* if the angle is too horizontal, adjust it a
        little to make the ball go slightly upwards */
     const flatRight: number = 0
@@ -163,7 +165,7 @@ export default class PlayScene extends Scene {
     } else if (Phaser.Math.Within(Math.abs(angleRad), flatLeft, tolerance)) {
       angleRad = -(flatLeft - tolerance)
     }
-    this.prefabs.ball.setVelocityFromAngle(angleRad)
+    return angleRad
   }
 
   private spinBallOnCollision (

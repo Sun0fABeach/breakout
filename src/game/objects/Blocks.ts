@@ -8,7 +8,8 @@ type Block = PhysicsSprite
 type BlockDef = {
   readonly type: string,
   readonly value: number,
-  readonly strength: number
+  readonly strength: number,
+  readonly accelerates?: boolean
 }
 type CollisionCb = (
   ball: Ball,
@@ -30,11 +31,11 @@ class Blocks {
     { type: 'PurpleStrong', value: 150, strength: 2 },
     { type: 'RedStrong', value: 100, strength: 2 },
     { type: 'YellowStrong', value: 50, strength: 2 },
-    { type: 'GreenSpeed', value: 300, strength: 1 },
-    { type: 'GreySpeed', value: 250, strength: 1 },
-    { type: 'PurpleSpeed', value: 200, strength: 1 },
-    { type: 'RedSpeed', value: 150, strength: 1 },
-    { type: 'YellowSpeed', value: 100, strength: 1 }
+    { type: 'GreenSpeed', value: 300, strength: 1, accelerates: true },
+    { type: 'GreySpeed', value: 250, strength: 1, accelerates: true },
+    { type: 'PurpleSpeed', value: 200, strength: 1, accelerates: true },
+    { type: 'RedSpeed', value: 150, strength: 1, accelerates: true },
+    { type: 'YellowSpeed', value: 100, strength: 1, accelerates: true }
   ]
 
   constructor (
@@ -54,7 +55,7 @@ class Blocks {
         scene.physics.world.enableBody(block, Physics.Arcade.STATIC_BODY)
       })
       return new BlockGroup(
-        scene, blocks, blockDef.value, blockDef.strength, pointsTextGroup
+        scene, blocks, blockDef, pointsTextGroup
       )
     })
   }
@@ -112,19 +113,22 @@ class Blocks {
 
 class BlockGroup extends Physics.Arcade.StaticGroup {
   private ballCollider: Collider | null
+  private readonly scoreVal: number
+  private readonly accelerates: boolean
 
   constructor (
     scene: Scene,
     blocks: GameObject[],
-    private readonly scoreVal: number,
-    strength: number,
+    blockDef: BlockDef,
     private readonly pointsTextGroup: GameObjects.Group
   ) {
     super(scene.physics.world, scene, blocks)
     blocks.forEach((block: GameObject) =>
-      this.prepareBlock(block as Block, strength)
+      this.prepareBlock(block as Block, blockDef.strength)
     )
     this.ballCollider = null
+    this.scoreVal = blockDef.value
+    this.accelerates = !!blockDef.accelerates
   }
 
   private prepareBlock (block: Block, strength: number): void {
@@ -143,7 +147,7 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
       ball,
       this,
       function (this: Scene, ball: GameObject, block: GameObject) {
-        self.handleHit(block as Block)
+        self.handleHit(block as Block, ball as Ball)
         // eslint-disable-next-line standard/no-callback-literal
         callback(
           ball as Ball,
@@ -161,7 +165,7 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
     this.ballCollider.object1 = ball
   }
 
-  private handleHit (block: Block): void {
+  private handleHit (block: Block, ball: Ball): void {
     this.showPoints(block, this.points * Store.scoreMultiplier)
 
     let strength: number = block.getData('strength')
@@ -173,6 +177,10 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
       block.setTexture('spritesheet', block.frame.name.replace('Strong', ''))
     }
     block.setData('strength', strength - 1)
+
+    if (this.accelerates) {
+      ball.increaseSpeed()
+    }
   }
 
   private killBlock (toKill: Block): void {
