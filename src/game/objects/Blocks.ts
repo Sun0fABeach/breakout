@@ -29,7 +29,12 @@ class Blocks {
     { type: 'GreyStrong', value: 200, strength: 2 },
     { type: 'PurpleStrong', value: 150, strength: 2 },
     { type: 'RedStrong', value: 100, strength: 2 },
-    { type: 'YellowStrong', value: 50, strength: 2 }
+    { type: 'YellowStrong', value: 50, strength: 2 },
+    { type: 'GreenSpeed', value: 300, strength: 1 },
+    { type: 'GreySpeed', value: 250, strength: 1 },
+    { type: 'PurpleSpeed', value: 200, strength: 1 },
+    { type: 'RedSpeed', value: 150, strength: 1 },
+    { type: 'YellowSpeed', value: 100, strength: 1 }
   ]
 
   constructor (
