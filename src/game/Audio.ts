@@ -6,6 +6,7 @@ class Audio {
     explosion: 0.16,
     ding: 0.5,
     dong: 0.9,
+    punch: 0.2,
     letsGo: 0.7,
     ohNo: 0.4,
     ohYeah: 0.7,
@@ -19,7 +20,7 @@ class Audio {
 
   static play (name: string, vol?: number): void {
     const volume: number = vol === undefined ? Audio.volumes[name] : vol
-    Audio.scene.sound.playAudioSprite('audiosprites', name, { volume })
+    Audio.scene.sound.playAudioSprite('audiosprite', name, { volume })
   }
 }
 

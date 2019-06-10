@@ -33,7 +33,7 @@ export default class BootScene extends Scene {
       spriteAtlas
     )
     this.load.audioSprite(
-      'audiosprites',
+      'audiosprite',
       audioSpriteAtlas,
       [audioSpriteSheetOGG, audioSpriteSheetMP3]
     )

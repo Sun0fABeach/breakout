@@ -1,7 +1,7 @@
 {
   "resources": [
-    "audiosprite.ogg",
-    "audiosprite.mp3"
+    "audiosprite.mp3",
+    "audiosprite.ogg"
   ],
   "spritemap": {
     "ding": {
@@ -39,19 +39,24 @@
       "end": 32,
       "loop": false
     },
-    "thud": {
+    "punch": {
       "start": 33,
-      "end": 33.44478458049887,
+      "end": 33.66612244897959,
+      "loop": false
+    },
+    "thud": {
+      "start": 35,
+      "end": 35.44478458049887,
       "loop": false
     },
     "wooden": {
-      "start": 35,
-      "end": 36.153673469387755,
+      "start": 37,
+      "end": 38.153673469387755,
       "loop": false
     },
     "swish": {
-      "start": 38,
-      "end": 38.34249433106576,
+      "start": 40,
+      "end": 40.34249433106576,
       "loop": false
     }
   }

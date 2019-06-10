@@ -114,7 +114,6 @@ class Blocks {
 class BlockGroup extends Physics.Arcade.StaticGroup {
   private ballCollider: Collider | null
   private readonly scoreVal: number
-  private readonly accelerates: boolean
 
   constructor (
     scene: Scene,
@@ -124,17 +123,21 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
   ) {
     super(scene.physics.world, scene, blocks)
     blocks.forEach((block: GameObject) =>
-      this.prepareBlock(block as Block, blockDef.strength)
+      this.prepareBlock(block as Block, blockDef)
     )
     this.ballCollider = null
     this.scoreVal = blockDef.value
-    this.accelerates = !!blockDef.accelerates
   }
 
-  private prepareBlock (block: Block, strength: number): void {
+  private prepareBlock (
+    block: Block, { strength, accelerates }: BlockDef
+  ): void {
     block.setData('strength', strength)
     if (strength > 1) {
       block.setTint(0xffffff, 0x333333, 0x333333, 0xffffff)
+    }
+    if (accelerates) {
+      block.setData('accelerates', true)
     }
     const body = block.body as ArcadePhysics.StaticBody
     body.updateFromGameObject() // might be transformed in tiled, so adjust body
@@ -178,7 +181,7 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
     }
     block.setData('strength', strength - 1)
 
-    if (this.accelerates) {
+    if (block.getData('accelerates')) {
       ball.increaseSpeed()
     }
   }

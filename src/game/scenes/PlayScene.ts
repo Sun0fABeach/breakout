@@ -165,7 +165,11 @@ export default class PlayScene extends Scene {
     } else {
       ball.spinOnCollision(ball.body.touching)
       Store.bumpScoreMultiplier(this.scoreMultBump)
-      Audio.play(block.getData('strength') === 0 ? 'ding' : 'dong')
+      if (block.getData('accelerates')) {
+        Audio.play('punch')
+      } else {
+        Audio.play(block.getData('strength') === 0 ? 'ding' : 'dong')
+      }
     }
   }
 
