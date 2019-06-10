@@ -2,18 +2,21 @@ import { GameObjects } from 'phaser'
 import Ball from '@/game/objects/Ball'
 import Particles from '@/game/Particles'
 
-type CollisionCb = (this: Scene, ball: Ball, paddle: Paddle) => any
+type CollisionCb = (ball: Ball, paddle: Paddle) => any
 
 class Paddle extends GameObjects.Container {
   private readonly baseCoords: { x: number, y: number}
-  private readonly img: GameObjects.Image
+  private readonly mountedBallOffset: { x: number, y: number } = { x: 0, y: 0 }
   private mountedBall: Ball | null
   private ballCollider: Collider | null
+  private readonly img: GameObjects.Image
   private readonly emitters: ParticleEmitter[]
 
   constructor (scene: Scene, x: number, y: number) {
     super(scene, x, y)
+
     this.baseCoords = { x, y }
+
     this.img = scene.add.image(0, 0, 'spritesheet', 'paddle')
     this.add(this.img)
     this.setSize(this.img.displayWidth, this.img.displayHeight)
@@ -51,19 +54,54 @@ class Paddle extends GameObjects.Container {
     )
   }
 
+  bounceBallOff (ball: Ball): void {
+    ball.resetSpeed(false)
+    ball.setVelocityFromAngle(this.ballLaunchAngle(ball))
+  }
+
+  private ballLaunchAngle (ball: Ball): number {
+    let angleRad: number = Phaser.Math.Angle.Between(
+      this.x, this.y, ball.x, ball.y
+    )
+    /* if the angle is too horizontal, adjust it a
+       little to make the ball go slightly upwards */
+    const flatRight: number = 0
+    const flatLeft: number = 3.141593
+    const tolerance: number = 0.008726 // 0.5 degrees
+    if (Phaser.Math.Within(angleRad, flatRight, tolerance)) {
+      angleRad = -tolerance
+    } else if (Phaser.Math.Within(Math.abs(angleRad), flatLeft, tolerance)) {
+      angleRad = -(flatLeft - tolerance)
+    }
+    return angleRad
+  }
+
   setBallForCollider (ball: Ball): void {
     // @ts-ignore
     this.ballCollider.object1 = ball
   }
 
   mountBall (ball: Ball): void {
-    this.mountedBall = ball
+    ball.disableFull()
     this.add(ball)
+
+    const sign = Phaser.Math.Between(0, 1) === 0 ? -1 : +1 // left or right
+    this.mountedBallOffset.x = sign * this.halfWidth / 3
+    this.mountedBallOffset.y = -(this.halfHeight + ball.halfHeight - 1)
+    ball.setPosition(this.mountedBallOffset.x, this.mountedBallOffset.y)
+    ball.fadeIn()
+
+    this.mountedBall = ball
   }
 
-  removeBall (destroyBall: boolean = false): void {
-    this.remove(this.mountedBall!, destroyBall)
+  detachBall (): Ball {
+    this.remove(this.mountedBall!, true) // also destroys ball
     this.mountedBall = null
+
+    return new Ball(this.scene,
+      this.x + this.mountedBallOffset.x,
+      this.y + this.mountedBallOffset.y
+    )
   }
 
   explode (): void {

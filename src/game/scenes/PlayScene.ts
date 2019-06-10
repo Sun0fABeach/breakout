@@ -10,13 +10,11 @@ import Store, { GameState } from '@/game/Store'
 
 export default class PlayScene extends Scene {
   private prefabs: { [index: string]: any }
-  private readonly ballPaddleOffset: { x: number, y: number }
   private readonly scoreMultBump: number
 
   constructor () {
     super({ key: 'PlayScene' })
 
-    this.ballPaddleOffset = { x: 0, y: 0 }
     this.scoreMultBump = 0.5
     this.prefabs = {} // filled in create()
   }
@@ -35,11 +33,12 @@ export default class PlayScene extends Scene {
       'spritesheet',
       'sky'
     )
-    this.prefabs.paddle = new Paddle(
+    this.prefabs.paddle = new Paddle( // shown on start screen
       this,
       worldDimensions.width / 2,
       worldDimensions.height - 50
     )
+
     this.prefabs.cursor = this.input.keyboard.createCursorKeys()
 
     Store.changeGameState(GameState.PrePlay)
@@ -57,16 +56,17 @@ export default class PlayScene extends Scene {
   }
 
   private setupPlay (): void {
+    const { paddle } = this.prefabs
     const ball = new Ball(this, 0, 0)
 
-    this.prefabs.paddle.setupBallCollider(ball, this.bounceBallOffPaddle)
+    paddle.mountBall(ball)
+    paddle.setupBallCollider(ball, this.bounceBallOffPaddle)
 
     const blocks: Blocks = Levels.next()
     blocks.setupBallCollider(ball, this.blockHit.bind(this))
 
     this.prefabs = { ball, blocks, ...this.prefabs }
 
-    this.putBallOnPaddle()
     this.physics.world.on('worldbounds', this.ballHitWorldBounds, this)
 
     this.initPauseHandling()
@@ -115,57 +115,23 @@ export default class PlayScene extends Scene {
       })
   }
 
-  private putBallOnPaddle (): void {
-    const { ball, paddle } = this.prefabs
-
-    ball.disableFull()
-    paddle.mountBall(ball)
-
-    const sign = Phaser.Math.Between(0, 1) === 0 ? -1 : +1 // left or right
-    this.ballPaddleOffset.x = sign * paddle.halfWidth / 3
-    this.ballPaddleOffset.y = -(paddle.halfHeight + ball.halfHeight - 1)
-    ball.setPosition(this.ballPaddleOffset.x, this.ballPaddleOffset.y)
-    ball.fadeIn()
-  }
-
   private launchBallFromPaddle (): void {
     const { paddle, blocks } = this.prefabs
 
-    paddle.removeBall(true) // destroys ball object
-    const ball = new Ball(this,
-      paddle.x + this.ballPaddleOffset.x,
-      paddle.y + this.ballPaddleOffset.y
-    )
-    this.prefabs.ball = ball
+    const newBall = paddle.detachBall()
 
-    this.bounceBallOffPaddle(ball, paddle)
-    paddle.setBallForCollider(ball)
-    blocks.setBallForCollider(ball)
+    this.bounceBallOffPaddle(newBall, paddle)
+    paddle.setBallForCollider(newBall)
+    blocks.setBallForCollider(newBall)
+
+    this.prefabs.ball = newBall
   }
 
   private bounceBallOffPaddle (ball: Ball, paddle: Paddle): void {
     Audio.play('wooden')
-    ball.resetSpeed(false)
-    ball.setVelocityFromAngle(this.ballLaunchAngle(ball, paddle))
+    paddle.bounceBallOff(ball)
     ball.spin = Direction[ball.x < paddle.x ? 'Left' : 'Right']
     Store.resetScoreMultiplier()
-  }
-
-  private ballLaunchAngle (ball: Ball, paddle: Paddle): number {
-    let angleRad: number = Phaser.Math.Angle.Between(
-      paddle.x, paddle.y, ball.x, ball.y
-    )
-    /* if the angle is too horizontal, adjust it a
-       little to make the ball go slightly upwards */
-    const flatRight: number = 0
-    const flatLeft: number = 3.141593
-    const tolerance: number = 0.008726 // 0.5 degrees
-    if (Phaser.Math.Within(angleRad, flatRight, tolerance)) {
-      angleRad = -tolerance
-    } else if (Phaser.Math.Within(Math.abs(angleRad), flatLeft, tolerance)) {
-      angleRad = -(flatLeft - tolerance)
-    }
-    return angleRad
   }
 
   private spinBallOnCollision (
@@ -245,11 +211,11 @@ export default class PlayScene extends Scene {
 
     return new Promise(resolve => {
       setTimeout(() => {
+        const { ball, paddle } = this.prefabs
         this.setupNextBlocks()
-        this.putBallOnPaddle()
-        this.prefabs.ball.fadeIn()
+        paddle.mountBall(ball)
         if (reset) {
-          this.prefabs.paddle.fadeIn()
+          paddle.fadeIn()
         }
         this.activatePauseButton()
         resolve()
@@ -281,8 +247,7 @@ export default class PlayScene extends Scene {
       paddle.resetPosition()
       this.gameOver()
     } else {
-      ball.show()
-      this.putBallOnPaddle()
+      paddle.mountBall(ball)
     }
   }
 
