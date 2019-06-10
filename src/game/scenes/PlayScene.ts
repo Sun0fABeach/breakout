@@ -134,30 +134,6 @@ export default class PlayScene extends Scene {
     Store.resetScoreMultiplier()
   }
 
-  private spinBallOnCollision (
-    { up, right, down, left }: ArcadeBodyCollision
-  ): void {
-    const ball: Ball = this.prefabs.ball
-
-    if (up) {
-      // goes left -> spin right
-      // goes right -> spin left
-      ball.spin = Direction[ball.velocityX < 0 ? 'Right' : 'Left']
-    } else if (right) {
-      // goes up -> spin right
-      // goes down -> spin left
-      ball.spin = Direction[ball.velocityY < 0 ? 'Right' : 'Left']
-    } else if (down) {
-      // goes left -> spin left
-      // goes right -> spin right
-      ball.spin = Direction[ball.velocityX < 0 ? 'Left' : 'Right']
-    } else if (left) {
-      // goes up -> spin left
-      // goes down -> spin right
-      ball.spin = Direction[ball.velocityY < 0 ? 'Left' : 'Right']
-    }
-  }
-
   private ballHitWorldBounds (
     ballBody: PhysicsBody,
     up: boolean, down: boolean, left: boolean, right: boolean
@@ -168,7 +144,7 @@ export default class PlayScene extends Scene {
       // call like this to enable multiple layered thuds:
       Audio.play('thud')
       this.prefabs.ball.puff(up, false, left, right)
-      this.spinBallOnCollision({ up, right, down, left, none: false })
+      this.prefabs.ball.spinOnCollision({ up, right, down, left })
     }
   }
 
@@ -187,7 +163,7 @@ export default class PlayScene extends Scene {
         this.gameOver(true)
       }
     } else {
-      this.spinBallOnCollision(ball.body.touching)
+      ball.spinOnCollision(ball.body.touching)
       Store.bumpScoreMultiplier(this.scoreMultBump)
       Audio.play(block.getData('strength') === 0 ? 'ding' : 'dong')
     }

@@ -170,6 +170,26 @@ class Ball extends Physics.Arcade.Image {
     this.setVelocity(0)
   }
 
+  spinOnCollision ({ up, right, down, left }: ArcadeBodyCollision): void {
+    if (up) {
+      // goes left -> spin right
+      // goes right -> spin left
+      this.spin = Direction[this.velocityX < 0 ? 'Right' : 'Left']
+    } else if (right) {
+      // goes up -> spin right
+      // goes down -> spin left
+      this.spin = Direction[this.velocityY < 0 ? 'Right' : 'Left']
+    } else if (down) {
+      // goes left -> spin left
+      // goes right -> spin right
+      this.spin = Direction[this.velocityX < 0 ? 'Left' : 'Right']
+    } else if (left) {
+      // goes up -> spin left
+      // goes down -> spin right
+      this.spin = Direction[this.velocityY < 0 ? 'Left' : 'Right']
+    }
+  }
+
   set spin (spinDirection: Direction) {
     const sign = spinDirection === Direction.Left ? -1 : +1
     this.setAngularVelocity(sign * this.angularVelocity)
