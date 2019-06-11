@@ -55,7 +55,7 @@ class Paddle extends GameObjects.Container {
   }
 
   bounceBallOff (ball: Ball): void {
-    ball.resetSpeed(false)
+    ball.resetSpeed()
     ball.setVelocityFromAngle(this.ballLaunchAngle(ball))
   }
 

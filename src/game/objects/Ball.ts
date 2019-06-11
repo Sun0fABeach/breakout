@@ -24,7 +24,6 @@ class Ball extends Physics.Arcade.Image {
     this.setCollideWorldBounds(true)
     this.body.onWorldBounds = true // enable worldbounds event
     this.setBounce(1)
-    this.setSpeed(this.speedBase, false)
 
     this.emitters = this.setupEmitters(scene)
   }
@@ -140,30 +139,22 @@ class Ball extends Physics.Arcade.Image {
 
   setVelocityFromAngle (angleRad: number): void {
     this.setVelocity(
-      Math.cos(angleRad) * 9999, // actual speed limited via setMaxSpeed()
-      Math.sin(angleRad) * 9999
+      Math.cos(angleRad) * this.speed,
+      Math.sin(angleRad) * this.speed
     )
   }
 
-  increaseSpeed (apply: boolean = true): void {
-    this.setSpeed(this.speed + this.speedIncrease, apply)
+  increaseSpeed (): void {
+    this.setSpeed(this.speed + this.speedIncrease)
   }
 
-  resetSpeed (apply: boolean = true): void {
-    this.setSpeed(this.speedBase, apply)
+  resetSpeed (): void {
+    this.setSpeed(this.speedBase)
   }
 
-  private setSpeed (newSpeed: number, apply: boolean): void {
-    // @ts-ignore typdefs don't know this method
-    this.body.setMaxSpeed(newSpeed)
+  private setSpeed (newSpeed: number): void {
     this.speed = newSpeed
-
-    if (apply) {
-      /* do one physics step to be able to apply speed after collision
-       * (direction needs to change first) */
-      this.scene.physics.world.step(0)
-      this.setVelocityFromAngle((this.body as ArcadePhysics.Body).angle)
-    }
+    this.body.velocity.normalize().scale(newSpeed)
   }
 
   stop (): void {
