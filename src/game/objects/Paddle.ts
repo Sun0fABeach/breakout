@@ -40,6 +40,7 @@ class Paddle extends GameObjects.Container {
         blendMode: Phaser.BlendModes.SCREEN,
         speed: { min: 100, max: 400 },
         scale: { start: 1, end: 0 },
+        quantity: 100,
         lifespan: 3000,
         gravityY: 200,
         bounds: scene.physics.world.bounds,
@@ -108,9 +109,8 @@ class Paddle extends GameObjects.Container {
     this.setAlpha(0)
     this.emitters.forEach(emitter => {
       emitter.setEmitZone({
-        type: 'edge',
-        source: this.getBounds(),
-        quantity: 100
+        type: 'random',
+        source: this.getBounds()
       })
       emitter.resume()
       // @ts-ignore - no need to pass more arguments here
