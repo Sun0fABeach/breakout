@@ -1,4 +1,4 @@
-import { Physics, GameObjects } from 'phaser'
+import { Physics, GameObjects, Curves } from 'phaser'
 import Particles from '@/game/Particles'
 import Ball from '@/game/objects/Ball'
 import PointsText from '@/game/objects/text/PointsText'
@@ -232,16 +232,31 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
   }
 
   private emitHitParticles (block: Block): void {
+    const isSpeedBlock: boolean = !!block.getData('accelerates')
+
     Blocks.emitters.forEach(emitter => {
       emitter.setEmitZone({
-        type: 'edge',
-        source: block.getBounds(),
+        type: isSpeedBlock ? 'random' : 'edge',
+        source: isSpeedBlock ? this.speedBlockBounds(block) : block.getBounds(),
         quantity: 20
       })
       emitter.resume()
       // @ts-ignore - no need to pass arguments here
       emitter.explode()
     })
+  }
+
+  private speedBlockBounds (block: Block): Phaser.Curves.Path {
+    const { x: left, y: top, right, bottom }: Phaser.Geom.Rectangle =
+      block.getBounds()
+    const { halfWidth, halfHeight }: { halfWidth: number, halfHeight: number } =
+      block.body
+
+    return new Curves.Path(left + halfWidth, top) // draw kite
+      .lineTo(right, top + halfHeight)
+      .lineTo(left + halfWidth, bottom)
+      .lineTo(left, top + halfHeight)
+      .closePath()
   }
 
   private showPoints (block: Block, points: number): void {
