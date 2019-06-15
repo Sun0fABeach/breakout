@@ -1,4 +1,4 @@
-import { Physics, GameObjects, Curves } from 'phaser'
+import { Physics, GameObjects, Geom } from 'phaser'
 import Particles from '@/game/Particles'
 import Ball from '@/game/objects/Ball'
 import PointsText from '@/game/objects/text/PointsText'
@@ -16,6 +16,8 @@ type CollisionCb = (
   block: PhysicsSprite,
   points: number
 ) => any
+
+const emitterQuantity: number = 20
 
 class Blocks {
   static emitters: ParticleEmitter[]
@@ -68,7 +70,7 @@ class Blocks {
         blendMode: Phaser.BlendModes.SCREEN,
         scale: { start: 0.8, end: 0 },
         speed: { min: -100, max: 100 },
-        quantity: 20
+        quantity: emitterQuantity
       })
     )
   }
@@ -236,9 +238,9 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
 
     Blocks.emitters.forEach(emitter => {
       emitter.setEmitZone({
-        type: isSpeedBlock ? 'random' : 'edge',
+        type: 'edge',
         source: isSpeedBlock ? this.speedBlockBounds(block) : block.getBounds(),
-        quantity: 20
+        quantity: emitterQuantity
       })
       emitter.resume()
       // @ts-ignore - no need to pass arguments here
@@ -246,17 +248,19 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
     })
   }
 
-  private speedBlockBounds (block: Block): Phaser.Curves.Path {
+  private speedBlockBounds (block: Block): Geom.Polygon {
     const { x: left, y: top, right, bottom }: Phaser.Geom.Rectangle =
       block.getBounds()
     const { halfWidth, halfHeight }: { halfWidth: number, halfHeight: number } =
       block.body
 
-    return new Curves.Path(left + halfWidth, top) // draw kite
-      .lineTo(right, top + halfHeight)
-      .lineTo(left + halfWidth, bottom)
-      .lineTo(left, top + halfHeight)
-      .closePath()
+    return new Geom.Polygon([
+      new Geom.Point(left + halfWidth, top),
+      new Geom.Point(right, top + halfHeight),
+      new Geom.Point(left + halfWidth, bottom),
+      new Geom.Point(left, top + halfHeight),
+      new Geom.Point(left + halfWidth, top),
+    ])
   }
 
   private showPoints (block: Block, points: number): void {
