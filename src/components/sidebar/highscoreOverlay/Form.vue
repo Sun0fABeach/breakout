@@ -1,5 +1,5 @@
 <template>
-  <form id="sidebar-hs-form" @submit.prevent.stop>
+  <form id="sidebar-hs-form" @submit.prevent.stop="submit">
     <label>
       Your name
       <input
@@ -7,7 +7,6 @@
         name="user_name"
         maxlength="12"
         v-model.trim="name"
-        @keyup.enter="submit"
         ref="input"
       />
     </label>
@@ -39,8 +38,10 @@ export default {
       'addHighscore'
     ]),
     submit () {
-      this.addHighscore({ name: this.name, score: this.score })
-      this.$emit('submitted')
+      if (this.name) {
+        this.addHighscore({ name: this.name, score: this.score })
+        this.$emit('submitted')
+      }
     }
   }
 }
