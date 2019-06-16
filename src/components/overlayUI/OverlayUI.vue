@@ -64,6 +64,20 @@ export default {
           this.changeGameState(GameState.RestartPlay)
           break
       }
+    },
+    enterListener (e) {
+      if (e.key === 'Enter') {
+        this.changeGameState(GameState.StartPlay)
+      }
+    }
+  },
+  watch: {
+    gameState (state) {
+      if (state === GameState.PrePlay) {
+        document.addEventListener('keydown', this.enterListener)
+      } else {
+        document.removeEventListener('keydown', this.enterListener)
+      }
     }
   }
 }
