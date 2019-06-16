@@ -55,10 +55,15 @@ export default {
       'changeGameState'
     ]),
     buttonClick () {
-      this.changeGameState(
-        this.gameState === GameState.PrePlay
-          ? GameState.StartPlay : GameState.RestartPlay
-      )
+      switch (this.gameState) {
+        case GameState.PrePlay:
+          this.changeGameState(GameState.StartPlay)
+          break
+        case GameState.Lost:
+        case GameState.Won:
+          this.changeGameState(GameState.RestartPlay)
+          break
+      }
     }
   }
 }
