@@ -98,21 +98,25 @@ export default class PlayScene extends Scene {
   }
 
   private deactivateCursorButtons (): void {
-    Object.values(this.prefabs.cursor as Phaser.Input.Keyboard.Key[])
-      .forEach((button: Phaser.Input.Keyboard.Key) => {
-        // @ts-ignore reset is not a static function
-        button.reset()
-        button.preventDefault = false
-        button.enabled = false
-      })
+    this.modifyCursorButtons((button: KeyboardKey) => {
+      // @ts-ignore reset is not a static function
+      button.reset()
+      button.preventDefault = false
+      button.enabled = false
+    })
   }
 
   private activateCursorButtons (): void {
-    Object.values(this.prefabs.cursor as Phaser.Input.Keyboard.Key[])
-      .forEach((button: Phaser.Input.Keyboard.Key) => {
-        button.preventDefault = true
-        button.enabled = true
-      })
+    this.modifyCursorButtons((button: KeyboardKey) => {
+      button.preventDefault = true
+      button.enabled = true
+    })
+  }
+
+  private modifyCursorButtons (
+    callback: { (button: KeyboardKey): void }
+  ): void {
+    Object.values(this.prefabs.cursor as KeyboardKey[]).forEach(callback)
   }
 
   private launchBallFromPaddle (): void {

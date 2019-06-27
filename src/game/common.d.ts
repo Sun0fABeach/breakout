@@ -1,4 +1,5 @@
 declare type Scene = Phaser.Scene
+declare type KeyboardKey = Phaser.Input.Keyboard.Key
 
 import ArcadePhysics = Phaser.Physics.Arcade
 declare type PhysicsImage = ArcadePhysics.Image
