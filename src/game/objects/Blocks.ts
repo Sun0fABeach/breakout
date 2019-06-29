@@ -57,7 +57,9 @@ class Blocks {
         scene.physics.world.enableBody(block, Physics.Arcade.STATIC_BODY)
       })
       return new BlockGroup(scene, blocks as Block[], blockDef, pointsTextGroup)
-    })
+    }).filter(
+      (blockGroup: BlockGroup) => blockGroup.getLength() > 0
+    )
   }
 
   /* needs to be called before constructing instances! */
