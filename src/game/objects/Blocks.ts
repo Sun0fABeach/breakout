@@ -50,15 +50,13 @@ class Blocks {
 
     this.blockGroups = Blocks.types.map((blockDef: BlockDef) => {
       const spriteName: string = 'block' + blockDef.type
-      const blocks: GameObject[] = tilemap.createFromObjects(
+      const blocks: GameObjects.Sprite[] = tilemap.createFromObjects(
         'Blocks', spriteName, { key: 'spritesheet', frame: spriteName }
       )
-      blocks.forEach((block: GameObject) => {
+      blocks.forEach((block: GameObjects.Sprite) => {
         scene.physics.world.enableBody(block, Physics.Arcade.STATIC_BODY)
       })
-      return new BlockGroup(
-        scene, blocks, blockDef, pointsTextGroup
-      )
+      return new BlockGroup(scene, blocks as Block[], blockDef, pointsTextGroup)
     })
   }
 
@@ -79,7 +77,7 @@ class Blocks {
     this.blockGroups.forEach(group => group.killAll())
   }
 
-  fadeKillAll (): Promise<{}[]> {
+  fadeKillAll (): Promise<(void | Promise<void>)[]> {
     return Promise.all(this.blockGroups.map(group =>
       new Promise(async resolve => {
         await group.fadeKillAll()
@@ -100,11 +98,9 @@ class Blocks {
     this.blockGroups.forEach(group => group.setBallForCollider(ball))
   }
 
-  get all (): PhysicsSprite[] {
+  get all (): Block[] {
     return this.blockGroups.reduce(
-      (acc: PhysicsSprite[], group: BlockGroup) => {
-        return acc.concat(group.getChildren() as PhysicsSprite[])
-      }, []
+      (acc: Block[], group: BlockGroup) => acc.concat(group.blocks), []
     )
   }
 
@@ -119,14 +115,12 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
 
   constructor (
     scene: Scene,
-    blocks: GameObject[],
+    blocks: Block[],
     blockDef: BlockDef,
     private readonly pointsTextGroup: GameObjects.Group
   ) {
     super(scene.physics.world, scene, blocks)
-    blocks.forEach((block: GameObject) =>
-      this.prepareBlock(block as Block, blockDef)
-    )
+    blocks.forEach((block: Block) => this.prepareBlock(block, blockDef))
     this.ballCollider = null
     this.scoreVal = blockDef.value
   }
@@ -200,11 +194,8 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
   }
 
   killAll (): void {
-    for (
-      let alive: Block = this.getFirstAlive();
-      alive !== null;
-      alive = this.getFirstAlive()
-    ) {
+    let alive: Block
+    while ((alive = this.getFirstAlive()) !== null) {
       this.killBlock(alive)
     }
   }
@@ -213,12 +204,12 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
     duration: number = 500,
     easing: string = 'Linear'
   ): Promise<void> {
-    await this.fadeOut(this.getChildren(), duration, easing)
+    await this.fadeOut(this.blocks, duration, easing)
     this.killAll()
   }
 
   private fadeOut (
-    blocks: GameObject | GameObject[],
+    blocks: Block | Block[],
     duration: number = 300,
     easing: string = 'Expo.easeOut'
   ): Promise<void> {
@@ -288,12 +279,15 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
   }
 
   get allHit (): boolean {
-    const children: Block[] = this.getChildren() as Block[]
-    return children.every((block: Block) => !block.body.enable)
+    return this.blocks.every((block: Block) => !block.body.enable)
   }
 
   get points (): number {
     return this.scoreVal
+  }
+
+  get blocks (): Block[] {
+    return this.getChildren() as Block[]
   }
 }
 
