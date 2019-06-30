@@ -5,11 +5,9 @@ import PointsText from '@/game/objects/text/PointsText'
 import Store from '@/game/Store'
 
 type Block = PhysicsSprite
-type BlockDef = {
-  readonly type: string,
-  readonly value: number,
-  readonly strength: number,
-  readonly accelerates?: boolean
+type tiledBlockData = {
+  readonly name: string,
+  readonly value: number | boolean
 }
 type CollisionCb = (
   ball: Ball,
@@ -19,48 +17,17 @@ type CollisionCb = (
 
 const emitterQuantity: number = 20
 
+const blockColors: string[] = ['Green', 'Grey', 'Purple', 'Red', 'Yellow']
+const blockVariants: string[] = ['', 'Strong', 'Speed']
+const blockGroupNames: string[] = blockVariants.reduce(
+  (res: string[], variant: string) =>
+    res.concat(blockColors.map((name: string) => `block${name}${variant}`)),
+  []
+)
+
 class Blocks {
   static emitters: ParticleEmitter[]
   private readonly blockGroups: BlockGroup[]
-  private static types: BlockDef[] = [
-    { type: 'Green', value: 250, strength: 1 },
-    { type: 'Grey', value: 200, strength: 1 },
-    { type: 'Purple', value: 150, strength: 1 },
-    { type: 'Red', value: 100, strength: 1 },
-    { type: 'Yellow', value: 50, strength: 1 },
-    { type: 'GreenStrong', value: 250, strength: 2 },
-    { type: 'GreyStrong', value: 200, strength: 2 },
-    { type: 'PurpleStrong', value: 150, strength: 2 },
-    { type: 'RedStrong', value: 100, strength: 2 },
-    { type: 'YellowStrong', value: 50, strength: 2 },
-    { type: 'GreenSpeed', value: 300, strength: 1, accelerates: true },
-    { type: 'GreySpeed', value: 250, strength: 1, accelerates: true },
-    { type: 'PurpleSpeed', value: 200, strength: 1, accelerates: true },
-    { type: 'RedSpeed', value: 150, strength: 1, accelerates: true },
-    { type: 'YellowSpeed', value: 100, strength: 1, accelerates: true }
-  ]
-
-  constructor (
-    scene: Scene,
-    tilemap: Phaser.Tilemaps.Tilemap
-  ) {
-    const pointsTextGroup = new GameObjects.Group(scene, {
-      classType: PointsText
-    })
-
-    this.blockGroups = Blocks.types.map((blockDef: BlockDef) => {
-      const spriteName: string = 'block' + blockDef.type
-      const blocks: GameObjects.Sprite[] = tilemap.createFromObjects(
-        'Blocks', spriteName, { key: 'spritesheet', frame: spriteName }
-      )
-      blocks.forEach((block: GameObjects.Sprite) => {
-        scene.physics.world.enableBody(block, Physics.Arcade.STATIC_BODY)
-      })
-      return new BlockGroup(scene, blocks as Block[], blockDef, pointsTextGroup)
-    }).filter(
-      (blockGroup: BlockGroup) => blockGroup.getLength() > 0
-    )
-  }
 
   /* needs to be called before constructing instances! */
   static init (scene: Scene): void {
@@ -73,6 +40,36 @@ class Blocks {
         quantity: emitterQuantity
       })
     )
+  }
+
+  constructor (scene: Scene, tilemap: Phaser.Tilemaps.Tilemap) {
+    const pointsTextGroup = new GameObjects.Group(scene, {
+      classType: PointsText
+    })
+
+    this.blockGroups = blockGroupNames.map((spriteName: string) => {
+      const blocks: GameObjects.Sprite[] = tilemap.createFromObjects(
+        'Blocks', spriteName, { key: 'spritesheet', frame: spriteName }
+      )
+      if (blocks.length === 0) {
+        return null
+      }
+      blocks.forEach((block: GameObjects.Sprite) => {
+        this.normalizeTiledObjectData(block)
+        scene.physics.world.enableBody(block, Physics.Arcade.STATIC_BODY)
+      })
+      return new BlockGroup(scene, blocks as Block[], pointsTextGroup)
+    }).filter(
+      (blockGroup: BlockGroup | null) => blockGroup !== null
+    ) as BlockGroup[]
+  }
+
+  private normalizeTiledObjectData (block: GameObjects.Sprite): void {
+    const entries: tiledBlockData[] = Object.values(block.data.list)
+    entries.forEach((entry: tiledBlockData, idx: number) => {
+      block.setData(entry.name, entry.value)
+      block.data.remove(idx.toString())
+    })
   }
 
   killAll (): void {
@@ -113,29 +110,20 @@ class Blocks {
 
 class BlockGroup extends Physics.Arcade.StaticGroup {
   private ballCollider: Collider | null
-  private readonly scoreVal: number
 
   constructor (
     scene: Scene,
     blocks: Block[],
-    blockDef: BlockDef,
     private readonly pointsTextGroup: GameObjects.Group
   ) {
     super(scene.physics.world, scene, blocks)
-    blocks.forEach((block: Block) => this.prepareBlock(block, blockDef))
+    blocks.forEach((block: Block) => this.prepareBlock(block))
     this.ballCollider = null
-    this.scoreVal = blockDef.value
   }
 
-  private prepareBlock (
-    block: Block, { strength, accelerates }: BlockDef
-  ): void {
-    block.setData('strength', strength)
-    if (strength > 1) {
+  private prepareBlock (block: Block): void {
+    if (block.getData('strength') > 1) {
       block.setTint(0xffffff, 0x333333, 0x333333, 0xffffff)
-    }
-    if (accelerates) {
-      block.setData('accelerates', true)
     }
     const body = block.body as ArcadePhysics.StaticBody
     body.updateFromGameObject() // might be transformed in tiled, so adjust body
@@ -148,13 +136,10 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
       ball,
       this,
       function (this: Scene, ball: GameObject, block: GameObject) {
-        self.handleHit(block as Block, ball as Ball)
+        const points: number = block.getData('value') * Store.scoreMultiplier
+        self.handleHit(block as Block, ball as Ball, points)
         // eslint-disable-next-line standard/no-callback-literal
-        callback(
-          ball as Ball,
-          block as Block,
-          self.scoreVal * Store.scoreMultiplier
-        )
+        callback(ball as Ball, block as Block, points)
       },
       undefined,
       this.scene
@@ -166,8 +151,8 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
     this.ballCollider.object1 = ball
   }
 
-  private handleHit (block: Block, ball: Ball): void {
-    this.showPoints(block, this.points * Store.scoreMultiplier)
+  private handleHit (block: Block, ball: Ball, points: number): void {
+    this.showPoints(block, points)
 
     let strength: number = block.getData('strength')
     if (strength === 1) {
@@ -282,10 +267,6 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
 
   get allHit (): boolean {
     return this.blocks.every((block: Block) => !block.body.enable)
-  }
-
-  get points (): number {
-    return this.scoreVal
   }
 
   get blocks (): Block[] {
