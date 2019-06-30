@@ -11,6 +11,17 @@
                  "height":32,
                  "id":24,
                  "name":"blockPurple",
+                 "properties":[
+                        {
+                         "name":"strength",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"value",
+                         "type":"int",
+                         "value":150
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -23,6 +34,17 @@
                  "height":32,
                  "id":25,
                  "name":"blockPurple",
+                 "properties":[
+                        {
+                         "name":"strength",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"value",
+                         "type":"int",
+                         "value":150
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -35,6 +57,17 @@
                  "height":32,
                  "id":27,
                  "name":"blockPurple",
+                 "properties":[
+                        {
+                         "name":"strength",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"value",
+                         "type":"int",
+                         "value":150
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -47,6 +80,17 @@
                  "height":32,
                  "id":28,
                  "name":"blockPurple",
+                 "properties":[
+                        {
+                         "name":"strength",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"value",
+                         "type":"int",
+                         "value":150
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -59,6 +103,17 @@
                  "height":32,
                  "id":29,
                  "name":"blockRed",
+                 "properties":[
+                        {
+                         "name":"strength",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"value",
+                         "type":"int",
+                         "value":100
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -71,6 +126,17 @@
                  "height":32,
                  "id":30,
                  "name":"blockRed",
+                 "properties":[
+                        {
+                         "name":"strength",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"value",
+                         "type":"int",
+                         "value":100
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -83,6 +149,17 @@
                  "height":32,
                  "id":32,
                  "name":"blockRed",
+                 "properties":[
+                        {
+                         "name":"strength",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"value",
+                         "type":"int",
+                         "value":100
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -95,6 +172,17 @@
                  "height":32,
                  "id":33,
                  "name":"blockRed",
+                 "properties":[
+                        {
+                         "name":"strength",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"value",
+                         "type":"int",
+                         "value":100
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -107,6 +195,17 @@
                  "height":32,
                  "id":34,
                  "name":"blockYellow",
+                 "properties":[
+                        {
+                         "name":"strength",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"value",
+                         "type":"int",
+                         "value":50
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -119,6 +218,17 @@
                  "height":32,
                  "id":35,
                  "name":"blockYellow",
+                 "properties":[
+                        {
+                         "name":"strength",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"value",
+                         "type":"int",
+                         "value":50
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -131,6 +241,17 @@
                  "height":32,
                  "id":36,
                  "name":"blockYellow",
+                 "properties":[
+                        {
+                         "name":"strength",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"value",
+                         "type":"int",
+                         "value":50
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -143,6 +264,17 @@
                  "height":32,
                  "id":37,
                  "name":"blockYellow",
+                 "properties":[
+                        {
+                         "name":"strength",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"value",
+                         "type":"int",
+                         "value":50
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -155,6 +287,17 @@
                  "height":32,
                  "id":38,
                  "name":"blockYellow",
+                 "properties":[
+                        {
+                         "name":"strength",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"value",
+                         "type":"int",
+                         "value":50
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -167,6 +310,17 @@
                  "height":32,
                  "id":56,
                  "name":"blockPurpleStrong",
+                 "properties":[
+                        {
+                         "name":"strength",
+                         "type":"int",
+                         "value":2
+                        }, 
+                        {
+                         "name":"value",
+                         "type":"int",
+                         "value":250
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -179,6 +333,17 @@
                  "height":32,
                  "id":57,
                  "name":"blockPurpleStrong",
+                 "properties":[
+                        {
+                         "name":"strength",
+                         "type":"int",
+                         "value":2
+                        }, 
+                        {
+                         "name":"value",
+                         "type":"int",
+                         "value":250
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -191,6 +356,17 @@
                  "height":32,
                  "id":58,
                  "name":"blockRedStrong",
+                 "properties":[
+                        {
+                         "name":"strength",
+                         "type":"int",
+                         "value":2
+                        }, 
+                        {
+                         "name":"value",
+                         "type":"int",
+                         "value":200
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -203,6 +379,17 @@
                  "height":32,
                  "id":59,
                  "name":"blockRedStrong",
+                 "properties":[
+                        {
+                         "name":"strength",
+                         "type":"int",
+                         "value":2
+                        }, 
+                        {
+                         "name":"value",
+                         "type":"int",
+                         "value":200
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -215,6 +402,17 @@
                  "height":32,
                  "id":60,
                  "name":"blockYellow",
+                 "properties":[
+                        {
+                         "name":"strength",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"value",
+                         "type":"int",
+                         "value":50
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
