@@ -7,7 +7,7 @@ const keys: { readonly [index: string]: string } = {
   restart: 'keydown_R'
 }
 
-const numLevels: number = 4
+const numLevels: number = 5
 
 export {
   Direction,
