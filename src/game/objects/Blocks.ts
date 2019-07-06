@@ -17,7 +17,9 @@ type CollisionCb = (
 
 const emitterQuantity: number = 20
 
-const blockColors: string[] = ['Green', 'Grey', 'Purple', 'Red', 'Yellow']
+const blockColors: string[] = [
+  'Green', 'Grey', 'Purple', 'Red', 'Yellow', 'Blue'
+]
 const blockVariants: string[] = ['', 'Strong', 'Speed']
 const blockGroupNames: string[] = blockVariants.reduce(
   (res: string[], variant: string) =>
