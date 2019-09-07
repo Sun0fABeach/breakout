@@ -10,6 +10,7 @@
     "dev": "vue-cli-service serve"
   },
   "dependencies": {
+    "@tweenjs/tween.js": "^18.1.2",
     "phaser": "^3.16.2",
     "vue": "^2.6.10",
     "vue-paginate": "^3.6.0",

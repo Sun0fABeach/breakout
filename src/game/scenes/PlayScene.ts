@@ -184,8 +184,10 @@ export default class PlayScene extends Scene {
 
     Store.resetScoreMultiplier()
 
+    // reset of level num not delayed -> in sync with other sidebar num resets
+    reset ? Store.resetLevel() : setTimeout(Store.nextLevel, timeoutBase)
+
     setTimeout(() => {
-      Store[reset ? 'resetLevel' : 'nextLevel']()
       Store.changeGameState(GameState.NextLevel) // shows next level text
     }, timeoutBase)
 
