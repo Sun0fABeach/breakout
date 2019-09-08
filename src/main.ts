@@ -4,9 +4,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import store from './store'
 
-// @ts-ignore there is no declaration file
 import VuePaginate from 'vue-paginate'
-// @ts-ignore there is no declaration file
 import TWEEN from '@tweenjs/tween.js'
 
 Vue.use(VuePaginate)
