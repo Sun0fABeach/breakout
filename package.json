@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@tweenjs/tween.js": "^18.1.2",
+    "dexie": "^2.0.4",
     "phaser": "^3.16.2",
     "vue": "^2.6.10",
     "vue-paginate": "^3.6.0",

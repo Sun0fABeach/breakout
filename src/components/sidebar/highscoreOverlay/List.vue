@@ -22,7 +22,7 @@
 
 <script>
 import HighscoreListItem from './ListItem'
-import { mapState } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'sidebarHighscoreList',
@@ -31,10 +31,16 @@ export default {
   },
   data () {
     return {
+      highscores: [],
       paginate: ['highscoreList']
     }
   },
-  computed: mapState(['highscores'])
+  methods: mapActions([
+    'getRankedHighscores'
+  ]),
+  async created () {
+    this.highscores = await this.getRankedHighscores()
+  }
 }
 </script>
 

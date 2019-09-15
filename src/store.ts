@@ -1,13 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import scoresDb, { ScoreData, RankedScoreData } from '@/scoresDb'
 
 Vue.use(Vuex)
-
-interface ScoreData {
-  name: string,
-  score: number,
-  rank: number
-}
 
 enum GameState {
   None,
@@ -31,10 +26,17 @@ const baseVals = {
 
 export default new Vuex.Store({
   state: {
-    highscores: [] as ScoreData[],
     gameState: GameState.None,
     paused: false,
     ...baseVals
+  },
+  actions: {
+    async getRankedHighscores (): Promise<RankedScoreData[]> {
+      return scoresDb.getRankedHighscores()
+    },
+    async addHighscore (context, toAdd: ScoreData): Promise<void> {
+      await scoresDb.addHighscore(toAdd)
+    }
   },
   mutations: {
     changeGameState (state, newGameState: GameState) {
@@ -67,20 +69,6 @@ export default new Vuex.Store({
     },
     resetLevel (state) {
       state.level = baseVals.level
-    },
-
-    addHighscore (state, scoreData: ScoreData) {
-      let idx: number = state.highscores.findIndex((entry: ScoreData) =>
-        entry.score <= scoreData.score
-      )
-      if (idx === -1) {
-        idx = state.highscores.length
-      }
-      scoreData.rank = idx + 1
-      state.highscores.splice(idx, 0, scoreData)
-      state.highscores.slice(idx + 1).forEach((entry: ScoreData) =>
-        entry.rank++
-      )
     }
   }
 })

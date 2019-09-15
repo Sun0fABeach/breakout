@@ -18,7 +18,7 @@
 
 <script>
 import SidebarButton from '../Button'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'sidebarHighscoreForm',
@@ -34,7 +34,7 @@ export default {
     'score'
   ]),
   methods: {
-    ...mapMutations([
+    ...mapActions([
       'addHighscore'
     ]),
     submit () {
