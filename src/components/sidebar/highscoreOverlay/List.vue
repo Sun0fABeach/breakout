@@ -90,7 +90,7 @@ export default {
       &:hover {
         border-color: grey;
       }
-      &:first-child, &:last-child {
+      &.active {
         font-weight: bold;
       }
     }
