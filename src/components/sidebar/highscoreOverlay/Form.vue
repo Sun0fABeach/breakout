@@ -6,6 +6,7 @@
         type="text"
         name="user_name"
         maxlength="12"
+        autocomplete="off"
         v-model.trim="name"
         ref="input"
       />
