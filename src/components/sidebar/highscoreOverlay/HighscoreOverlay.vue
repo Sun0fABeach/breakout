@@ -62,7 +62,7 @@ export default {
   bottom: 0;
   left: 0;
   width: 100%;
-  padding: 1rem; // parent padding ignored, so apply own padding
+  padding: 0 1rem 1rem;; // parent padding ignored, so apply own padding
   background-color: aliceblue;
 
   &.v-enter-active, &.v-leave-active {

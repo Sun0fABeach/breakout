@@ -3,6 +3,7 @@ enum Direction {
 }
 
 const keys: { readonly [index: string]: string } = {
+  mute: 'keydown_M',
   pause: 'keydown_P',
   restart: 'keydown_R'
 }

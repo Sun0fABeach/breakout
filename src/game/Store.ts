@@ -7,6 +7,9 @@ interface stateChangeObj {
 
 class Store {
   /** getters **/
+  static get muted (): boolean {
+    return store.state.muted
+  }
   static get level (): number {
     return store.state.level
   }
@@ -29,6 +32,10 @@ class Store {
   /** mutations **/
   static changeGameState (newState: GameState): void {
     store.commit('changeGameState', newState)
+  }
+
+  static toggleMute (): void {
+    store.commit('toggleMute')
   }
 
   static bumpScore (points: number): void {

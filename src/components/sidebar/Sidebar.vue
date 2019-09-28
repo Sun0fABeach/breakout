@@ -1,5 +1,6 @@
 <template>
   <div id="sidebar">
+    <MuteSymbol />
     <h1>Breakout!</h1>
     <SidebarContent />
   </div>
@@ -7,10 +8,11 @@
 
 <script>
 import SidebarContent from './Content'
+import MuteSymbol from './MuteSymbol'
 
 export default {
   name: 'sidebar',
-  components: { SidebarContent }
+  components: { SidebarContent, MuteSymbol }
 }
 </script>
 

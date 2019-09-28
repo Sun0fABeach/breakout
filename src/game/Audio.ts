@@ -1,3 +1,5 @@
+import Store from '@/game/Store'
+
 class Audio {
   private static scene: Scene
   private static readonly volumes: { [index: string]: number } = {
@@ -19,6 +21,9 @@ class Audio {
   }
 
   static play (name: string, vol?: number): void {
+    if (Store.muted) {
+      return
+    }
     const volume: number = vol === undefined ? Audio.volumes[name] : vol
     Audio.scene.sound.playAudioSprite('audiosprite', name, { volume })
   }

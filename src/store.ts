@@ -28,6 +28,7 @@ export default new Vuex.Store({
   state: {
     gameState: GameState.None,
     paused: false,
+    muted: false,
     ...baseVals
   },
   actions: {
@@ -45,6 +46,9 @@ export default new Vuex.Store({
 
     pause (state, active: boolean) {
       state.paused = active
+    },
+    toggleMute (state) {
+      state.muted = !state.muted
     },
     bumpScore (state, val: number) {
       state.score += val
