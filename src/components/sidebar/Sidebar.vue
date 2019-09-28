@@ -25,6 +25,7 @@ export default {
   font-family: 'Courier New', Courier, monospace;
   z-index: 1; // above game surface
   overflow-x: hidden; // for highscore overlay slide-in
+  user-select: none;
 
   h1 {
     margin: 1rem 0 0;
