@@ -31,10 +31,10 @@ export default {
 
 <style lang="scss" scoped>
 #sidebar-content {
+  --content-padding: 0 1rem 1rem;
   position: relative; // for abs. positioned highscore overlay
   flex-grow: 1;
   display: flex; // will stretch game info across full height
-  padding: 0 1rem 1rem;
 }
 </style>
 

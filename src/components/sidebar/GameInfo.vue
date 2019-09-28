@@ -67,6 +67,7 @@ export default {
 #sidebar-game-info {
   display: flex;
   flex-direction: column;
+  padding: var(--content-padding);
 
   > * {
     margin-top: 1rem;
