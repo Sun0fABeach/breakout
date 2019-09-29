@@ -1,37 +1,27 @@
 <template>
-  <div>
-    <span :class="muted && 'muted'" @click="toggleMute">
-      {{ muted ? '&#x1f508;' : '&#x1f50a;' }}
-    </span>
-  </div>
+  <img :src="muted ? MuteSVG : UnmuteSVG" @click="toggleMute">
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex'
+import MuteSVG from '@/assets/mute.svg'
+import UnmuteSVG from '@/assets/unmute.svg'
 
 export default {
+  data () {
+    return {
+      MuteSVG, UnmuteSVG
+    }
+  },
   computed: mapState(['muted']),
   methods: mapMutations(['toggleMute'])
 }
 </script>
 
 <style lang="scss" scoped>
-div {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 0.5rem;
-  padding: 0 1rem;
-  color: darkslategrey;
-
-  > span {
-    display: inline-flex; // to make content stick left
-    font-size: 1.125rem;
-    width: 1rem;
-    cursor: pointer;
-
-    &.muted { // to prevent wiggle when switching symbol
-      transform: translateX(1px)
-    }
-  }
+img {
+  width: 1rem;
+  opacity: 0.65;
+  cursor: pointer;
 }
 </style>

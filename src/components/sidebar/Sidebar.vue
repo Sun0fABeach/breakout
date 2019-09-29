@@ -1,6 +1,8 @@
 <template>
   <div id="sidebar">
-    <MuteSymbol />
+    <div>
+      <MuteSymbol />
+    </div>
     <h1>Breakout!</h1>
     <SidebarContent />
   </div>
@@ -26,6 +28,13 @@ export default {
   z-index: 1; // above game surface
   overflow-x: hidden; // for highscore overlay slide-in
   user-select: none;
+
+  > div:first-child {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.625rem;
+    padding: 0 1rem;
+  }
 
   h1 {
     margin: 1rem 0 0;
