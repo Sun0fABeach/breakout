@@ -34,7 +34,7 @@ class Ball extends Physics.Arcade.Image {
 
     emitters.explosion = ['small', 'medium', 'big'].map(type =>
       Particles.managers.stars[type].createEmitter({
-        active: false,
+        on: false,
         blendMode: Phaser.BlendModes.SCREEN,
         speed: { min: 50, max: 500 },
         scale: { start: 1, end: 0 },
@@ -47,7 +47,7 @@ class Ball extends Physics.Arcade.Image {
     )
     emitters.puff = [
       Particles.managers.puff.createEmitter({
-        active: false,
+        on: false,
         blendMode: Phaser.BlendModes.SCREEN,
         speed: 15,
         scale: { start: 0.5, end: 0.7 },
@@ -57,7 +57,7 @@ class Ball extends Physics.Arcade.Image {
     ]
     emitters.tail = ['small', 'medium'].map(type =>
       Particles.managers.stars[type].createEmitter({
-        active: false,
+        on: false,
         blendMode: Phaser.BlendModes.ADD,
         radial: false,
         scale: { start: 1, end: 0, ease: 'Power3' },
@@ -116,7 +116,6 @@ class Ball extends Physics.Arcade.Image {
 
   explode (): void {
     Object.values(this.emitters.explosion).forEach(emitter => {
-      emitter.resume()
       emitter.explode(60, this.x, this.y)
     })
     this.disableFull()
@@ -124,7 +123,6 @@ class Ball extends Physics.Arcade.Image {
 
   explodeBottom (): void {
     Object.values(this.emitters.explosion).forEach(emitter => {
-      emitter.resume()
       emitter.setAngle(this.explosionAngleRange(this.body.velocity.angle()))
       emitter.explode(60, this.x, this.world.bounds.height - 4)
     })
@@ -171,7 +169,6 @@ class Ball extends Physics.Arcade.Image {
 
   activateTail (): void {
     this.emitters.tail.forEach(emitter => {
-      emitter.resume()
       emitter.start()
       emitter.startFollow(this)
     })
@@ -245,8 +242,7 @@ class Ball extends Physics.Arcade.Image {
       coords = [ worldWidth - 1, this.y ]
     }
 
-    Object.values(this.emitters.puff).forEach(emitter => {
-      emitter.resume()
+    this.emitters.puff.forEach(emitter => {
       emitter.setAngle(this.particleAngleRange(directionDeg, 180))
       emitter.explode(2, ...coords)
     })

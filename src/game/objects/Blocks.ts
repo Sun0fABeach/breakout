@@ -35,7 +35,7 @@ class Blocks {
   static init (scene: Scene): void {
     Blocks.emitters = ['small', 'medium'].map(type =>
       Particles.managers.stars[type].createEmitter({
-        active: false,
+        on: false,
         blendMode: Phaser.BlendModes.SCREEN,
         scale: { start: 0.8, end: 0 },
         speed: { min: -100, max: 100 },
@@ -223,7 +223,6 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
         source: isSpeedBlock ? this.speedBlockBounds(block) : block.getBounds(),
         quantity: emitterQuantity
       })
-      emitter.resume()
       // @ts-ignore - no need to pass arguments here
       emitter.explode()
     })

@@ -36,7 +36,7 @@ class Paddle extends GameObjects.Container {
   setupEmitters (scene: Scene): ParticleEmitter[] {
     return ['small', 'medium', 'big'].map(type =>
       Particles.managers.stars[type].createEmitter({
-        active: false,
+        on: false,
         blendMode: Phaser.BlendModes.SCREEN,
         speed: { min: 100, max: 400 },
         scale: { start: 1, end: 0 },
@@ -113,7 +113,6 @@ class Paddle extends GameObjects.Container {
         type: 'random',
         source: this.getBounds()
       })
-      emitter.resume()
       // @ts-ignore - no need to pass more arguments here
       emitter.explode(100)
     })
