@@ -9,6 +9,7 @@ class Ball extends Physics.Arcade.Image {
   private readonly speedBase: number = 350
   private readonly speedIncrease: number = 100
   private readonly angularVelocity: number = 200
+  private readonly tailParticleSpeed: number = 100
   private readonly world: ArcadePhysics.World
   private readonly emitters: EmitterDict
 
@@ -54,6 +55,17 @@ class Ball extends Physics.Arcade.Image {
         alpha: 0.15
       })
     ]
+    emitters.tail = ['small', 'medium'].map(type =>
+      Particles.managers.stars[type].createEmitter({
+        active: false,
+        blendMode: Phaser.BlendModes.ADD,
+        radial: false,
+        scale: { start: 1, end: 0, ease: 'Power3' },
+        lifespan: 1000,
+        tint: [ 0xffff00, 0xff0000, 0x00ff00 ],
+        gravityY: -200
+      })
+    )
 
     return emitters
   }
@@ -155,6 +167,33 @@ class Ball extends Physics.Arcade.Image {
   private setSpeed (newSpeed: number): void {
     this.speed = newSpeed
     this.body.velocity.normalize().scale(newSpeed)
+  }
+
+  activateTail (): void {
+    this.emitters.tail.forEach(emitter => {
+      emitter.resume()
+      emitter.start()
+      emitter.startFollow(this)
+    })
+    this.adjustTail()
+  }
+
+  deactivateTail (): void {
+    this.emitters.tail.forEach(emitter => {
+      emitter.stop()
+      emitter.stopFollow()
+    })
+  }
+
+  adjustTail (): void {
+    const currentVector = new PhaserMath.Vector2(this.body.velocity)
+    currentVector.normalize()
+    const speedX: number = currentVector.x * this.tailParticleSpeed
+    const speedY: number = currentVector.y * this.tailParticleSpeed
+    this.emitters.tail.forEach(emitter => {
+      emitter.setSpeedX({ min: -speedY, max: speedY })
+      emitter.setSpeedY({ min: -speedX, max: speedX })
+    })
   }
 
   stop (): void {

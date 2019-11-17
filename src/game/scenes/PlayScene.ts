@@ -147,8 +147,10 @@ export default class PlayScene extends Scene {
     } else {
       // call like this to enable multiple layered thuds:
       Audio.play('thud')
-      this.prefabs.ball.puff(up, false, left, right)
-      this.prefabs.ball.spinOnCollision({ up, right, down, left })
+      const ball: Ball = this.prefabs.ball
+      ball.puff(up, false, left, right)
+      ball.spinOnCollision({ up, right, down, left, none: false })
+      ball.adjustTail()
     }
   }
 
@@ -159,6 +161,7 @@ export default class PlayScene extends Scene {
 
     if (blocks.allHit) {
       Audio.play('gong')
+      ball.deactivateTail()
       ball.explode()
 
       if (Levels.hasNext()) {
@@ -168,6 +171,7 @@ export default class PlayScene extends Scene {
       }
     } else {
       ball.spinOnCollision(ball.body.touching)
+      ball.adjustTail()
       Store.bumpScoreMultiplier(this.scoreMultBump)
       if (block.getData('accelerates')) {
         Audio.play('punch')
@@ -224,6 +228,7 @@ export default class PlayScene extends Scene {
     const { ball, paddle } = this.prefabs
 
     Audio.play('explosion')
+    ball.deactivateTail()
     ball.explodeBottom()
     Store.resetScoreMultiplier()
     Store.loseLife()

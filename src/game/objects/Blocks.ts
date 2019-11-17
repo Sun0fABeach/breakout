@@ -168,6 +168,7 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
 
     if (block.getData('accelerates')) {
       ball.increaseSpeed()
+      ball.activateTail()
     }
   }
 
