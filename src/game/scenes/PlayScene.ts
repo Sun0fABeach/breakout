@@ -1,4 +1,4 @@
-import Phaser, { Scene } from 'phaser'
+import { Scene } from 'phaser'
 import Ball from '@/game/objects/Ball'
 import Paddle from '@/game/objects/Paddle'
 import Blocks from '@/game/objects/Blocks'
@@ -9,14 +9,11 @@ import { Direction, keys } from '@/game/globals'
 import Store, { GameState } from '@/game/Store'
 
 export default class PlayScene extends Scene {
-  private prefabs: { [index: string]: any }
-  private readonly scoreMultBump: number
+  private prefabs: { [index: string]: any } = {} // filled in create()
+  private readonly scoreMultBump: number = 0.5
 
   constructor () {
     super({ key: 'PlayScene' })
-
-    this.scoreMultBump = 0.5
-    this.prefabs = {} // filled in create()
   }
 
   create (): void {
@@ -172,11 +169,12 @@ export default class PlayScene extends Scene {
     } else {
       ball.spinOnCollision(ball.body.touching)
       ball.adjustTail()
-      Store.bumpScoreMultiplier(this.scoreMultBump)
       if (block.getData('accelerates')) {
         Audio.play('punch')
+        Store.bumpScoreMultiplier(this.scoreMultBump * 2)
       } else {
         Audio.play(block.getData('strength') === 0 ? 'ding' : 'dong')
+        Store.bumpScoreMultiplier(this.scoreMultBump)
       }
     }
   }
