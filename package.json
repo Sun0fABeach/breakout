@@ -12,12 +12,14 @@
   "dependencies": {
     "@tweenjs/tween.js": "^18.1.2",
     "dexie": "^2.0.4",
+    "lodash-es": "^4.17.15",
     "phaser": "^3.16.2",
     "vue": "^2.6.10",
     "vue-paginate": "^3.6.0",
     "vuex": "^3.1.0"
   },
   "devDependencies": {
+    "@types/lodash-es": "^4.17.3",
     "@vue/cli-plugin-babel": "^3.7.0",
     "@vue/cli-plugin-eslint": "^3.7.0",
     "@vue/cli-plugin-typescript": "^3.7.0",
