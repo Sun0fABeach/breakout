@@ -3,13 +3,15 @@ import BootScene from '@/game/scenes/BootScene'
 import PlayScene from '@/game/scenes/PlayScene'
 import PauseScene from '@/game/scenes/PauseScene'
 
-function launch (width: number, height: number): void {
+function launch (
+  containerId: string, width: number, height: number
+): Phaser.Game {
   // eslint-disable-next-line
-  new Phaser.Game({
+  return new Phaser.Game({
     type: Phaser.AUTO,
     width,
     height,
-    parent: 'phaser-game',
+    parent: containerId,
     physics: {
       default: 'arcade',
       arcade: {

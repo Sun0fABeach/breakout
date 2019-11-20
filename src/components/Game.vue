@@ -2,7 +2,7 @@
   <div id="game-container">
 
     <div id="game-surface">
-      <div id="phaser-game" :style="dimensionsStyle" />
+      <div :id="containerId" :style="dimensionsStyle" />
       <OverlayUI />
     </div>
 
@@ -27,17 +27,23 @@ export default {
   data () {
     return {
       downloaded: false,
+      gameInstance: null,
+      containerId: 'phaser-game',
       dimensionsStyle: {
         width: width + 'px',
         height: height + 'px'
       }
     }
   },
-  mounted () {
-    import(/* webpackChunkName: "game" */ '@/game/game').then(game => {
-      this.downloaded = true
-      this.$nextTick(() => game.launch(width, height))
+  async mounted () {
+    const game = await import(/* webpackChunkName: "game" */ '@/game/game')
+    this.downloaded = true
+    this.$nextTick(() => {
+      this.gameInstance = game.launch(this.containerId, width, height)
     })
+  },
+  destroyed () {
+    this.gameInstance.destroy(false)
   }
 }
 </script>
