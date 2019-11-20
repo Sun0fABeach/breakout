@@ -20,6 +20,7 @@
 <script>
 import SidebarButton from '../Button'
 import { mapState, mapActions } from 'vuex'
+import { pick } from 'lodash-es'
 
 export default {
   name: 'sidebarHighscoreForm',
@@ -40,7 +41,7 @@ export default {
     ]),
     submit () {
       if (this.name) {
-        this.addHighscore({ name: this.name, score: this.score })
+        this.addHighscore(pick(this, 'name', 'score'))
         this.$emit('submitted')
       }
     }

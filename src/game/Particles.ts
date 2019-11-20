@@ -1,3 +1,5 @@
+import { transform } from 'lodash-es'
+
 type ManagerDict = { [index: string]: ParticleEmitterManager }
 
 interface Managers {
@@ -9,12 +11,11 @@ class Particles {
   static managers: Managers
 
   static init (scene: Scene): void {
-    const stars: ManagerDict = ['Small', 'Medium', 'Big'].reduce(
+    const stars: ManagerDict = transform(['Small', 'Medium', 'Big'],
       (res: ManagerDict, type: string) => {
         const key = type.toLowerCase()
         res[key] = scene.add.particles('spritesheet', `star${type}`)
         res[key].depth = Infinity
-        return res
       }, {}
     )
     const puff: ParticleEmitterManager = scene.add.particles(

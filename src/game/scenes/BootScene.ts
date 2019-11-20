@@ -13,7 +13,7 @@ const audioSpriteSheetMP3 = require('@/game/assets/sounds/audiosprite.mp3')
 const blocks: string[] = []
 
 each(range(1, numLevels + 1), idx => {
-  // blocks[i] = require(`@/game/assets/blocksDebug.json`)
+  // blocks[idx] = require(`@/game/assets/blocksDebug.json`)
   blocks[idx] = require(`@/game/assets/blocksLvl${idx}.json`)
 })
 

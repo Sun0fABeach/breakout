@@ -1,6 +1,7 @@
 import Blocks from '@/game/objects/Blocks'
 import { numLevels } from '@/game/globals'
 import Store from '@/game/Store'
+import { each, range } from 'lodash-es'
 
 class Levels {
   private static scene: Scene
@@ -8,9 +9,9 @@ class Levels {
 
   static init (scene: Scene): void {
     Levels.scene = scene
-    for (let i: number = 1; i <= numLevels; ++i) {
-      Levels.tileMaps[i] = scene.add.tilemap(`blocksLvl${i}`)
-    }
+    each(range(1, numLevels + 1), idx => {
+      Levels.tileMaps[idx] = scene.add.tilemap(`blocksLvl${idx}`)
+    })
   }
 
   static hasNext (): Boolean {

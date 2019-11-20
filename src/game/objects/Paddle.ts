@@ -1,6 +1,7 @@
 import { GameObjects } from 'phaser'
 import Ball from '@/game/objects/Ball'
 import Particles from '@/game/Particles'
+import { map, each } from 'lodash-es'
 
 type CollisionCb = (ball: Ball, paddle: Paddle) => any
 
@@ -34,7 +35,7 @@ class Paddle extends GameObjects.Container {
   }
 
   setupEmitters (scene: Scene): ParticleEmitter[] {
-    return ['small', 'medium', 'big'].map(type =>
+    return map(['small', 'medium', 'big'], (type: string) =>
       Particles.managers.stars[type].createEmitter({
         on: false,
         blendMode: Phaser.BlendModes.SCREEN,
@@ -108,7 +109,7 @@ class Paddle extends GameObjects.Container {
 
   explode (): void {
     this.setAlpha(0)
-    this.emitters.forEach(emitter => {
+    each(this.emitters, (emitter: ParticleEmitter) => {
       emitter.setEmitZone({
         type: 'random',
         source: this.getBounds()

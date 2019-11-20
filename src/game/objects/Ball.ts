@@ -1,6 +1,7 @@
 import Phaser, { Physics, Math as PhaserMath } from 'phaser'
 import Particles from '@/game/Particles'
 import { Direction } from '@/game/globals'
+import { map, each, method } from 'lodash-es'
 
 type EmitterDict = { [index: string]: ParticleEmitter[] }
 
@@ -32,7 +33,7 @@ class Ball extends Physics.Arcade.Image {
   setupEmitters (scene: Scene): EmitterDict {
     const emitters: EmitterDict = {}
 
-    emitters.explosion = ['small', 'medium', 'big'].map(type =>
+    emitters.explosion = map(['small', 'medium', 'big'], (type: string) =>
       Particles.managers.stars[type].createEmitter({
         on: false,
         blendMode: Phaser.BlendModes.SCREEN,
@@ -55,7 +56,7 @@ class Ball extends Physics.Arcade.Image {
         alpha: 0.15
       })
     ]
-    emitters.tail = ['small', 'medium'].map(type =>
+    emitters.tail = map(['small', 'medium'], (type: string) =>
       Particles.managers.stars[type].createEmitter({
         on: false,
         blendMode: Phaser.BlendModes.ADD,
@@ -115,14 +116,12 @@ class Ball extends Physics.Arcade.Image {
   }
 
   explode (): void {
-    Object.values(this.emitters.explosion).forEach(emitter => {
-      emitter.explode(60, this.x, this.y)
-    })
+    each(this.emitters.explosion, method('explode', 60, this.x, this.y))
     this.disableFull()
   }
 
   explodeBottom (): void {
-    Object.values(this.emitters.explosion).forEach(emitter => {
+    each(this.emitters.explosion, (emitter: ParticleEmitter) => {
       emitter.setAngle(this.explosionAngleRange(this.body.velocity.angle()))
       emitter.explode(60, this.x, this.world.bounds.height - 4)
     })
@@ -168,7 +167,7 @@ class Ball extends Physics.Arcade.Image {
   }
 
   activateTail (): void {
-    this.emitters.tail.forEach(emitter => {
+    each(this.emitters.tail, (emitter: ParticleEmitter) => {
       emitter.start()
       emitter.startFollow(this)
     })
@@ -176,7 +175,7 @@ class Ball extends Physics.Arcade.Image {
   }
 
   deactivateTail (): void {
-    this.emitters.tail.forEach(emitter => {
+    each(this.emitters.tail, (emitter: ParticleEmitter) => {
       emitter.stop()
       emitter.stopFollow()
     })
@@ -187,7 +186,7 @@ class Ball extends Physics.Arcade.Image {
     currentVector.normalize()
     const speedX: number = currentVector.x * this.tailParticleSpeed
     const speedY: number = currentVector.y * this.tailParticleSpeed
-    this.emitters.tail.forEach(emitter => {
+    each(this.emitters.tail, (emitter: ParticleEmitter) => {
       emitter.setSpeedX({ min: -speedY, max: speedY })
       emitter.setSpeedY({ min: -speedX, max: speedX })
     })
@@ -242,7 +241,7 @@ class Ball extends Physics.Arcade.Image {
       coords = [ worldWidth - 1, this.y ]
     }
 
-    this.emitters.puff.forEach(emitter => {
+    each(this.emitters.puff, (emitter: ParticleEmitter) => {
       emitter.setAngle(this.particleAngleRange(directionDeg, 180))
       emitter.explode(2, ...coords)
     })

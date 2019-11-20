@@ -7,6 +7,7 @@ import Audio from '@/game/Audio'
 import Particles from '@/game/Particles'
 import { Direction, keys } from '@/game/globals'
 import Store, { GameState } from '@/game/Store'
+import { each, values } from 'lodash-es'
 
 export default class PlayScene extends Scene {
   private prefabs: { [index: string]: any } = {} // filled in create()
@@ -113,7 +114,7 @@ export default class PlayScene extends Scene {
   private modifyCursorButtons (
     callback: { (button: KeyboardKey): void }
   ): void {
-    Object.values(this.prefabs.cursor as KeyboardKey[]).forEach(callback)
+    each(values(this.prefabs.cursor), callback)
   }
 
   private launchBallFromPaddle (): void {

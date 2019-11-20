@@ -3,6 +3,9 @@ import Particles from '@/game/Particles'
 import Ball from '@/game/objects/Ball'
 import PointsText from '@/game/objects/text/PointsText'
 import Store from '@/game/Store'
+import {
+  map, concat, reduce, each, compact, values, method, flatten, every, some
+} from 'lodash-es'
 
 type Block = PhysicsSprite
 type tiledBlockData = {
@@ -21,9 +24,9 @@ const blockColors: string[] = [
   'Green', 'Grey', 'Purple', 'Red', 'Yellow', 'Blue'
 ]
 const blockVariants: string[] = ['', 'Strong', 'Speed']
-const blockGroupNames: string[] = blockVariants.reduce(
+const blockGroupNames: string[] = reduce(blockVariants,
   (res: string[], variant: string) =>
-    res.concat(blockColors.map((name: string) => `block${name}${variant}`)),
+    concat(res, map(blockColors, (name: string) => `block${name}${variant}`)),
   []
 )
 
@@ -33,7 +36,7 @@ class Blocks {
 
   /* needs to be called before constructing instances! */
   static init (scene: Scene): void {
-    Blocks.emitters = ['small', 'medium'].map(type =>
+    Blocks.emitters = map(['small', 'medium'], (type: string) =>
       Particles.managers.stars[type].createEmitter({
         on: false,
         blendMode: Phaser.BlendModes.SCREEN,
@@ -49,37 +52,34 @@ class Blocks {
       classType: PointsText
     })
 
-    this.blockGroups = blockGroupNames.map((spriteName: string) => {
+    this.blockGroups = compact(map(blockGroupNames, (spriteName: string) => {
       const blocks: GameObjects.Sprite[] = tilemap.createFromObjects(
         'Blocks', spriteName, { key: 'spritesheet', frame: spriteName }
       )
       if (blocks.length === 0) {
         return null
       }
-      blocks.forEach((block: GameObjects.Sprite) => {
+      each(blocks, (block: GameObjects.Sprite) => {
         this.normalizeTiledObjectData(block)
         scene.physics.world.enableBody(block, Physics.Arcade.STATIC_BODY)
       })
       return new BlockGroup(scene, blocks as Block[], pointsTextGroup)
-    }).filter(
-      (blockGroup: BlockGroup | null) => blockGroup !== null
-    ) as BlockGroup[]
+    }))
   }
 
   private normalizeTiledObjectData (block: GameObjects.Sprite): void {
-    const entries: tiledBlockData[] = Object.values(block.data.list)
-    entries.forEach((entry: tiledBlockData, idx: number) => {
+    each(values(block.data.list), (entry: tiledBlockData, idx: number) => {
       block.setData(entry.name, entry.value)
       block.data.remove(idx.toString())
     })
   }
 
   killAll (): void {
-    this.blockGroups.forEach(group => group.killAll())
+    each(this.blockGroups, method('killAll'))
   }
 
   fadeKillAll (): Promise<(void | Promise<void>)[]> {
-    return Promise.all(this.blockGroups.map(group =>
+    return Promise.all(map(this.blockGroups, (group: BlockGroup) =>
       new Promise(async resolve => {
         await group.fadeKillAll()
         resolve()
@@ -88,25 +88,23 @@ class Blocks {
   }
 
   reset (): void {
-    this.blockGroups.forEach(group => group.reset())
+    each(this.blockGroups, method('reset'))
   }
 
   setupBallCollider (ball: Ball, callback: CollisionCb): void {
-    this.blockGroups.forEach(group => group.setupBallCollider(ball, callback))
+    each(this.blockGroups, method('setupBallCollider', ball, callback))
   }
 
   setBallForCollider (ball: Ball): void {
-    this.blockGroups.forEach(group => group.setBallForCollider(ball))
+    each(this.blockGroups, method('setBallForCollider', ball))
   }
 
   get all (): Block[] {
-    return this.blockGroups.reduce(
-      (acc: Block[], group: BlockGroup) => acc.concat(group.blocks), []
-    )
+    return flatten(map(this.blockGroups, 'blocks'))
   }
 
   get allHit (): boolean {
-    return this.blockGroups.every(group => group.allHit)
+    return every(this.blockGroups, 'allHit')
   }
 }
 
@@ -119,7 +117,7 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
     private readonly pointsTextGroup: GameObjects.Group
   ) {
     super(scene.physics.world, scene, blocks)
-    blocks.forEach((block: Block) => this.prepareBlock(block))
+    each(blocks, this.prepareBlock)
     this.ballCollider = null
   }
 
@@ -217,7 +215,7 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
   private emitHitParticles (block: Block): void {
     const isSpeedBlock: boolean = !!block.getData('accelerates')
 
-    Blocks.emitters.forEach(emitter => {
+    each(Blocks.emitters, (emitter: ParticleEmitter) => {
       emitter.setEmitZone({
         type: 'edge',
         source: isSpeedBlock ? this.speedBlockBounds(block) : block.getBounds(),
@@ -268,7 +266,7 @@ class BlockGroup extends Physics.Arcade.StaticGroup {
   }
 
   get allHit (): boolean {
-    return this.blocks.every((block: Block) => !block.body.enable)
+    return !some(this.blocks, 'body.enable')
   }
 
   get blocks (): Block[] {
