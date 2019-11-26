@@ -7,6 +7,7 @@ import Audio from '@/game/Audio'
 import Particles from '@/game/Particles'
 import { Direction, keys } from '@/game/globals'
 import Store, { GameState } from '@/game/Store'
+import { wait } from '@/helpers'
 import { each, values } from 'lodash-es'
 
 export default class PlayScene extends Scene {
@@ -50,7 +51,7 @@ export default class PlayScene extends Scene {
     })
 
     // play sound slightly into bounce-in animation of start button
-    setTimeout(() => Audio.play('swish'), 325)
+    wait(325).then(() => Audio.play('swish'))
   }
 
   private setupPlay (): void {
@@ -188,18 +189,17 @@ export default class PlayScene extends Scene {
     Store.resetScoreMultiplier()
 
     // reset of level num not delayed -> in sync with other sidebar num resets
-    reset ? Store.resetLevel() : setTimeout(Store.nextLevel, timeoutBase)
+    reset ? Store.resetLevel() : wait(timeoutBase).then(Store.nextLevel)
 
-    setTimeout(() => {
+    wait(timeoutBase).then(() =>
       Store.changeGameState(GameState.NextLevel) // shows next level text
-    }, timeoutBase)
-
-    setTimeout(() => {
+    )
+    wait(timeoutBase + 1000).then(() =>
       Store.changeGameState(GameState.Running) // hides next level text
-    }, timeoutBase + 1000)
+    )
 
     return new Promise(resolve => {
-      setTimeout(() => {
+      wait(timeoutBase + 1000).then(() => {
         const { ball, paddle } = this.prefabs
         this.setupNextBlocks()
         paddle.mountBall(ball)
@@ -208,7 +208,7 @@ export default class PlayScene extends Scene {
         }
         this.activatePauseButton()
         resolve()
-      }, timeoutBase + 1000)
+      })
     })
   }
 
@@ -247,16 +247,16 @@ export default class PlayScene extends Scene {
       this.deactivateCursorButtons()
     }
 
-    setTimeout(() => { // wait for ball explosion to quiet down
+    wait(won ? 1250 : 500).then(() => { // wait for ball explosion to quiet down
       if (won) {
         this.deactivateCursorButtons()
         Store.changeGameState(GameState.Won)
-        setTimeout(() => Audio.play('ohYeah'), 750)
+        wait(750).then(() => Audio.play('ohYeah'))
       } else {
         Store.changeGameState(GameState.Lost)
-        setTimeout(() => Audio.play('ohNo'), 750)
+        wait(750).then(() => Audio.play('ohNo'))
       }
-    }, won ? 1250 : 500)
+    })
   }
 
   private async restart (): Promise<void> {
