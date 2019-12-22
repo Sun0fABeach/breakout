@@ -13,24 +13,24 @@
                  "name":"blockGreen",
                  "properties":[
                         {
-                         "name":"foo",
-                         "type":"int",
-                         "value":99
-                        }, 
-                        {
                          "name":"hello",
                          "type":"string",
                          "value":"world"
-                        }, 
+                        },
                         {
                          "name":"sprite",
                          "type":"string",
                          "value":"blockGreen"
-                        }, 
+                        },
                         {
                          "name":"strength",
                          "type":"int",
                          "value":1
+                        },
+                        {
+                         "name":"value",
+                         "type":"int",
+                         "value":99
                         }],
                  "rotation":0,
                  "type":"",
