@@ -1,6 +1,6 @@
 <template functional>
   <tr>
-    <th>{{ props.rank }}</th>
+    <th :class="{ tall: props.tall }">{{ props.rank }}</th>
     <td>
       <div>
         <span>{{ props.name }}</span>
@@ -25,6 +25,10 @@ export default {
     score: {
       type: [Number, String],
       required: true
+    },
+    tall: {
+      type: Boolean,
+      default: false
     }
   }
 }
@@ -32,10 +36,17 @@ export default {
 
 <style lang="scss" scoped>
 th {
+  padding-top: 0.5rem;
+  padding-right: 0.375rem;
+  color: dimgrey;
   font-size: 1.875rem;
   font-weight: normal;
   vertical-align: bottom;
   text-align: left;
+
+  &.tall {
+    padding-top: 0.625rem;
+  }
 }
 
 td {

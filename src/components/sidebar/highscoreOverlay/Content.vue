@@ -1,8 +1,8 @@
 <template>
   <div id="sidebar-hs-content">
     <transition :name="transition" mode="out-in">
-      <HighscoreList v-if="showList" />
-      <HighscoreForm v-else @submitted="switchToList" />
+      <HighscoreForm v-if="showForm" @submitted="onSubmit" />
+      <HighscoreList v-else :tall="tallList" />
     </transition>
   </div>
 </template>
@@ -10,6 +10,7 @@
 <script>
 import HighscoreForm from './Form'
 import HighscoreList from './List'
+import { wait } from '@/helpers'
 
 export default {
   name: 'sidebarHighscoreContent',
@@ -18,29 +19,30 @@ export default {
     HighscoreList
   },
   props: {
-    overlayOpen: {
+    gameEnded: {
       type: Boolean,
-      required: true
+      default: false
     }
   },
   data () {
     return {
-      showList: false,
-      transition: 'fade'
+      showForm: this.gameEnded,
+      transition: 'none',
+      tallList: true
     }
   },
   methods: {
-    switchToList () {
+    async onSubmit () {
+      this.showForm = false
       this.transition = 'fade'
-      this.showList = true
+      await wait(1000)
+      this.transition = 'none'
     }
   },
   watch: {
-    overlayOpen (opens) {
-      if (opens) {
-        this.transition = 'none'
-        this.showList = false
-      }
+    gameEnded (ended) {
+      this.showForm = ended
+      this.tallList = !ended
     }
   }
 }

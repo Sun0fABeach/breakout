@@ -3,11 +3,16 @@
     <h2>Top Scores</h2>
 
     <table>
-      <paginate name="highscoreList" :list="highscores" :per="8" tag="tbody">
+      <paginate
+        name="highscoreList"
+        :list="highscores"
+        :per="pageSize"
+        tag="tbody"
+      >
         <HighscoreListItem
           v-for="(entry, idx) in paginated('highscoreList')"
           :key="idx"
-          v-bind="entry"
+          v-bind="{ tall, ...entry }"
         />
       </paginate>
     </table>
@@ -24,20 +29,40 @@
 import HighscoreListItem from './ListItem'
 import { mapActions } from 'vuex'
 
+const pageSizes = {
+  default: 7,
+  tall: 8
+}
+
 export default {
   name: 'sidebarHighscoreList',
   components: {
     HighscoreListItem
   },
+  props: {
+    tall: {
+      type: Boolean,
+      default: false
+    }
+  },
   data () {
     return {
       highscores: [],
-      paginate: ['highscoreList']
+      paginate: ['highscoreList'],
+      pageSize: pageSizes.default
     }
   },
   methods: mapActions([
     'getRankedHighscores'
   ]),
+  watch: {
+    tall: {
+      handler (isTall) {
+        this.pageSize = pageSizes[isTall ? 'tall' : 'default']
+      },
+      immediate: true
+    }
+  },
   async created () {
     this.highscores = await this.getRankedHighscores()
   }
@@ -74,31 +99,23 @@ export default {
 
 <style lang="scss">
 /* pagination items/links are created dynamically, so can't use scoped here */
-#sidebar-hs-list {
-  > table th {
-    padding-top: 0.5rem;
-    padding-right: 0.375rem;
-    color: dimgrey;
+#sidebar-hs-list .paginate-links {
+  li {
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    cursor: pointer;
+
+    &:hover {
+      border-color: grey;
+    }
+    &.active {
+      font-weight: bold;
+    }
   }
 
-  .paginate-links {
-    li {
-      border: 1px solid transparent;
-      border-radius: 0.25rem;
-      cursor: pointer;
-
-      &:hover {
-        border-color: grey;
-      }
-      &.active {
-        font-weight: bold;
-      }
-    }
-
-    a {
-      display: inline-block;
-      padding: 0.125rem 0.25rem;
-    }
+  a {
+    display: inline-block;
+    padding: 0.125rem 0.25rem;
   }
 }
 </style>
