@@ -1,6 +1,6 @@
 <template>
   <div id="sidebar-hs-content">
-    <transition :name="transition" mode="out-in">
+    <transition :name="transition" mode="out-in" @after-enter="afterFade">
       <HighscoreForm v-if="showForm" @submitted="onSubmit" />
       <HighscoreList v-else :tall="tallList" />
     </transition>
@@ -10,7 +10,6 @@
 <script>
 import HighscoreForm from './Form'
 import HighscoreList from './List'
-import { wait } from '@/helpers'
 
 export default {
   name: 'sidebarHighscoreContent',
@@ -32,10 +31,11 @@ export default {
     }
   },
   methods: {
-    async onSubmit () {
+    onSubmit () {
       this.showForm = false
       this.transition = 'fade'
-      await wait(1000)
+    },
+    afterFade () {
       this.transition = 'none'
     }
   },
@@ -61,5 +61,4 @@ export default {
     opacity: 0;
   }
 }
-
 </style>

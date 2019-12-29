@@ -1,12 +1,16 @@
 <template>
-  <transition>
+  <transition
+    @before-enter="beforeOpen"
+    @after-enter="afterOpen"
+    @after-leave="afterClose"
+  >
     <div id="sidebar-hs-overlay" v-show="open">
-      <div id="sidebar-hs-score" v-if="gameEndedLocal">
+      <div id="sidebar-hs-score" v-if="gameEndedScoped">
         <span>Final Score</span>
         <span>{{ displayedScore }}</span>
       </div>
 
-      <HighscoreContent :gameEnded="gameEndedLocal" />
+      <HighscoreContent :gameEnded="gameEndedScoped" />
     </div>
   </transition>
 </template>
@@ -14,7 +18,6 @@
 <script>
 import HighscoreContent from './Content'
 import { mapState } from 'vuex'
-import { wait } from '@/helpers'
 
 export default {
   name: 'sidebarHighscoreOverlay',
@@ -32,34 +35,32 @@ export default {
     }
   },
   data () {
-    return { // these are set in watcher
-      gameEndedLocal: false,
+    return {
+      gameEndedScoped: false,
       displayedScore: null
     }
   },
   computed: mapState([
     'score'
   ]),
-  watch: {
-    async open (opening) {
-      /* we don't want a visual "snap-back" effect, so we update local component
-       * data when the overlay starts opening / has finished closing. */
-      if (opening) {
-        if (this.gameEnded) {
-          this.gameEndedLocal = true
-          this.displayedScore = this.score
-          await wait(750)
-          this.$el.querySelector('input[type=text]').focus()
-        } else {
-          this.gameEndedLocal = false
-          this.displayedScore = null
-        }
-      } else {
-        await wait(750)
-        this.gameEndedLocal = false
-        this.displayedScore = null
-        this.$emit('closed')
+  methods: {
+    /* we don't want a visual "snap-back" effect, so we update local component
+     * data when before the overlay opens / has finished closing. */
+    beforeOpen () {
+      if (this.gameEnded) {
+        this.gameEndedScoped = true
+        this.displayedScore = this.score
       }
+    },
+    afterOpen () {
+      if (this.gameEndedScoped) {
+        this.$el.querySelector('input[type=text]').focus()
+      }
+    },
+    afterClose () {
+      this.gameEndedScoped = false
+      this.displayedScore = null
+      this.$emit('closed')
     }
   }
 }
