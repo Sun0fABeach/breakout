@@ -22,7 +22,7 @@ export default {
 #sidebar {
   display: flex;
   flex-direction: column;
-  min-width: 10rem;
+  width: 11.25rem;
   background-color: aliceblue;
   font-family: 'Courier New', Courier, monospace;
   z-index: 1; // above game surface
