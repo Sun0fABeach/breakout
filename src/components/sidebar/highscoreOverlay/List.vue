@@ -2,6 +2,8 @@
   <div id="sidebar-hs-list">
     <h2>Top Scores</h2>
 
+    <p v-if="highscores.length === 0">- No scores -</p>
+
     <table>
       <paginate
         name="highscoreList"
@@ -78,6 +80,11 @@ export default {
 
   > h2 {
     margin: 0 0 0.375rem;
+  }
+
+  > p { // empty table placeholder
+    color: dimgrey;
+    text-align: center;
   }
 
   > table {
