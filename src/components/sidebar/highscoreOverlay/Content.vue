@@ -25,7 +25,7 @@ export default {
   },
   data () {
     return {
-      showForm: this.gameEnded,
+      showForm: false,
       transition: 'none',
       tallList: true
     }

@@ -37,7 +37,7 @@ export default {
   data () {
     return {
       gameEndedScoped: false,
-      displayedScore: null
+      displayedScore: 0
     }
   },
   computed: mapState([
@@ -59,7 +59,6 @@ export default {
     },
     afterClose () {
       this.gameEndedScoped = false
-      this.displayedScore = null
       this.$emit('closed')
     }
   }
