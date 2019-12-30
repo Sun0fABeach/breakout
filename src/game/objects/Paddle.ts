@@ -12,6 +12,7 @@ class Paddle extends GameObjects.Container {
   private ballCollider: Collider | null
   private readonly img: GameObjects.Image
   private readonly emitters: ParticleEmitter[]
+  private readonly movementPixels: number = 5
 
   constructor (scene: Scene, x: number, y: number) {
     super(scene, x, y)
@@ -105,6 +106,14 @@ class Paddle extends GameObjects.Container {
       this.x + this.mountedBallOffset.x,
       this.y + this.mountedBallOffset.y
     )
+  }
+
+  moveLeft (): void {
+    this.x -= this.movementPixels
+  }
+
+  moveRight (): void {
+    this.x += this.movementPixels
   }
 
   explode (): void {

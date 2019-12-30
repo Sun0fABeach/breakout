@@ -286,12 +286,10 @@ export default class PlayScene extends Scene {
       this.launchBallFromPaddle()
     }
 
-    const pixelChange: number = 5
-
     if (cursor.left.isDown) {
-      paddle.x -= pixelChange
+      paddle.moveLeft()
     } else if (cursor.right.isDown) {
-      paddle.x += pixelChange
+      paddle.moveRight()
     }
   }
 }
