@@ -59,6 +59,7 @@ td {
     > :first-child {
       color: dimgrey;
       font-size: 0.875rem;
+      white-space: nowrap;
     }
     > :last-child {
       font-size: 1.25rem;
