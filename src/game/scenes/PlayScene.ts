@@ -96,23 +96,21 @@ export default class PlayScene extends Scene {
     this.scene.run('PauseScene')
   }
 
-  private deactivateCursorButtons (): void {
-    this.modifyCursorButtons((button: KeyboardKey) => {
+  private deactivateKeyInput (): void {
+    this.eachKeyboardKey((button: KeyboardKey) => {
       // @ts-ignore reset is not a static function
       button.reset()
-      button.preventDefault = false
-      button.enabled = false
     })
+    // @ts-ignore
+    this.game.input.keyboard.enabled = false
   }
 
-  private activateCursorButtons (): void {
-    this.modifyCursorButtons((button: KeyboardKey) => {
-      button.preventDefault = true
-      button.enabled = true
-    })
+  private activateKeyInput (): void {
+    // @ts-ignore
+    this.game.input.keyboard.enabled = true
   }
 
-  private modifyCursorButtons (
+  private eachKeyboardKey (
     callback: { (button: KeyboardKey): void }
   ): void {
     each(values(this.prefabs.cursor), callback)
@@ -244,12 +242,12 @@ export default class PlayScene extends Scene {
   private gameOver (won: boolean = false): void {
     this.deactivatePauseButton()
     if (!won) { // paddle explodes, so deactivate right away
-      this.deactivateCursorButtons()
+      this.deactivateKeyInput()
     }
 
     wait(won ? 1250 : 500).then(() => { // wait for ball explosion to quiet down
       if (won) {
-        this.deactivateCursorButtons()
+        this.deactivateKeyInput()
         Store.changeGameState(GameState.Won)
         wait(750).then(() => Audio.play('ohYeah'))
       } else {
@@ -264,7 +262,7 @@ export default class PlayScene extends Scene {
     Store.resetLives()
     Store.resetScore()
     await this.transitionNextLevel(true, 500)
-    this.activateCursorButtons()
+    this.activateKeyInput()
   }
 
   private fadeIn (...objects: { alpha: number }[]): void {
