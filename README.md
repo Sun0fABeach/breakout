@@ -2,6 +2,8 @@
 
 #### Classic breakout done in Vue + Phaser 3.
 
+## [Play](https://breakout-vue-phaser3.netlify.app/)
+
 ## Build Setup
 
 ``` bash
