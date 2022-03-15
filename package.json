@@ -12,7 +12,7 @@
   "dependencies": {
     "@tweenjs/tween.js": "^18.5.0",
     "dexie": "^2.0.4",
-    "lodash-es": "^4.17.15",
+    "lodash-es": "^4.17.21",
     "phaser": "^3.16.2",
     "vue": "^2.6.11",
     "vue-paginate": "^3.6.0",
